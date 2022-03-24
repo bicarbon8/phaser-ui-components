@@ -1,0 +1,55 @@
+{
+  "name": "phaser-ui-components",
+  "version": "0.0.1",
+  "description": "phaser.io UI component library for use in browser games using the Phaser3 game engine",
+  "main": "./dist/src/index.js",
+  "scripts": {
+    "clean": "npx rimraf ./dist",
+    "build": "npm run-script clean && npx tsc",
+    "pretest": "npm run-script clean",
+    "test": "npx karma start --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bicarbon8/phaser-ui-components.git"
+  },
+  "keywords": [
+    "phaser",
+    "phaser3",
+    "phaser-ui",
+    "html5-game",
+    "ui-component"
+  ],
+  "author": "Jason Holt Smith <bicarbon8@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bicarbon8/phaser-ui-components/issues"
+  },
+  "homepage": "https://github.com/bicarbon8/phaser-ui-components#readme",
+  "files": [
+    "./dist/src/**/*"
+  ],
+  "devDependencies": {
+    "@types/jasmine": "^4.0.0",
+    "@types/node": "^17.0.23",
+    "buble": "^0.20.0",
+    "jasmine": "^4.0.2",
+    "jasmine-core": "^4.0.1",
+    "karma": "^6.3.17",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-jasmine": "^4.0.1",
+    "karma-jasmine-html-reporter": "^1.7.0",
+    "karma-rollup-preprocessor": "^7.0.8",
+    "karma-spec-reporter": "0.0.33",
+    "karma-typescript": "^5.5.3",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.70.1",
+    "rollup-plugin-buble": "^0.19.8",
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "phaser": "^3.55.2"
+  }
+}
