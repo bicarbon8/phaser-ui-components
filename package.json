@@ -1,6 +1,6 @@
 {
   "name": "phaser-ui-components",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "phaser.io UI component library for use in browser games using the Phaser3 game engine",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -11,7 +11,9 @@
     "clean": "npx rimraf ./dist",
     "build": "npm run clean && npx tsc",
     "test": "npx karma start --coverage",
-    "pack": "npm run build && cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist && npm pack ./dist"
+    "preparedist": "cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist",
+    "pack": "npm run build && npm run preparedist && npm pack ./dist",
+    "publish": "npm run build && npm run preparedist && npm publish ./dist"
   },
   "repository": {
     "type": "git",

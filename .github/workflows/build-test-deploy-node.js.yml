@@ -26,8 +26,7 @@ jobs:
     - run: npm ci
     - run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
     - run: cp .npmrc-publish ~/.npmrc
-    - run: npm run pack
-    - run: npm publish
+    - run: npm run publish
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         NPM_USER: ${{ secrets.NPM_USER }}
