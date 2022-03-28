@@ -10,5 +10,4 @@ export interface CardOptions {
     header?: CardHeaderOptions;
     image?: CardImageOptions;
     body?: CardBodyOptions;
-    debug?: boolean;
 }
