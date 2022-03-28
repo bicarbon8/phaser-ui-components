@@ -1,7 +1,6 @@
 /** Buttons */
 export * from "./button/text-button";
 export * from "./button/text-button-options";
-export * from "./button/button-style";
 /** Cards */
 export * from "./card/card";
 export * from "./card/card-options";

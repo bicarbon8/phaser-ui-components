@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
-import { ButtonStyle } from '../../src';
 import { TextButton } from "../../src/button/text-button";
+import { TextButtonOptions } from '../../src/button/text-button-options';
 
 var game: Phaser.Game;
 var scene: Phaser.Scene;
@@ -30,35 +30,32 @@ describe('TextButton', () => {
     });
 
     it('sets its width based on text if not specified', () => {
-        const button: TextButton = new TextButton(scene, {
-            text: 'sample text',
-            buttonStyle: ButtonStyle.info
-        });
+        const opts: TextButtonOptions = {}; 
+        opts.text = 'sample text';
+        const button: TextButton = TextButton.info(scene, opts);
         scene.add.existing(button);
         
         expect(button.text.width).toBe(button.width);
     });
 
     it('scales the text if text is wider than specified width', () => {
-        const button: TextButton = new TextButton(scene, {
-            text: 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll',
-            width: 100,
-            buttonStyle: ButtonStyle.primary
-        });
+        const opts: TextButtonOptions = {};
+        opts.text = 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll';
+        opts.width = 100;
+        const button: TextButton = TextButton.primary(scene, opts);
         scene.add.existing(button);
 
-        expect(button.width).toBe(100);
-        expect(button.text.displayWidth).toBe(100);
-        expect(button.text.width).toBeGreaterThan(100);
+        expect(button.width).toBe(opts.width);
+        expect(button.text.displayWidth).toBe(opts.width);
+        expect(button.text.width).toBeGreaterThan(opts.width);
     });
 
     it('centers the text within the button', () => {
-        const button: TextButton = new TextButton(scene, {
-            text: '-',
-            width: 200,
-            height: 200,
-            buttonStyle: ButtonStyle.danger
-        });
+        const opts: TextButtonOptions = {};
+        opts.text = '-';
+        opts.width = 200;
+        opts.height = 200;
+        const button: TextButton = TextButton.Outline.warning(scene, opts);
         scene.add.existing(button);
 
         expect(button.text.originX).toBe(0.5);
@@ -76,19 +73,18 @@ describe('TextButton', () => {
     });
 
     it('can add padding around the text', () => {
-        const button: TextButton = new TextButton(scene, {
-            text: 'Sample Text',
-            padding: 10,
-            buttonStyle: ButtonStyle.info
-        });
+        const opts: TextButtonOptions = {};
+        opts.text = 'Sample Text';
+        opts.padding = 10;
+        const button: TextButton = TextButton.info(scene, opts);
         scene.add.existing(button);
 
-        expect(button.width).toBe(button.text.width + 20);
-        expect(button.height).toBe(button.text.height + 20);
+        expect(button.width).toBe(button.text.width + (opts.padding * 2));
+        expect(button.height).toBe(button.text.height + (opts.padding * 2));
         const textBounds: Phaser.Geom.Rectangle = button.text.getBounds();
-        expect(button.top).toBe(textBounds.top - 10);
-        expect(button.bottom).toBe(textBounds.bottom + 10);
-        expect(button.left).toBe(textBounds.left - 10);
-        expect(button.right).toBe(textBounds.right + 10);
+        expect(button.top).toBe(textBounds.top - opts.padding);
+        expect(button.bottom).toBe(textBounds.bottom + opts.padding);
+        expect(button.left).toBe(textBounds.left - opts.padding);
+        expect(button.right).toBe(textBounds.right + opts.padding);
     });
 });

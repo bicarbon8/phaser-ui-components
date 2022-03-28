@@ -1,7 +1,6 @@
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
 import { GridCellOptions } from "./grid-cell-options";
-import { GridLayout } from "./grid-layout";
 
 export class GridCell extends Phaser.GameObjects.Container {
     public readonly row: number;
