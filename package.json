@@ -12,8 +12,8 @@
     "build": "npm run clean && npx tsc",
     "test": "npx karma start --coverage",
     "preparedist": "cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist",
-    "pack": "npm run build && npm run preparedist && npm pack ./dist",
-    "publish": "npm run build && npm run preparedist && npm publish ./dist"
+    "pkg": "npm run build && npm run preparedist && npm pack ./dist",
+    "pub": "npm run build && npm run preparedist && npm publish ./dist"
   },
   "repository": {
     "type": "git",
