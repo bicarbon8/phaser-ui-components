@@ -1,39 +1,22 @@
 import * as Phaser from 'phaser';
 import { TextButton } from "../../src/button/text-button";
 import { TextButtonOptions } from '../../src/button/text-button-options';
-
-var game: Phaser.Game;
-var scene: Phaser.Scene;
+import { TestUtils } from '../test-utils';
 
 describe('TextButton', () => {
     beforeAll((done) => {
-        if (game) {game.destroy(true, true);}
-        game = new Phaser.Game({
-            type: Phaser.AUTO,
-            scene: {
-                init: function () {
-                    scene = this;
-                    done();
-                }
-            },
-            callbacks: {
-                postBoot: function () {
-                    game.loop.stop();
-                }
-            }
-        });
+        TestUtils.game(done);
     });
 
     beforeEach(() => {
-        scene.cameras.main.centerOn(0, 0);
-        scene.children.each((c: Phaser.GameObjects.GameObject) => c.destroy());
+        TestUtils.clear();
     });
 
     it('sets its width based on text if not specified', () => {
         const opts: TextButtonOptions = {}; 
         opts.text = 'sample text';
-        const button: TextButton = TextButton.info(scene, opts);
-        scene.add.existing(button);
+        const button: TextButton = TextButton.info(TestUtils.scene(), opts);
+        TestUtils.scene().add.existing(button);
         
         expect(button.text.width).toBe(button.width);
     });
@@ -42,8 +25,8 @@ describe('TextButton', () => {
         const opts: TextButtonOptions = {};
         opts.text = 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll';
         opts.width = 100;
-        const button: TextButton = TextButton.primary(scene, opts);
-        scene.add.existing(button);
+        const button: TextButton = TextButton.primary(TestUtils.scene(), opts);
+        TestUtils.scene().add.existing(button);
 
         expect(button.width).toBe(opts.width);
         expect(button.text.displayWidth).toBe(opts.width);
@@ -55,8 +38,8 @@ describe('TextButton', () => {
         opts.text = '-';
         opts.width = 200;
         opts.height = 200;
-        const button: TextButton = TextButton.Outline.warning(scene, opts);
-        scene.add.existing(button);
+        const button: TextButton = TextButton.Outline.warning(TestUtils.scene(), opts);
+        TestUtils.scene().add.existing(button);
 
         expect(button.text.originX).toBe(0.5);
         expect(button.text.originY).toBe(0.5);
@@ -76,8 +59,8 @@ describe('TextButton', () => {
         const opts: TextButtonOptions = {};
         opts.text = 'Sample Text';
         opts.padding = 10;
-        const button: TextButton = TextButton.info(scene, opts);
-        scene.add.existing(button);
+        const button: TextButton = TextButton.info(TestUtils.scene(), opts);
+        TestUtils.scene().add.existing(button);
 
         expect(button.width).toBe(button.text.width + (opts.padding * 2));
         expect(button.height).toBe(button.text.height + (opts.padding * 2));

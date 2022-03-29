@@ -190,7 +190,7 @@ export class CardBody extends LayoutManager {
         this._createBackgroundObject(this._options.background);
     }
 
-    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.FillStyle): void {
+    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.Styles): void {
         if (!this._backgroundContainer) {
             this._backgroundContainer = this.scene.add.container(0, 0);
             this.add(this._backgroundContainer);
@@ -199,16 +199,32 @@ export class CardBody extends LayoutManager {
         this._backgroundContainer.removeAll(true);
         if (options) {
             if (this._options.cornerRadius != null) {
-                const backgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics({fillStyle: options});
-                backgroundTop.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
+                const backgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
+                if (options.fillStyle) {
+                    backgroundTop.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
+                }
+                if (options.lineStyle) {
+                    backgroundTop.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
+                }
                 this._backgroundContainer.add(backgroundTop);
-                const backgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics({fillStyle: options});
-                backgroundBottom.fillRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
+                const backgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
+                if (options.fillStyle) {
+                    backgroundBottom.fillRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
+                }
+                if (options.lineStyle) {
+                    backgroundBottom.strokeRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
+                }
                 this._backgroundContainer.add(backgroundBottom);
             } else {
-                const background: Phaser.GameObjects.Graphics = this.scene.add.graphics({fillStyle: options});
-                background.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
+                const background: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
+                if (options.fillStyle) {
+                    background.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
+                }
+                if (options.lineStyle) {
+                    background.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
+                }
             }
         }
+        this.setSize(this._options.width, this.height);
     }
 }

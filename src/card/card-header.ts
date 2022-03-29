@@ -83,7 +83,7 @@ export class CardHeader extends Phaser.GameObjects.Container {
         }
     }
 
-    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.FillStyle): void {
+    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.Styles): void {
         if (!this._backgroundContainer) {
             this._backgroundContainer = this.scene.add.container(0, 0);
             this.add(this._backgroundContainer);
@@ -97,11 +97,21 @@ export class CardHeader extends Phaser.GameObjects.Container {
             this._options.height = this._options.height || textHeight + (this._options.padding * 2);
             this._options.cornerRadius = this._options.cornerRadius || 0;
             
-            const headerBackgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics({fillStyle: options});
-            headerBackgroundTop.fillRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
+            const headerBackgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
+            if (options.fillStyle) {
+                headerBackgroundTop.fillRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
+            }
+            if (options.lineStyle) {
+                headerBackgroundTop.strokeRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
+            }
             this._backgroundContainer.add(headerBackgroundTop);
-            const headerBackgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics({fillStyle: options});
-            headerBackgroundBottom.fillRect(-(this._options.width / 2), 0, this._options.width, this._options.height / 2);
+            const headerBackgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
+            if (options.fillStyle) {
+                headerBackgroundBottom.fillRect(-(this._options.width / 2), 0, this._options.width, this._options.height / 2);
+            }
+            if (options.lineStyle) {
+                headerBackgroundBottom.strokeRect(-(this._options.width / 2), 0, this._options.width, this._options.height / 2);
+            }
             this._backgroundContainer.add(headerBackgroundBottom);
             
             this.setSize(this._options.width, this._options.height);

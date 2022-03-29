@@ -5,7 +5,7 @@ export interface CardHeaderOptions {
     height?: number;
     text?: string;
     textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
-    background?: Phaser.Types.GameObjects.Graphics.FillStyle;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number;
     padding?: number;
 }

@@ -5,5 +5,5 @@ export interface CardImageOptions {
     height?: number;
     spriteKey?: string;
     spriteIndex?: number;
-    backgroundColor?: number;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
 }

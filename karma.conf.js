@@ -6,11 +6,12 @@ module.exports = function (config) {
       basePath: '',
       frameworks: ['jasmine', 'karma-typescript'],
       files: [
-          './test/**/*.spec.ts',
+          './test/**/*.ts',
           './src/**/*.ts'
       ],
       preprocessors: {
-        '**/*.ts': ['karma-typescript']
+        '**/*.ts': ['karma-typescript'],
+        'src/**/*.ts': ['coverage']
       },
       client: {
         jasmine: {
@@ -26,15 +27,28 @@ module.exports = function (config) {
         suppressAll: true // removes the duplicated traces
       },
       coverageReporter: {
-        dir: require('path').join(__dirname, './coverage'),
-        subdir: '.',
+        dir: 'coverage/',
+        subdir: function(browser) {
+          // normalization process to keep a consistent browser name across different
+          // OS
+          return browser.toLowerCase().split(/[ /-]/)[0];
+        },
         reporters: [
           { type: 'html' },
           { type: 'text-summary' }
-        ]
+        ],
+        check: {
+          emitWarning: false,
+          global: {
+            statements: 40,
+            branches: 20,
+            functions: 40,
+            lines: 40
+          }
+        }
       },
       mime: { 'text/x-typescript': ['ts','tsx'] },
-      reporters: ['progress', 'kjhtml'],
+      reporters: ['progress', 'kjhtml', 'coverage'],
       port: 9876,
       colors: true,
       logLevel: config.LOG_INFO,
@@ -46,6 +60,9 @@ module.exports = function (config) {
           flags: ['--no-sandbox']
         }
       },
+      browserDisconnectTimeout: 10000,
+      browserDisconnectTolerance: 3,
+      browserNoActivityTimeout: 100000,
       singleRun: true,
       restartOnFileChange: true,
       concurrency: Infinity

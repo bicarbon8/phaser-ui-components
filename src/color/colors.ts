@@ -20,25 +20,26 @@ export module Colors {
      * determines if a color is dark based on the number of
      * hex values between 0 and 7. if 50% or more are dark
      * values then the color is considered 'dark'
-     * @param color a hex color string like `#f5ac5c`
+     * @param color a hex color string or number like `#f5ac5c` or `0xf5ac5c`
      * @returns true if the color is dark otherwise false
      */
-    export function isDark(color: string): boolean {
+    export function isDark(color: string | number): boolean {
         let isDark: number = 0;
-        color = (color.startsWith('#')) ? color.slice(1) : color;
-        for (var i=0; i<color.length; i++) {
-            let c: string = color[i];
+        let colorStr: string = (typeof color === "object") ? color as string : toHexString(color as number);
+        colorStr = (colorStr.startsWith('#')) ? colorStr.slice(1) : colorStr;
+        for (var i=0; i<colorStr.length; i++) {
+            let c: string = colorStr[i];
             if (['0','1','2','3','4','5','6','7'].includes(c)) {
                 isDark++;
             }
         }
-        return isDark >= Math.ceil(color.length / 2);
+        return isDark >= Math.ceil(colorStr.length / 2);
     }
 
     /**
      * returns a random hex color like `#f5ac5c`
      */
-    export function getRandom(): string {
+    export function random(): string {
         const values: string = '0123456789abcdef';
         let colorStr: string = '#';
         for (var i=0; i<6; i++) {
@@ -62,7 +63,11 @@ export module Colors {
      * @returns a hex string like `#f5ac5c`
      */
     export function toHexString(color: number): string {
-        return `#${color.toString(16)}`;
+        let colorStr: string = `${color.toString(16)}`;
+        while (colorStr.length < 6) {
+            colorStr = `0${colorStr}`;
+        }
+        return `#${colorStr}`;
     }
 
     function randomFrom(input: string): number {

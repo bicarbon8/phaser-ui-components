@@ -11,7 +11,7 @@ export interface CardBodyOptions {
     descriptionStyle?: Phaser.Types.GameObjects.Text.TextStyle;
     buttons?: TextButtonOptions[];
     buttonSpacing?: number;
-    background?: Phaser.Types.GameObjects.Graphics.FillStyle;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number;
     padding?: number;
 }

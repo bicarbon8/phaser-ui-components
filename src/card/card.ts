@@ -17,14 +17,14 @@ export class Card extends LayoutManager {
     private _image: CardImage;
     private _body: CardBody;
 
-    constructor(scene: Phaser.Scene, options: CardOptions) {
+    constructor(scene: Phaser.Scene, options?: CardOptions) {
         const opts: LayoutManagerOptions = {
-            x: options.x,
-            y: options.y,
+            x: options?.x,
+            y: options?.y,
             orientation: 'vertical'
         }
         super(scene, opts);
-        this._options = options;
+        this._options = options || {};
         this._createGameObject();
     }
 

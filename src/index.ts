@@ -1,3 +1,5 @@
+/** Colors */
+export * from "./color/colors";
 /** Buttons */
 export * from "./button/text-button";
 export * from "./button/text-button-options";

@@ -8,10 +8,10 @@
     "src/**/*"
   ],
   "scripts": {
-    "clean": "npx rimraf ./dist",
+    "clean": "npx rimraf ./dist && npx rimraf ./coverage",
     "build": "npm run clean && npx tsc",
     "test": "npx karma start --coverage",
-    "test-local": "npx karma start --coverage --no-single-run",
+    "test-local": "npx karma start --coverage --no-single-run --browsers=Chrome",
     "preparedist": "cp ./package.json ./dist && cp ./LICENSE ./dist && cp ./README.md ./dist",
     "pkg": "npm run build && npm run preparedist && npm pack ./dist",
     "pub": "npm run build && npm run preparedist && npm publish ./dist"

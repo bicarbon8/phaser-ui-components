@@ -19,6 +19,15 @@ export class LayoutManager extends Phaser.GameObjects.Container {
         return this._contents;
     }
 
+    /**
+     * adds the passed in `LayoutContent` items adjusting any pre-existing
+     * items' positions. if `orientation` is `horizontal` items are added
+     * left to right; if `vertical` items are added top to bottom.
+     * 
+     * NOTE: the size of the `LayoutManager` is adjusted after all passed
+     * in items are added and pre-existing items' positions are adjusted
+     * @param contents one or more `LayoutContent` items to be added
+     */
     addContents(...contents: LayoutContent[]): void {
         if (contents?.length) {
             for (var i=0; i<contents.length; i++) {
@@ -31,6 +40,15 @@ export class LayoutManager extends Phaser.GameObjects.Container {
         }
     }
 
+    /**
+     * removes the specified `LayoutContent` instance from this `LayoutManager`
+     * and then adjusts the positions of the remaining items to close any gaps
+     * left by the removal.
+     * @param content the `LayoutContent` instance to be removed
+     * @param destroy if false the item will not be destroyed and can be used
+     * elsewhere in the scene. defaults to `true`
+     * @returns the removed `LayoutContent` instance
+     */
     removeContent(content: LayoutContent, destroy: boolean = true): LayoutContent {
         let removed: LayoutContent;
         if (content) {
@@ -44,6 +62,12 @@ export class LayoutManager extends Phaser.GameObjects.Container {
         return removed;
     }
 
+    /**
+     * removes all `LayoutContent` instances contained within this `LayoutManager`
+     * @param destroy if false the contents will not be destroyed and can be used
+     * elsewhere in the scene. defaults to `true`
+     * @returns an array of the removed `LayoutContent` instances
+     */
     removeAllContent(destroy: boolean = true): LayoutContent[] {
         const removed: LayoutContent[] = [];
         while (this.contents?.length) {
@@ -55,6 +79,10 @@ export class LayoutManager extends Phaser.GameObjects.Container {
         return removed;
     }
 
+    /**
+     * adjusts the positions of all `LayoutContent` instances contained within this
+     * `LayoutManager` based on the `orientation`
+     */
     layout(): void {
         if (this.orientation == 'horizontal') {
             this._layoutHorizontal();

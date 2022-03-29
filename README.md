@@ -54,3 +54,13 @@ a UI layout that divides the screen area into rows and columns and provides cont
 
 ## LayoutManager
 a UI layout that centre aligns all contents in either a horizontal or vertical orientataion
+
+# UI Utilities
+
+## Colors module
+provides functions to convert between hexidecimal strings and numbers as well as for determining if a colour is dark. also contains a set of predefined colours like `Colors.primary`, `Colors.info`, and `Colors.danger` and can generate random colours.
+
+- `Colors.isDark(color: string | number): boolean` - returns _true_ if 50% or more of the colour's hexidecimal values are between 0 and 7
+- `Colors.toHexString(color: number): string` - converts a number like `0xfc5a6d` to a string like `#fc5a6d`
+- `Colors.toHexNumber(color: string): number` - converts a string like `#fc5a6d` to a number like `0xfc5a6d`
+- `Colors.random(): string` - generates a random colour string like `#fc5a6d`
