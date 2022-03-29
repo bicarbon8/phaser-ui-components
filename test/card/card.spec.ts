@@ -92,4 +92,40 @@ describe('Card', () => {
         expect(card.height).toBeGreaterThan(0);
         expect(card.height).toEqual(card.header.height + card.cardbody.height);
     });
+
+    it('can be created with a header image and a body', () => {
+        const card: Card = new Card(TestUtils.scene(), {
+            width: 200,
+            header: {
+                text: 'header text',
+                textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.success)}
+            },
+            image: {
+                background: {fillStyle: {color: Colors.light}}
+            },
+            body: {
+                title: 'title text',
+                titleStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)},
+                description: 'description text',
+                descriptionStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+            }
+        });
+        TestUtils.scene().add.existing(card);
+
+        expect(card).toBeDefined();
+        expect(card.header).toBeDefined();        
+        expect(card.header.text).toBeDefined();
+        expect(card.image).toBeDefined();
+        expect(card.image.sprite).toBeUndefined();
+        expect(card.image.background).toBeDefined();
+        expect(card.image.height).toBe(200);
+        expect(card.cardbody).toBeDefined();
+        expect(card.cardbody.title).toBeDefined();
+        expect(card.cardbody.description).toBeDefined();
+        expect(card.width).toBe(200);
+        expect(card.width).toEqual(card.header.width);
+        expect(card.width).toEqual(card.cardbody.width);
+        expect(card.height).toBeGreaterThan(200);
+        expect(card.height).toEqual(card.header.height + card.cardbody.height + 200);
+    });
 });

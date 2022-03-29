@@ -1,4 +1,4 @@
-export interface LayoutManagerOptions {
+export interface LinearLayoutOptions {
     x?: number;
     y?: number;
     orientation?: 'vertical' | 'horizontal';

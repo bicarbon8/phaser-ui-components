@@ -7,5 +7,4 @@ export interface GridLayoutOptions {
     columns?: number;
     margins?: number;
     padding?: number;
-    debug?: boolean;
 }

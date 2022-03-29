@@ -1,21 +1,21 @@
 import { TextButton } from "../button/text-button";
 import { TextButtonOptions } from "../button/text-button-options";
 import { LayoutContent } from "../layout/layout-content";
-import { LayoutManager } from "../layout/layout-manager";
-import { LayoutManagerOptions } from "../layout/layout-manager-options";
+import { LinearLayout } from "../layout/linear-layout";
+import { LinearLayoutOptions } from "../layout/linear-layout-options";
 import { CardBodyOptions } from "./card-body-options";
 
-export class CardBody extends LayoutManager {
+export class CardBody extends LinearLayout {
     private _title: Phaser.GameObjects.Text;
     private _description: Phaser.GameObjects.Text;
     private _buttons: TextButton[];
-    private _buttonsLayout: LayoutManager;
+    private _buttonsLayout: LinearLayout;
     private _backgroundContainer: Phaser.GameObjects.Container;
 
     private readonly _options: CardBodyOptions;
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
-        const opts: LayoutManagerOptions = {
+        const opts: LinearLayoutOptions = {
             x: options?.x || 0,
             y: options?.y || 0,
             orientation: 'vertical',
@@ -144,7 +144,7 @@ export class CardBody extends LayoutManager {
 
     addButtons(...buttonOpts: TextButtonOptions[]): void {
         if (!this._buttonsLayout) {
-            this._buttonsLayout = new LayoutManager(this.scene, {
+            this._buttonsLayout = new LinearLayout(this.scene, {
                 orientation: 'horizontal',
                 padding: this._options.buttonSpacing
             });

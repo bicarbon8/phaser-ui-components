@@ -1,8 +1,12 @@
 import { GridCell } from "./grid-cell";
-import { GridCellOptions } from "./grid-cell-options";
 import { GridLayoutOptions } from "./grid-layout-options";
 import { LayoutContent } from "./layout-content";
 
+/**
+ * divides the available area (based on specified width and height)
+ * into a 12x12 grid allowing content to be arranged by specifying
+ * which `GridCell` each items is contained within
+ */
 export class GridLayout extends Phaser.GameObjects.Container {
     public readonly padding: number;
     public readonly margins: number;

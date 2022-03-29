@@ -1,11 +1,26 @@
 # phaser-ui-components
 phaser.io UI component library for use in browser games using the Phaser3 game engine
 
-# Interactive UI Components
+# UI Interactive Components
 
 ## Text Button
 
-a `Phaser.GameObjects.Container` that can contain a centre-aligned text string and a background with either rounded or square corners. options include the following:
+a `Phaser.GameObjects.Container` that can contain a centre-aligned text string and a background with either rounded or square corners. `TextButtonOptions` include the following:
+```javascript
+{
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    text?: string;
+    textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
+    cornerRadius?: number;
+    interactive?: boolean;
+    padding?: number;
+}
+```
+
 - **x**: [`number`] the x coordinate within your scene where this button will be centred _(optional - defaults to 0)_
 - **y**: [`number`] the y coordinate within your scene where this button will be centred _(optional - defaults to 0)_
 - **width**: [`number`] the width of the button. if specified and the text string provided is wider than this width, the text will be scaled down to fit _(optional - defaults to the text string width or 0 if no text provided)_
@@ -23,7 +38,18 @@ a `Phaser.GameObjects.Container` that can contain a centre-aligned text string a
 
 an object that can contain a header, image, title, and description similar to a HTML card. the `Card` object is comprised of separate `CardHeader`, `CardImage`, and `CardBody` objects allowing for individual use as needed.
 
-`Card` options are as follows:
+`CardOptions` are as follows:
+```javascript
+{
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    header?: CardHeaderOptions;
+    image?: CardImageOptions;
+    body?: CardBodyOptions;
+}
+```
 
 - **x**: [`number`] the x coordinate within your scene where this card will be centred _(optional - defaults to 0)_
 - **y**: [`number`] the y coordinate within your scene where this card will be centred _(optional - defaults to 0)_
@@ -35,7 +61,20 @@ an object that can contain a header, image, title, and description similar to a 
 
 ### CardHeader
 
-the card header can have a text value and a background which can include rounded upper corners. options for the header are similar to those for a `TextButton` as the two are nearly identical in looks:
+the card header can have a text value and a background which can include rounded upper corners. options for the header are similar to those for a `TextButton` as the two are nearly identical in looks with the main difference being that the `CardHeader` will only round the top corners if a non-zero `cornerRadius` is supplied in the `CardHeaderOptions`:
+```javascript
+{
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    text?: string;
+    textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
+    cornerRadius?: number;
+    padding?: number;
+}
+```
 
 - **x**: [`number`] the x coordinate within your scene where this header will be centred _(optional - defaults to 0)_
 - **y**: [`number`] the y coordinate within your scene where this header will be centred _(optional - defaults to location directly above `CardImage` or `CardBody`)_
@@ -47,13 +86,33 @@ the card header can have a text value and a background which can include rounded
 - **cornerRadius**: [`number`] allows specifying a rounded corner radius for the upper corners of the header background _(optional - defaults to 0)_
 - **padding**: [`number`] an amount to pad any text from the edge of the header. this will not increase the width or height if you've specified them in the options, but will ensure the edge of the header will be the number of pixels specified away from the text by scaling the text as needed _(optional - defaults to 0)_
 
-# Layout UI Components
+# UI Layout Components
 
 ## GridLayout
-a UI layout that divides the screen area into rows and columns and provides control over the alignment and positioning of items placed within each `GridCell` of the `GridLayout`
+a UI layout that divides the screen area into rows and columns and provides control over the alignment and positioning of items placed within each `GridCell` of the `GridLayout`. `GridLayoutOptions` include the following:
+```javascript
+{
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    rows?: number;
+    columns?: number;
+    margins?: number;
+    padding?: number;
+}
+```
 
-## LayoutManager
-a UI layout that centre aligns all contents in either a horizontal or vertical orientataion
+## LinearLayout
+a UI layout that centre aligns all contents in either a horizontal or vertical orientataion. `LinearLayoutOptions` include the following:
+```javascript
+{
+    x?: number;
+    y?: number;
+    orientation?: 'vertical' | 'horizontal';
+    padding?: number;
+}
+```
 
 # UI Utilities
 

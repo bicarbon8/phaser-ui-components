@@ -86,7 +86,7 @@ export class GridCell extends Phaser.GameObjects.Container {
      */
     setContent(content: LayoutContent): void {
         if (content) {
-            if (this._content) { this.removeContent(); } // remove previous contents and destroy
+            if (this._content) { this.removeContent(true); } // remove previous contents and destroy
             this._content = content;
             this.setContentScale();
             this.setContentPosition();

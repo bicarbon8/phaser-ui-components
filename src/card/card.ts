@@ -1,8 +1,8 @@
 import { TextButton } from "../button/text-button";
 import { TextButtonOptions } from "../button/text-button-options";
 import { LayoutContent } from "../layout/layout-content";
-import { LayoutManager } from "../layout/layout-manager";
-import { LayoutManagerOptions } from "../layout/layout-manager-options";
+import { LinearLayout } from "../layout/linear-layout";
+import { LinearLayoutOptions } from "../layout/linear-layout-options";
 import { CardBody } from "./card-body";
 import { CardBodyOptions } from "./card-body-options";
 import { CardHeader } from "./card-header";
@@ -11,14 +11,14 @@ import { CardImage } from "./card-image";
 import { CardImageOptions } from "./card-image-options";
 import { CardOptions } from "./card-options";
 
-export class Card extends LayoutManager {
+export class Card extends LinearLayout {
     private readonly _options: CardOptions;
     private _header: CardHeader;
     private _image: CardImage;
     private _body: CardBody;
 
     constructor(scene: Phaser.Scene, options?: CardOptions) {
-        const opts: LayoutManagerOptions = {
+        const opts: LinearLayoutOptions = {
             x: options?.x,
             y: options?.y,
             orientation: 'vertical'

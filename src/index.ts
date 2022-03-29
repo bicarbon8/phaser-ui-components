@@ -13,8 +13,8 @@ export * from "./card/card-image-options";
 export * from "./card/card-body";
 export * from "./card/card-body-options";
 /** Layout */
-export * from "./layout/layout-manager";
-export * from "./layout/layout-manager-options";
+export * from "./layout/linear-layout";
+export * from "./layout/linear-layout-options";
 export * from "./layout/layout-content";
 export * from "./layout/grid-layout";
 export * from "./layout/grid-layout-options";

@@ -1,14 +1,14 @@
 import { Helpers } from "../utilities/helpers";
 import { LayoutContent } from "./layout-content";
-import { LayoutManagerOptions } from "./layout-manager-options";
+import { LinearLayoutOptions } from "./linear-layout-options";
 
-export class LayoutManager extends Phaser.GameObjects.Container {
+export class LinearLayout extends Phaser.GameObjects.Container {
     public readonly orientation: string;
     public readonly padding: number;
     
     private _contents: LayoutContent[];
 
-    constructor(scene: Phaser.Scene, options?: LayoutManagerOptions) {
+    constructor(scene: Phaser.Scene, options?: LinearLayoutOptions) {
         super(scene, options?.x, options?.y);
         this.orientation = options?.orientation || 'horizontal';
         this.padding = options?.padding || 0;

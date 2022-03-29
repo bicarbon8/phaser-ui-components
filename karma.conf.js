@@ -40,10 +40,10 @@ module.exports = function (config) {
         check: {
           emitWarning: false,
           global: {
-            statements: 40,
-            branches: 20,
-            functions: 40,
-            lines: 40
+            statements: 63,
+            branches: 56,
+            functions: 57,
+            lines: 65
           }
         }
       },
@@ -53,11 +53,15 @@ module.exports = function (config) {
       colors: true,
       logLevel: config.LOG_INFO,
       autoWatch: true,
-      browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessCI'],
+      browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessCI', 'ChromeDebugging'],
       customLaunchers: {
         ChromeHeadlessCI: {
           base: 'ChromeHeadless',
           flags: ['--no-sandbox']
+        },
+        ChromeDebugging: {
+          base: 'Chrome',
+          flags: [ '--remote-debugging-port=9333' ]
         }
       },
       browserDisconnectTimeout: 10000,
