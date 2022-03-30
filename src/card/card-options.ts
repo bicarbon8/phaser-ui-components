@@ -6,8 +6,22 @@ export interface CardOptions {
     x?: number;
     y?: number;
     width?: number;
-    height?: number;
+    cornerRadius?: number;
+    padding?: number;
+    background?: Phaser.Types.GameObjects.Graphics.Styles;
     header?: CardHeaderOptions;
     image?: CardImageOptions;
     body?: CardBodyOptions;
+}
+
+export module CardOptions {
+    export function DEFAULT(scene: Phaser.Scene): CardOptions {
+        return {
+            x: 0,
+            y: 0,
+            width: scene.sys.game.scale.gameSize.width,
+            cornerRadius: 0,
+            padding: 0
+        };
+    }
 }

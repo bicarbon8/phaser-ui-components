@@ -1,3 +1,4 @@
+import { Helpers } from "../utilities/helpers";
 import { CardHeaderOptions } from "./card-header-options";
 
 export class CardHeader extends Phaser.GameObjects.Container {
@@ -6,7 +7,8 @@ export class CardHeader extends Phaser.GameObjects.Container {
     private _backgroundContainer: Phaser.GameObjects.Container;
     
     constructor(scene: Phaser.Scene, options?: CardHeaderOptions) {
-        super(scene, options?.x, options?.y);
+        options = Helpers.merge(CardHeaderOptions.DEFAULT(scene), options);
+        super(scene, options.x, options.y);
         this._options = options;
         this._createGameObject();
     }
@@ -20,7 +22,7 @@ export class CardHeader extends Phaser.GameObjects.Container {
     }
 
     private _createGameObject(): void {
-        this._options.padding = this._options.padding || 5;
+        this._options.padding = this._options.padding;
         this._createTextObject(this._options.text, this._options.textStyle);
         this._createBackgroundObject(this._options.background);
     }
@@ -63,11 +65,7 @@ export class CardHeader extends Phaser.GameObjects.Container {
 
     private _createTextObject(text?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (text) {
-            const textStyle: Phaser.Types.GameObjects.Text.TextStyle = style || { 
-                font: '20px Courier', 
-                color: '#000000',
-                align: 'center'
-            };
+            const textStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardHeaderOptions.DEFAULT(this.scene).textStyle, style);
             const headerText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, text, textStyle);
             headerText.setOrigin(0.5);
             this._options.width = this._options.width || (headerText.width + (this._options.padding * 2));
@@ -91,12 +89,6 @@ export class CardHeader extends Phaser.GameObjects.Container {
         }
         this._backgroundContainer.removeAll(true);
         if (options) {
-            const textWidth: number = this._text?.width || 100;
-            const textHeight: number = this._text?.height || 20;
-            this._options.width = this._options.width || textWidth + (this._options.padding * 2);
-            this._options.height = this._options.height || textHeight + (this._options.padding * 2);
-            this._options.cornerRadius = this._options.cornerRadius || 0;
-            
             const headerBackgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
             if (options.fillStyle) {
                 headerBackgroundTop.fillRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);

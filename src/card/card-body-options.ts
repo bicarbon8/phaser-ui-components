@@ -15,3 +15,19 @@ export interface CardBodyOptions {
     cornerRadius?: number;
     padding?: number;
 }
+
+export module CardBodyOptions {
+    export function DEFAULT(scene: Phaser.Scene): CardBodyOptions {
+        return {
+            x: 0,
+            y: 0,
+            width: scene.sys.game.scale.gameSize.width,
+            titleStyle: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'},
+            descriptionStyle: {fontFamily: 'Courier', fontSize: '14px', color: '#000000'},
+            buttons: [],
+            buttonSpacing: 0,
+            cornerRadius: 0,
+            padding: 0
+        };
+    }
+}

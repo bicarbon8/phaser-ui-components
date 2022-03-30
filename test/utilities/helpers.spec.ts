@@ -14,7 +14,7 @@ describe('Helpers', () => {
             expect(actual.padding).toBe(baseObj.padding);
             expect(actual.textStyle.fontFamily).toEqual(baseObj.textStyle.fontFamily);
             expect(actual.textStyle.fontSize).toEqual(baseObj.textStyle.fontSize);
-            expect(actual.textStyle.color).toEqual(Colors.toHexString(Colors.dark));
+            expect(actual.textStyle.color).toEqual('#000000');
         });
 
         it('can handle null baseObj', () => {
@@ -48,7 +48,7 @@ describe('Helpers', () => {
             expect(actual.padding).toBe(2);
             expect(actual.textStyle.fontFamily).toEqual(baseObj.textStyle.fontFamily);
             expect(actual.textStyle.fontSize).toEqual(mergeObj.textStyle.fontSize);
-            expect(actual.textStyle.color).toEqual(Colors.toHexString(Colors.dark));
+            expect(actual.textStyle.color).toEqual('#000000');
         });
 
         it('does not modify the mergeObj', () => {

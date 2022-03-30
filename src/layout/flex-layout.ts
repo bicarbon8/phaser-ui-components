@@ -16,8 +16,7 @@ export class FlexLayout extends Phaser.GameObjects.Container {
         this._rowManager = new LinearLayout(scene, {
             x: options.x,
             y: options.y,
-            orientation: 'vertical',
-            padding: options.padding
+            orientation: 'vertical'
         });
         this.add(this._rowManager);
         this.updateWidth(options.width);
@@ -48,12 +47,21 @@ export class FlexLayout extends Phaser.GameObjects.Container {
         if (contents?.length > 0) {
             for (var i=0; i<contents.length; i++) {
                 let content: LayoutContent = contents[i];
+                content.setScale(1);
                 let row: LinearLayout = this._getLastRow();
-                if (row.width + content.width + this.padding > this.width) {
+                if (content.width > (this.width + (this.padding * 2))) {
+                    if (row.contents.length > 0) {
+                        row = this._addRow();
+                    }
+                    const scale: number = (this.width + (this.padding * 2)) / content.width;
+                    content.setScale(scale);
+                }
+                if (row.width + (content.width * content.scale) + this.padding > this.width) {
                     row = this._addRow();
                 }
                 row.addContents(content);
             }
+            this._rowManager.refreshLayout();
     
             this.setSize(this.width, this._rowManager.height);
         }

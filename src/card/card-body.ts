@@ -3,6 +3,7 @@ import { TextButtonOptions } from "../button/text-button-options";
 import { LayoutContent } from "../layout/layout-content";
 import { LinearLayout } from "../layout/linear-layout";
 import { LinearLayoutOptions } from "../layout/linear-layout-options";
+import { Helpers } from "../utilities/helpers";
 import { CardBodyOptions } from "./card-body-options";
 
 export class CardBody extends LinearLayout {
@@ -15,11 +16,12 @@ export class CardBody extends LinearLayout {
     private readonly _options: CardBodyOptions;
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
+        options = Helpers.merge(CardBodyOptions.DEFAULT(scene), options);
         const opts: LinearLayoutOptions = {
-            x: options?.x || 0,
-            y: options?.y || 0,
+            x: options.x,
+            y: options.y,
             orientation: 'vertical',
-            padding: options?.padding || 0
+            padding: options.padding
         };
         super(scene, opts);
         this._options = options;
@@ -79,10 +81,7 @@ export class CardBody extends LinearLayout {
 
     private _createTitleObject(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (title) {
-            const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = style || { 
-                font: '30px Courier', 
-                color: '#000000',
-            };
+            const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).titleStyle, style);
             const titleText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, title, titleStyle);
             this._options.width = this._options.width || titleText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
@@ -125,10 +124,7 @@ export class CardBody extends LinearLayout {
 
     private _createDescriptionObject(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (description) {
-            const descStyle: Phaser.Types.GameObjects.Text.TextStyle = style || { 
-                font: '20px Courier', 
-                color: '#000000',
-            };
+            const descStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).descriptionStyle, style);
             const descText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, description, descStyle);
             this._options.width = this._options.width || descText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
@@ -190,37 +186,37 @@ export class CardBody extends LinearLayout {
         this._createBackgroundObject(this._options.background);
     }
 
-    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.Styles): void {
+    private _createBackgroundObject(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
         if (!this._backgroundContainer) {
             this._backgroundContainer = this.scene.add.container(0, 0);
             this.add(this._backgroundContainer);
             this.sendToBack(this._backgroundContainer);
         }
         this._backgroundContainer.removeAll(true);
-        if (options) {
+        if (styles) {
             if (this._options.cornerRadius != null) {
-                const backgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
+                const backgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(styles);
+                if (styles.fillStyle) {
                     backgroundTop.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
                 }
-                if (options.lineStyle) {
+                if (styles.lineStyle) {
                     backgroundTop.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
                 }
                 this._backgroundContainer.add(backgroundTop);
-                const backgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
+                const backgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics(styles);
+                if (styles.fillStyle) {
                     backgroundBottom.fillRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
                 }
-                if (options.lineStyle) {
+                if (styles.lineStyle) {
                     backgroundBottom.strokeRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
                 }
                 this._backgroundContainer.add(backgroundBottom);
             } else {
-                const background: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
+                const background: Phaser.GameObjects.Graphics = this.scene.add.graphics(styles);
+                if (styles.fillStyle) {
                     background.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
                 }
-                if (options.lineStyle) {
+                if (styles.lineStyle) {
                     background.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
                 }
             }
