@@ -63,7 +63,7 @@ export class CardBody extends LinearLayout {
             } else {
                 this._createTitleObject(title, style);
             }
-            this.layout();
+            this.refreshLayout();
             this.resizeBackground(this._options.width, this.height);
         }
     }
@@ -109,7 +109,7 @@ export class CardBody extends LinearLayout {
             } else {
                 this._createDescriptionObject(description, style);
             }
-            this.layout();
+            this.refreshLayout();
             this.resizeBackground(this._options.width, this.height);
         }
     }
@@ -164,7 +164,7 @@ export class CardBody extends LinearLayout {
                 scaleX = availableWidth / (this._buttonsLayout.width + (this.padding * 2));
                 this._buttonsLayout.setScale(scaleX);
             }
-            this.layout();
+            this.refreshLayout();
             this.resizeBackground(this._options.width, this.height);
         }
     }
@@ -179,7 +179,7 @@ export class CardBody extends LinearLayout {
     removeAllButtons(destroy: boolean = true): TextButton[] {
         const buttons: TextButton[] = this._buttonsLayout.removeAllContent(destroy) as TextButton[];
         this._buttons = [];
-        this.layout();
+        this.refreshLayout();
         this.resizeBackground(this._options.width, this.height);
         return buttons;
     }

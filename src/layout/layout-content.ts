@@ -1,1 +1,1 @@
-export type LayoutContent = Phaser.GameObjects.Sprite | Phaser.GameObjects.Image | Phaser.GameObjects.Text | Phaser.GameObjects.Container;
+export type LayoutContent = Phaser.GameObjects.Sprite | Phaser.GameObjects.Image | Phaser.GameObjects.Text | Phaser.GameObjects.Container | Phaser.GameObjects.Arc | Phaser.GameObjects.Rectangle;

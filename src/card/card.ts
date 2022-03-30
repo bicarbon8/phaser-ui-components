@@ -51,7 +51,7 @@ export class Card extends LinearLayout {
                 };
                 this._createHeaderObject(this._options.header);
             }
-            this.layout();
+            this.refreshLayout();
         }
     }
 
@@ -62,7 +62,7 @@ export class Card extends LinearLayout {
     removeHeader(destroy: boolean = true): CardHeader {
         const header: CardHeader = this.removeContent(this.header, destroy) as CardHeader;
         this._header = null;
-        this.layout();
+        this.refreshLayout();
         return header;
     }
 
@@ -75,7 +75,7 @@ export class Card extends LinearLayout {
     removeImage(destroy: boolean = true): CardImage {
         const image: CardImage = this.removeContent(this.image, destroy) as CardImage;
         this._image = null;
-        this.layout();
+        this.refreshLayout();
         return image;
     }
 
@@ -90,13 +90,13 @@ export class Card extends LinearLayout {
                 };
                 this._createCardBodyObject(this._options.body);
             }
-            this.layout();
+            this.refreshLayout();
         }
     }
 
     removeBodyTitle(destroy: boolean = true): LayoutContent {
         const title: LayoutContent = this.cardbody?.removeTitle(destroy);
-        this.layout();
+        this.refreshLayout();
         return title;
     }
 
@@ -111,13 +111,13 @@ export class Card extends LinearLayout {
                 };
                 this._createCardBodyObject(this._options.body);
             }
-            this.layout();
+            this.refreshLayout();
         }
     }
 
     removeBodyDescription(destroy: boolean = true): LayoutContent {
         const desc: LayoutContent = this.cardbody?.removeDescription(destroy);
-        this.layout();
+        this.refreshLayout();
         return desc;
     }
 
@@ -131,20 +131,20 @@ export class Card extends LinearLayout {
                 };
                 this._createCardBodyObject(this._options.body);
             }
-            this.layout();
+            this.refreshLayout();
         }
     }
 
     removeBodyButtons(destroy: boolean = true): TextButton[] {
         const buttons: TextButton[] = this.cardbody.removeAllButtons(destroy);
-        this.layout();
+        this.refreshLayout();
         return buttons;
     }
 
     removeCardBody(destroy: boolean = true): CardBody {
         const body: CardBody = this.removeContent(this.cardbody, destroy) as CardBody;
         this._body = null;
-        this.layout();
+        this.refreshLayout();
         return body;
     }
 

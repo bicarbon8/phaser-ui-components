@@ -1,6 +1,7 @@
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
 import { GridCellOptions } from "./grid-cell-options";
+import { Helpers } from "../utilities/helpers";
 
 export class GridCell extends Phaser.GameObjects.Container {
     public readonly row: number;
@@ -19,20 +20,19 @@ export class GridCell extends Phaser.GameObjects.Container {
     private _content: LayoutContent;
     
     constructor(scene: Phaser.Scene, options?: GridCellOptions) {
-        super(scene, options?.x, options?.y);
-        this.row = options?.row || 0;
-        this.column = options?.column || 0;
-        this.padding = options?.padding || 0;
-        this.alignment = options?.alignment || {horizontal: 'centre', vertical: 'middle'};
-        this.alignment.horizontal = this.alignment.horizontal || 'centre';
-        this.alignment.vertical = this.alignment.vertical || 'middle';
-        this.scaleToFit = options?.scaleToFit || true;
-        this.keepAspectRatio = options?.keepAspectRatio || true;
-        const width: number = options?.width || 0;
-        const height: number = options?.height || 0;
+        options = Helpers.merge(GridCellOptions.DEFAULT(), options);
+        super(scene, options.x, options.y);
+        this.row = options.row;
+        this.column = options.column;
+        this.padding = options.padding;
+        this.alignment = options.alignment;
+        this.scaleToFit = options.scaleToFit;
+        this.keepAspectRatio = options.keepAspectRatio;
+        const width: number = options.width;
+        const height: number = options.height;
         this.updateSize(width, height);
-        this.setBackground(options?.style);
-        this.setContent(options?.content);
+        this.setBackground(options.background);
+        this.setContent(options.content);
     }
 
     get top(): number {
@@ -63,19 +63,20 @@ export class GridCell extends Phaser.GameObjects.Container {
         return this._background;
     }
 
-    updateSize(width: number, height: number): void {
+    updateSize(width: number, height: number): GridCell {
         this.setSize(width, height);
         this._top = -(height / 2);
         this._bottom = (height / 2);
         this._left = -(width / 2);
         this._right = (width / 2);
         if (this.background) {
-            this.setBackground()
+            this.setBackground(this._backgroundStyle)
         }
         if (this.content) {
             this.setContentScale();
             this.setContentPosition();
         }
+        return this;
     }
 
     /**
@@ -84,43 +85,45 @@ export class GridCell extends Phaser.GameObjects.Container {
      * if you wish to retain the object
      * @param content the content to be added to this `GridCell`
      */
-    setContent(content: LayoutContent): void {
+    setContent(content: LayoutContent): GridCell {
         if (content) {
-            if (this._content) { this.removeContent(true); } // remove previous contents and destroy
+            if (this.content) { this.removeContent(true); } // remove previous contents and destroy
             this._content = content;
             this.setContentScale();
             this.setContentPosition();
             this.add(this._content);
             this.bringToTop(this._content);
         }
+        return this;
     }
 
     removeContent<T extends LayoutContent>(destroy: boolean = true): T {
-        const content: T = this.contentAs<T>();
-        this.remove(content, destroy);
-        this._content = null;
-        return content;
+        if (this.content) {
+            const content: T = this.contentAs<T>();
+            this.remove(content, destroy);
+            this._content = null;
+            return content;
+        }
+        return null;
     }
 
-    setBackground(style?: Phaser.Types.GameObjects.Graphics.Styles): void {
-        if (style) {
-            this._backgroundStyle = style;
+    setBackground(style?: Phaser.Types.GameObjects.Graphics.Styles): GridCell {
+        this._backgroundStyle = style;
+        if (this.background) { 
+            this.remove(this.background, true);
+            this._background = null;
         }
         if (this._backgroundStyle) {
-            if (this._background) { 
-                this.remove(this._background);
-                this._background.destroy();
-                this._background = null;
-            }
             this._background = this.scene.add.graphics(this._backgroundStyle);
             this.add(this._background);
             if (this._backgroundStyle?.fillStyle) {this._background.fillRect(this.left, this.top, this.width, this.height);}
             if (this._backgroundStyle?.lineStyle) {this._background.strokeRect(this.left, this.top, this.width, this.height);}
             this.sendToBack(this._background);
         }
+        return this;
     }
 
-    setContentScale(): void {
+    setContentScale(): GridCell {
         if (this.content) {
             const width: number = this.content.width;
             const height: number = this.content.height;
@@ -137,24 +140,25 @@ export class GridCell extends Phaser.GameObjects.Container {
                 this.content.setScale(1);
             }
         }
+        return this;
     }
 
-    setContentPosition(): void {
+    setContentPosition(): GridCell {
         if (this.content) {
             if (!(this.content instanceof Phaser.GameObjects.Container)) { this.content.setOrigin(0.5, 0.5); }
-            switch(this.alignment?.horizontal) {
+            switch(this.alignment.horizontal) {
                 case 'right':
                     this.content.setX(this.right - this.padding - ((this.content.width * this.content.scaleX) / 2));
                     break;
                 case 'left':
                     this.content.setX(this.left + this.padding + ((this.content.width * this.content.scaleX) / 2));
                     break;
-                case 'centre':
+                case 'center':
                 default:
                     this.content.setX(0);
                     break;
             }
-            switch(this.alignment?.vertical) {
+            switch(this.alignment.vertical) {
                 case 'bottom':
                     this.content.setY(this.bottom - this.padding - ((this.content.height * this.content.scaleY) / 2));
                     break;
@@ -167,5 +171,6 @@ export class GridCell extends Phaser.GameObjects.Container {
                     break;
             }
         }
+        return this;
     }
 }
