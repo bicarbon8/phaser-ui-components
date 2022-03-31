@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { Colors } from '../color/colors';
+import { Helpers } from '../utilities/helpers';
 import { TextButtonOptions } from "./text-button-options";
 
 export class TextButton extends Phaser.GameObjects.Container {
@@ -8,8 +8,9 @@ export class TextButton extends Phaser.GameObjects.Container {
     private _background: Phaser.GameObjects.Graphics;
 
     constructor(scene: Phaser.Scene, options?: TextButtonOptions) {
-        super(scene, options?.x, options?.y);
-        this._options = options || {};
+        options = Helpers.merge(TextButtonOptions.DEFAULT(), options);
+        super(scene, options.x, options.y);
+        this._options = options;
         this._createGameObject();
     }
 
@@ -51,10 +52,7 @@ export class TextButton extends Phaser.GameObjects.Container {
         }
         
         if (text) {
-            this._options.textStyle = style || this._options.textStyle || {};
-            this._options.textStyle.fontSize = this._options.textStyle.fontSize || '20px';
-            this._options.textStyle.fontFamily = this._options.textStyle.fontFamily || 'Courier';
-            this._options.textStyle.color = this._options.textStyle.color || '#000000';
+            this._options.textStyle = style || this._options.textStyle;
             const txt = this.scene.add.text(0, 0, text, this._options.textStyle);
             txt.setOrigin(0.5);
             this._options.padding = this._options.padding || 0;
@@ -81,8 +79,6 @@ export class TextButton extends Phaser.GameObjects.Container {
             this._options.background = style;
             this._options.width = this._options.width || 0;
             this._options.height = this._options.height || 0;
-            this._options.padding = this._options.padding || 0;
-            this._options.cornerRadius = this._options.cornerRadius || 0;
             const rect = this.scene.add.graphics(this._options.background);
             if (this._options.cornerRadius > 0) {
                 if (this._options.background.fillStyle) {
@@ -105,48 +101,5 @@ export class TextButton extends Phaser.GameObjects.Container {
         }
 
         this.setSize(this._options.width, this._options.height);
-    }
-}
-
-export module TextButton {
-    /** Blue background with White text */
-    export function primary(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#ffffff'}, background: {fillStyle: {color: Colors.primary}}}); }
-    /** Gray background with White text */
-    export function secondary(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#ffffff'}, background: {fillStyle: {color: Colors.secondary}}}); }
-    /** Green background with White text */
-    export function success(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#ffffff'}, background: {fillStyle: {color: Colors.success}}}); }
-    /** Red background with White text */
-    export function danger(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#ffffff'}, background: {fillStyle: {color: Colors.danger}}}); }
-    /** Yellow background with Black text */
-    export function warning(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#000000'}, background: {fillStyle: {color: Colors.warning}}}); }
-    /** Light Blue background with Black text */
-    export function info(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#000000'}, background: {fillStyle: {color: Colors.info}}}); }
-    /** Light Gray background with Black text */
-    export function light(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#000000'}, background: {fillStyle: {color: Colors.light}}}); }
-    /** Dark Gray background with White text */
-    export function dark(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: '#ffffff'}, background: {fillStyle: {color: Colors.dark}}}); }
-
-    export module Outline {
-        /** Blue outline with Blue text */
-        export function primary(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.primary)}, background: {lineStyle: {color: Colors.primary, width: 1}}}); }
-        /** Gray outline with Gray text */
-        export function secondary(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.secondary)}, background: {lineStyle: {color: Colors.secondary, width: 1}}}); }
-        /** Green outline with Green text */
-        export function success(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.success)}, background: {lineStyle: {color: Colors.success, width: 1}}}); }
-        /** Red outline with Red text */
-        export function danger(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.danger)}, background: {lineStyle: {color: Colors.danger, width: 1}}}); }
-        /** Yellow outline with Yellow text */
-        export function warning(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.warning)}, background: {lineStyle: {color: Colors.warning, width: 1}}}); }
-        /** Light Blue outline with Light Blue text */
-        export function info(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.info)}, background: {lineStyle: {color: Colors.info, width: 1}}}); }
-        /** Light Gray outline with Light Gray text */
-        export function light(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.light)}, background: {lineStyle: {color: Colors.light, width: 1}}}); }
-        /** Dark Gray outline with Dark Gray text */
-        export function dark(scene: Phaser.Scene, options?: TextButtonOptions): TextButton { return get(scene, options, {textStyle: {color: Colors.toHexString(Colors.dark)}, background: {lineStyle: {color: Colors.dark, width: 1}}}); }
-    }
-
-    function get(scene: Phaser.Scene, userOptions: TextButtonOptions, setOptions: TextButtonOptions): TextButton {
-        const options: TextButtonOptions = {...userOptions, ...setOptions};
-        return new TextButton(scene, options);
     }
 }

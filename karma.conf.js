@@ -40,10 +40,10 @@ module.exports = function (config) {
         check: {
           emitWarning: false,
           global: {
-            statements: 63,
-            branches: 56,
-            functions: 57,
-            lines: 65
+            statements: 89,
+            branches: 79,
+            functions: 75,
+            lines: 92
           }
         }
       },

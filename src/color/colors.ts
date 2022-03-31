@@ -1,3 +1,5 @@
+import { Helpers } from "../utilities/helpers";
+
 export module Colors {
     /** Blue */
     export const primary: number = 0x0d6efd;
@@ -16,6 +18,10 @@ export module Colors {
     /** Dark Gray */
     export const dark: number = 0x212529;
 
+    const darkHexValues: string = '01234567';
+    const lightHexValues: string = '8abcdef';
+    const hexValues: string = darkHexValues + lightHexValues;
+
     /**
      * determines if a color is dark based on the number of
      * hex values between 0 and 7. if 50% or more are dark
@@ -29,7 +35,7 @@ export module Colors {
         colorStr = (colorStr.startsWith('#')) ? colorStr.slice(1) : colorStr;
         for (var i=0; i<colorStr.length; i++) {
             let c: string = colorStr[i];
-            if (['0','1','2','3','4','5','6','7'].includes(c)) {
+            if (darkHexValues.includes(c)) {
                 isDark++;
             }
         }
@@ -40,10 +46,9 @@ export module Colors {
      * returns a random hex color like `#f5ac5c`
      */
     export function random(): string {
-        const values: string = '0123456789abcdef';
         let colorStr: string = '#';
         for (var i=0; i<6; i++) {
-            colorStr += values[randomFrom(values)];
+            colorStr += hexValues[randomFrom(hexValues)];
         }
         return colorStr;
     }
@@ -68,6 +73,44 @@ export module Colors {
             colorStr = `0${colorStr}`;
         }
         return `#${colorStr}`;
+    }
+
+    /**
+     * generates a lighter shade of the input `color` based on the 
+     * `degrees` to lighten
+     * @param color the starting color to base the lighter color on
+     * @param degrees the amount to lighten
+     * @returns a lighter shade of the input color
+     */
+    export function lighten(color: string, degrees: number = 1): string {
+        let lighter: string = '';
+        const colorStr: string = (color.startsWith('#')) ? color.slice(1) : color;
+        for (var i=0; i<colorStr.length; i++) {
+            let c: string = colorStr[i];
+            let index: number = hexValues.indexOf(c);
+            let lighterColorIndex: number = Helpers.getLowest(hexValues.length - 1, index + degrees);
+            lighter += hexValues[lighterColorIndex];
+        }
+        return `#${lighter}`;
+    }
+
+    /**
+     * generates a darker shade of the input `color` based on the 
+     * `degrees` to darken
+     * @param color the starting color to base the darker color on
+     * @param degrees the amount to darken
+     * @returns a darker shade of the input color
+     */
+     export function darken(color: string, degrees: number = 1): string {
+        let darker: string = '';
+        const colorStr: string = (color.startsWith('#')) ? color.slice(1) : color;
+        for (var i=0; i<colorStr.length; i++) {
+            let c: string = colorStr[i];
+            let index: number = hexValues.indexOf(c);
+            let darkerColorIndex: number = Helpers.getHighest(0, index - degrees);
+            darker += hexValues[darkerColorIndex];
+        }
+        return `#${darker}`;
     }
 
     function randomFrom(input: string): number {

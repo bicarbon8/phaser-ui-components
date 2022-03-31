@@ -5,18 +5,20 @@ import { LinearLayoutOptions } from "./linear-layout-options";
 export class LinearLayout extends Phaser.GameObjects.Container {
     public readonly orientation: string;
     public readonly padding: number;
-    
+
     private _contents: LayoutContent[];
 
     constructor(scene: Phaser.Scene, options?: LinearLayoutOptions) {
-        super(scene, options?.x, options?.y);
-        this.orientation = options?.orientation || 'horizontal';
-        this.padding = options?.padding || 0;
+        options = Helpers.merge(LinearLayoutOptions.DEFAULT(), options);
+        super(scene, options.x, options.y);
+        this.orientation = options.orientation;
+        this.padding = options.padding;
         this._contents = [];
+        this.addContents(...options.contents);
     }
 
     get contents(): LayoutContent[] {
-        return this._contents;
+        return Array.from(this._contents);
     }
 
     /**
@@ -36,7 +38,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 this.add(c);
             }
             this._contents = this.contents.concat(contents);
-            this.layout();
+            this.refreshLayout();
         }
     }
 
@@ -57,7 +59,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 removed = this._contents.splice(index, 1)[0];
                 this.remove(content, destroy);
             }
-            this.layout();
+            this.refreshLayout();
         }
         return removed;
     }
@@ -75,7 +77,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
             this.remove(c, destroy);
             removed.push(c);
         }
-        this.layout();
+        this.refreshLayout();
         return removed;
     }
 
@@ -83,7 +85,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
      * adjusts the positions of all `LayoutContent` instances contained within this
      * `LayoutManager` based on the `orientation`
      */
-    layout(): void {
+    refreshLayout(): void {
         if (this.orientation == 'horizontal') {
             this._layoutHorizontal();
         } else {

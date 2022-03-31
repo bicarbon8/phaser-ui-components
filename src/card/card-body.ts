@@ -3,6 +3,7 @@ import { TextButtonOptions } from "../button/text-button-options";
 import { LayoutContent } from "../layout/layout-content";
 import { LinearLayout } from "../layout/linear-layout";
 import { LinearLayoutOptions } from "../layout/linear-layout-options";
+import { Helpers } from "../utilities/helpers";
 import { CardBodyOptions } from "./card-body-options";
 
 export class CardBody extends LinearLayout {
@@ -10,21 +11,26 @@ export class CardBody extends LinearLayout {
     private _description: Phaser.GameObjects.Text;
     private _buttons: TextButton[];
     private _buttonsLayout: LinearLayout;
-    private _backgroundContainer: Phaser.GameObjects.Container;
+    private _background: Phaser.GameObjects.Graphics;
 
     private readonly _options: CardBodyOptions;
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
+        options = Helpers.merge(CardBodyOptions.DEFAULT(scene), options);
         const opts: LinearLayoutOptions = {
-            x: options?.x || 0,
-            y: options?.y || 0,
+            x: options.x,
+            y: options.y,
             orientation: 'vertical',
-            padding: options?.padding || 0
+            padding: options.padding
         };
         super(scene, opts);
         this._options = options;
         this._buttons = [];
         this._createGameObject();
+    }
+
+    get cornerRadius(): number {
+        return this._options.cornerRadius;
     }
 
     get title(): Phaser.GameObjects.Text {
@@ -39,33 +45,25 @@ export class CardBody extends LinearLayout {
         return this._buttons;
     }
 
-    get background(): Phaser.GameObjects.Container {
-        return this._backgroundContainer;
+    get background(): Phaser.GameObjects.Graphics {
+        return this._background;
     }
 
     private _createGameObject(): void {
-        this._createTitleObject(this._options.title, this._options.titleStyle);
-        this._createDescriptionObject(this._options.description, this._options.descriptionStyle);
-        this.addButtons(...this._options.buttons || []);
+        this.setTitle(this._options.title, this._options.titleStyle);
+        this.setDescription(this._options.description, this._options.descriptionStyle);
+        this.addButtons(...this._options.buttons);
         this._createBackgroundObject(this._options.background);
     }
 
-    updateTitle(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
+    setTitle(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): CardBody {
         if (title) {
-            if (this._title) {
-                this._title.setText(title);
-                this._title.setScale(1);
-                const availableWidth: number = this._options.width;
-                if (availableWidth < (this._title.width + (this.padding * 2))) {
-                    const scaleX: number = availableWidth / (this._title.width + (this.padding * 2));
-                    this._title.setScale(scaleX);
-                }
-            } else {
-                this._createTitleObject(title, style);
-            }
-            this.layout();
-            this.resizeBackground(this._options.width, this.height);
+            this._options.title = title;
+            this._options.titleStyle = style || this._options.titleStyle;
+            this._createTitleObject(this._options.title, this._options.titleStyle);
+            this._createBackgroundObject(this._options.background);
         }
+        return this;
     }
 
     removeTitle(destroy: boolean = true): LayoutContent {
@@ -79,10 +77,10 @@ export class CardBody extends LinearLayout {
 
     private _createTitleObject(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (title) {
-            const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = style || { 
-                font: '30px Courier', 
-                color: '#000000',
-            };
+            if (this._title) {
+                this.removeContent(this._title, true);
+            }
+            const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).titleStyle, style);
             const titleText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, title, titleStyle);
             this._options.width = this._options.width || titleText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
@@ -92,25 +90,17 @@ export class CardBody extends LinearLayout {
                 titleText.setScale(scaleX);
             }
             this._title = titleText;
-            this.addContents(titleText);
+            const contents: LayoutContent[] = this.removeAllContent(false);
+            this.addContents(titleText, ...contents);
         }
     }
 
-    updateDescription(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
+    setDescription(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (description) {
-            if (this._description) {
-                this._description.setText(description);
-                this._description.setScale(1);
-                const availableWidth: number = this._options.width;
-                if (availableWidth < (this._description.width + (this.padding * 2))) {
-                    const scaleX: number = availableWidth / (this._description.width + (this.padding * 2));
-                    this._description.setScale(scaleX);
-                }
-            } else {
-                this._createDescriptionObject(description, style);
-            }
-            this.layout();
-            this.resizeBackground(this._options.width, this.height);
+            this._options.description = description;
+            this._options.descriptionStyle = style || this._options.descriptionStyle;
+            this._createDescriptionObject(this._options.description, this._options.descriptionStyle);
+            this._createBackgroundObject(this._options.background);
         }
     }
 
@@ -125,10 +115,7 @@ export class CardBody extends LinearLayout {
 
     private _createDescriptionObject(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
         if (description) {
-            const descStyle: Phaser.Types.GameObjects.Text.TextStyle = style || { 
-                font: '20px Courier', 
-                color: '#000000',
-            };
+            const descStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).descriptionStyle, style);
             const descText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, description, descStyle);
             this._options.width = this._options.width || descText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
@@ -138,7 +125,11 @@ export class CardBody extends LinearLayout {
                 descText.setScale(scaleX);
             }
             this._description = descText;
-            this.addContents(descText);
+            const contents: LayoutContent[] = [];
+            if (this.title) { contents.push(this.removeContent(this.title, false)); }
+            contents.push(this._description);
+            if (this._buttonsLayout) { contents.push(this.removeContent(this._buttonsLayout, false)); }
+            this.addContents(...contents);
         }
     }
 
@@ -164,66 +155,56 @@ export class CardBody extends LinearLayout {
                 scaleX = availableWidth / (this._buttonsLayout.width + (this.padding * 2));
                 this._buttonsLayout.setScale(scaleX);
             }
-            this.layout();
-            this.resizeBackground(this._options.width, this.height);
+            this.refreshLayout();
+            this._createBackgroundObject(this._options.background);
         }
     }
 
     removeButton(index: number, destroy?: boolean): TextButton {
         if (index != null && index < this._buttons.length) {
             let button: TextButton = this._buttons.splice(index, 1)[0];
-            return this._buttonsLayout.removeContent(button, destroy) as TextButton;
+            const removed: TextButton = this._buttonsLayout.removeContent(button, destroy) as TextButton;
+            this.refreshLayout();
+            this._createBackgroundObject(this._options.background);
+            return removed;
         }
+        return null;
     }
 
     removeAllButtons(destroy: boolean = true): TextButton[] {
         const buttons: TextButton[] = this._buttonsLayout.removeAllContent(destroy) as TextButton[];
         this._buttons = [];
-        this.layout();
-        this.resizeBackground(this._options.width, this.height);
+        this.refreshLayout();
+        this._createBackgroundObject(this._options.background);
         return buttons;
     }
 
-    resizeBackground(width: number, height: number): void {
-        this._options.width = width;
-        this._options.height = height;
-        this._createBackgroundObject(this._options.background);
-    }
-
-    private _createBackgroundObject(options?: Phaser.Types.GameObjects.Graphics.Styles): void {
-        if (!this._backgroundContainer) {
-            this._backgroundContainer = this.scene.add.container(0, 0);
-            this.add(this._backgroundContainer);
-            this.sendToBack(this._backgroundContainer);
-        }
-        this._backgroundContainer.removeAll(true);
-        if (options) {
-            if (this._options.cornerRadius != null) {
-                const backgroundTop: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
-                    backgroundTop.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
-                }
-                if (options.lineStyle) {
-                    backgroundTop.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this._options.cornerRadius);
-                }
-                this._backgroundContainer.add(backgroundTop);
-                const backgroundBottom: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
-                    backgroundBottom.fillRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
-                }
-                if (options.lineStyle) {
-                    backgroundBottom.strokeRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, this._options.cornerRadius);
-                }
-                this._backgroundContainer.add(backgroundBottom);
-            } else {
-                const background: Phaser.GameObjects.Graphics = this.scene.add.graphics(options);
-                if (options.fillStyle) {
-                    background.fillRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
-                }
-                if (options.lineStyle) {
-                    background.strokeRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height);
-                }
+    private _createBackgroundObject(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
+        this.remove(this._background, true);
+        if (styles) {
+            const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, {
+                fillStyle: styles.fillStyle,
+                lineStyle: styles.lineStyle
+            });
+            this._background = background;
+            if (styles.fillStyle) {
+                background.fillRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, {
+                    tl: 0,
+                    tr: 0,
+                    bl: this._options.cornerRadius,
+                    br: this._options.cornerRadius
+                });
             }
+            if (styles.lineStyle) {
+                background.strokeRoundedRect(-(this._options.width / 2), -(this.height / 2), this._options.width, this.height, {
+                    tl: 0,
+                    tr: 0,
+                    bl: this._options.cornerRadius,
+                    br: this._options.cornerRadius
+                });
+            }
+            this.add(background);
+            this.sendToBack(background);
         }
         this.setSize(this._options.width, this.height);
     }

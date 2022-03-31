@@ -1,4 +1,4 @@
 export interface Alignment {
-    horizontal?: 'left' | 'centre' | 'right';
+    horizontal?: 'left' | 'center' | 'right';
     vertical?: 'top' | 'middle' | 'bottom';
 }

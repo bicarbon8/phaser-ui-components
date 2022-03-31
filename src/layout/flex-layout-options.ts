@@ -1,19 +1,19 @@
 import { LayoutContent } from "./layout-content";
 
-export interface LinearLayoutOptions {
+export interface FlexLayoutOptions {
     x?: number;
     y?: number;
-    orientation?: 'vertical' | 'horizontal';
+    width?: number;
     padding?: number;
     contents?: LayoutContent[];
 }
 
-export module LinearLayoutOptions {
-    export function DEFAULT(): LinearLayoutOptions {
+export module FlexLayoutOptions {
+    export function DEFAULT(scene: Phaser.Scene): FlexLayoutOptions {
         return {
             x: 0,
             y: 0,
-            orientation: 'horizontal',
+            width: scene.sys.game.scale.gameSize.width,
             padding: 0,
             contents: []
         };

@@ -1,3 +1,4 @@
+import { Helpers } from "../utilities/helpers";
 import { GridCell } from "./grid-cell";
 import { GridLayoutOptions } from "./grid-layout-options";
 import { LayoutContent } from "./layout-content";
@@ -20,15 +21,16 @@ export class GridLayout extends Phaser.GameObjects.Container {
     private _right: number;
 
     constructor(scene: Phaser.Scene, options?: GridLayoutOptions) {
-        super(scene, options?.x, options?.y);
+        options = Helpers.merge(GridLayoutOptions.DEFAULT(scene), options);
+        super(scene, options.x, options.y);
         
-        this.padding = options?.padding || 0;
-        this.margins = options?.margins || 0;
-        this.rows = options?.rows || 12;
-        this.columns = options?.columns || 12;
+        this.padding = options.padding;
+        this.margins = options.margins;
+        this.rows = options.rows;
+        this.columns = options.columns;
 
-        const width: number = options?.width || scene.sys.game.scale.gameSize.width;
-        const height: number = options?.height || scene.sys.game.scale.gameSize.height;
+        const width: number = options.width;
+        const height: number = options.height;
         this.updateSize(width, height);
         
         this._createGrid();

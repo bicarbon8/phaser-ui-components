@@ -1,3 +1,4 @@
+import { Helpers } from "../utilities/helpers";
 import { CardImageOptions } from "./card-image-options";
 
 export class CardImage extends Phaser.GameObjects.Container {
@@ -7,8 +8,9 @@ export class CardImage extends Phaser.GameObjects.Container {
     private _background: Phaser.GameObjects.Graphics;
 
     constructor(scene: Phaser.Scene, options?: CardImageOptions) {
-        super(scene, options?.x, options?.y);
-        this._options = options || {};
+        options = Helpers.merge(CardImageOptions.DEFAULT(scene), options);
+        super(scene, options.x, options.y);
+        this._options = options;
 
         this._createGameObject();
     }
@@ -29,7 +31,7 @@ export class CardImage extends Phaser.GameObjects.Container {
     private _createSprite(): void {
         const key: string = this._options.spriteKey;
         if (key) {
-            const index: number = this._options.spriteIndex || 0;
+            const index: number = this._options.spriteIndex;
             const sprite: Phaser.GameObjects.Sprite = this.scene.add.sprite(0, 0, key, index);
             this._options.width = this._options.width || sprite.width;
             this._options.height = this._options.height || sprite.height || this._options.width;

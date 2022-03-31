@@ -12,6 +12,28 @@ export interface GridCellOptions {
     alignment?: Alignment;
     scaleToFit?: boolean;
     keepAspectRatio?: boolean;
-    style?: Phaser.Types.GameObjects.Graphics.Styles,
+    background?: Phaser.Types.GameObjects.Graphics.Styles,
     content?: LayoutContent;
+}
+
+export module GridCellOptions {
+    export function DEFAULT(): GridCellOptions {
+        return {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            row: 0,
+            column: 0,
+            padding: 0,
+            alignment: {
+                horizontal: "center",
+                vertical: "middle"
+            },
+            scaleToFit: true,
+            keepAspectRatio: true
+            // no background
+            // no content
+        }
+    }
 }

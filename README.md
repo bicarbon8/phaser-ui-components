@@ -44,7 +44,8 @@ an object that can contain a header, image, title, and description similar to a 
     x?: number;
     y?: number;
     width?: number;
-    height?: number;
+    padding?: number;
+    cornerRadius?: number;
     header?: CardHeaderOptions;
     image?: CardImageOptions;
     body?: CardBodyOptions;
@@ -54,7 +55,8 @@ an object that can contain a header, image, title, and description similar to a 
 - **x**: [`number`] the x coordinate within your scene where this card will be centred _(optional - defaults to 0)_
 - **y**: [`number`] the y coordinate within your scene where this card will be centred _(optional - defaults to 0)_
 - **width**: [`number`] the width of the card. if not specified this will be the width of the first non-null contents specified _(optional - defaults to the content width or 0 if none provided)_
-- **height**: [`number`] currently unused and Card height will grow with contents
+- **padding**: [`number`] sets the `padding` for any `CardHeader` and `CardBody` added _(optional - defaults to 0)_
+- **cornerRadius**: [`number`] sets the `cornerRadius` for any `CardHeader` and `CardBody` added _(optional - defaults to 0)_
 - **header**: [`CardHeaderOptions`] an object containing the configuration options for the header area _(optional - no card header created if undefined or null)_
 - **image**: [`CardImageOptions`] an object containing the configuration options for the image area _(optional - no card image created if undefined or null)_
 - **body**: [`CardBodyOptions`] an object containing the configuration options for the card body area _(optional - no card body created if undefined or null)_
@@ -67,7 +69,6 @@ the card header can have a text value and a background which can include rounded
     x?: number;
     y?: number;
     width?: number;
-    height?: number;
     text?: string;
     textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
@@ -79,7 +80,6 @@ the card header can have a text value and a background which can include rounded
 - **x**: [`number`] the x coordinate within your scene where this header will be centred _(optional - defaults to 0)_
 - **y**: [`number`] the y coordinate within your scene where this header will be centred _(optional - defaults to location directly above `CardImage` or `CardBody`)_
 - **width**: [`number`] the width of the header. if specified and the text string provided is wider than this width, the text will be scaled down to fit _(optional - defaults to the text string width or 0 if no text provided)_
-- **height**: [`number`] the height of the header. if specified and the text string provided is taller than this height, the text will be scaled down to fit _(optional - defaults to the text string height or 0 if no text provided)_
 - **text**: [`string`] the text string to display within the header _(optional - defaults to null)_
 - **textStyle**: [`Phaser.Types.GameObjects.Text.TextStyle`] an object allowing full control over the text styling _(optional - defaults to `{font: '20px Courier', color: '#000000', align: 'center'}`)_
 - **background**: [`Phaser.Types.GameObjects.Graphics.FillStyle`] an object allowing full control over the fill style of the background _(optional - defaults to no background)_
@@ -102,6 +102,7 @@ a UI layout that divides the screen area into rows and columns and provides cont
     padding?: number;
 }
 ```
+you must add content to each `GridCell` of the `GridLayout` by calling `new GridLayout(scene).getGridCell(0, 0).setContent(new TextButton(scene, TextButtonOptions.primary({text: 'foo'})))` where `getGridCell(0, 0)` returns the _top-left_ cell and `getGridCell(0, 11)` returns the _top-right_ cell
 
 ## LinearLayout
 a UI layout that centre aligns all contents in either a horizontal or vertical orientataion. `LinearLayoutOptions` include the following:
@@ -111,8 +112,22 @@ a UI layout that centre aligns all contents in either a horizontal or vertical o
     y?: number;
     orientation?: 'vertical' | 'horizontal';
     padding?: number;
+    contents?: LayoutContent[];
 }
 ```
+
+## FlexLayout
+a UI layout that places as many `LayoutContent` items on the same row as will fit based on the layout's width and padding before wrapping to the next row and continuing the process. `FlexLayoutOptions` include the following:
+```javascript
+{
+    x?: number;
+    y?: number;
+    width?: number;
+    padding?: number;
+    contents?: LayoutContent[];
+}
+```
+> NOTE: `Phaser.GameObjects.Graphics` objects do not report their width properly so they should be placed inside a `Phaser.GameObjects.Container` who's size is set before being added to this layout for proper placement
 
 # UI Utilities
 
