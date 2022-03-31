@@ -1,5 +1,7 @@
 /** Colors */
 export * from "./color/colors";
+/** Styles */
+export * from "./style/styles";
 /** Buttons */
 export * from "./button/text-button";
 export * from "./button/text-button-options";
@@ -20,3 +22,5 @@ export * from "./layout/grid-layout";
 export * from "./layout/grid-layout-options";
 export * from "./layout/grid-cell";
 export * from "./layout/grid-cell-options";
+export * from "./layout/flex-layout";
+export * from "./layout/flex-layout-options";

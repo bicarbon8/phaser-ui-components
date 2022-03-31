@@ -1,4 +1,5 @@
 import { Colors } from "../color/colors";
+import { Styles } from "../style/styles";
 import { Helpers } from "../utilities/helpers";
 
 export interface CardHeaderOptions {
@@ -25,10 +26,30 @@ export module CardHeaderOptions {
         };
     }
 
-    export function primary(options?: CardHeaderOptions): CardHeaderOptions {
+    export function primary(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.primary(), options); }
+    export function secondary(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.secondary(), options); }
+    export function success(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.success(), options); }
+    export function danger(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.danger(), options); }
+    export function warning(options?: CardHeaderOptions): CardHeaderOptions {return get(Styles.warning(), options); }
+    export function info(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.info(), options); }
+    export function light(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.light(), options); }
+    export function dark(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.dark(), options); }
+
+    export module Outline {
+        export function primary(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.primary(), options); }
+        export function secondary(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.secondary(), options); }
+        export function success(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.success(), options); }
+        export function danger(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.danger(), options); }
+        export function warning(options?: CardHeaderOptions): CardHeaderOptions {return get(Styles.Outline.warning(), options); }
+        export function info(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.info(), options); }
+        export function light(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.light(), options); }
+        export function dark(options?: CardHeaderOptions): CardHeaderOptions { return get(Styles.Outline.dark(), options); }
+    }
+
+    function get(style: Styles, options?: CardHeaderOptions): CardHeaderOptions {
         return Helpers.merge({
-            textStyle: {color: '#ffffff'},
-            background: {fillStyle: {color: Colors.primary}}
+            textStyle: style.text,
+            background: style.graphics
         }, options);
     }
 }

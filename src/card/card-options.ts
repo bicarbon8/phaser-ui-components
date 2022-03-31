@@ -8,7 +8,6 @@ export interface CardOptions {
     width?: number;
     cornerRadius?: number;
     padding?: number;
-    background?: Phaser.Types.GameObjects.Graphics.Styles;
     header?: CardHeaderOptions;
     image?: CardImageOptions;
     body?: CardBodyOptions;

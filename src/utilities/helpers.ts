@@ -16,6 +16,24 @@ export module Helpers {
         }
         return highest;
     }
+
+    /**
+     * returns the lowest value from a passed in array of numbers or Infinity if no
+     * values passed in
+     * @param values an array of numbers
+     * @returns the lowest value from the array or Infinity if no values passed in
+     */
+    export function getLowest(...values: number[]): number {
+        let lowest: number = Infinity;
+        if (values) {
+            for (var i=0; i<values.length; i++) {
+                if (values[i] < lowest) {
+                    lowest = values[i];
+                }
+            }
+        }
+        return lowest;
+    }
     
     export function merge<T extends object>(baseObj: T, mergeObj: T): T {
         let result: T = {} as T;

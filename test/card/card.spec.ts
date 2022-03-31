@@ -1,4 +1,4 @@
-import { Colors } from "../../src";
+import { CardBodyOptions, CardHeaderOptions, CardOptions, Colors, TextButtonOptions } from "../../src";
 import { Card } from "../../src/card/card";
 import { TestUtils } from "../test-utils";
 
@@ -96,7 +96,6 @@ describe('Card', () => {
     it('can be created with a header image and a body', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 200,
-            background: {lineStyle: {color: Colors.primary}},
             cornerRadius: 5,
             header: {
                 text: 'header text',
@@ -129,10 +128,47 @@ describe('Card', () => {
         expect(card.height).withContext('card should be height of all parts combined').toEqual(card.header.height + card.cardbody.height + 200);
     });
 
+    it('can be created with a everything', () => {
+        const card: Card = new Card(TestUtils.scene(), {
+            width: 200,
+            cornerRadius: 5,
+            padding: 10,
+            header: CardHeaderOptions.primary({
+                text: 'header text'
+            }),
+            image: {height: 100},
+            body: CardBodyOptions.light({
+                title: 'title text',
+                description: 'description text',
+                buttons: [
+                    TextButtonOptions.success({
+                        text: 'Continue',
+                        padding: 5,
+                        cornerRadius: 2
+                    })
+                ]
+            })
+        });
+        TestUtils.scene().add.existing(card);
+
+        expect(card).toBeDefined();
+        expect(card.header).toBeDefined();
+        expect(card.header.padding).withContext('header padding').toBe(10);
+        expect(card.header.cornerRadius).withContext('header cornerRadius').toBe(5);
+        expect(card.image).toBeDefined();
+        expect(card.cardbody).toBeDefined();
+        expect(card.cardbody.padding).withContext('cardbody padding').toBe(10);
+        expect(card.cardbody.cornerRadius).withContext('cardbody cornerRadius').toBe(5);
+        expect(card.width).withContext('card width should be as specified').toBe(200);
+        expect(card.width).withContext('card header width should be same as card width').toEqual(card.header.width);
+        expect(card.width).withContext('card body width should be same as card width').toEqual(card.cardbody.width);
+        expect(card.height).withContext('card height should be over 200').toBeGreaterThan(200);
+        expect(card.height).withContext('card should be height of all parts combined').toEqual(card.header.height + card.cardbody.height + 100);
+    });
+
     it('can remove header', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 200,
-            background: {lineStyle: {color: Colors.primary}},
             cornerRadius: 5,
             header: {
                 text: 'header text',
@@ -161,7 +197,6 @@ describe('Card', () => {
     it('can remove image', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 200,
-            background: {lineStyle: {color: Colors.primary}},
             cornerRadius: 5,
             header: {
                 text: 'header text',
@@ -190,7 +225,6 @@ describe('Card', () => {
     it('can remove cardbody', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 200,
-            background: {lineStyle: {color: Colors.primary}},
             cornerRadius: 5,
             header: {
                 text: 'header text',
