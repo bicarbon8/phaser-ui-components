@@ -80,20 +80,11 @@ export class TextButton extends Phaser.GameObjects.Container {
             this._options.width = this._options.width || 0;
             this._options.height = this._options.height || 0;
             const rect = this.scene.add.graphics(this._options.background);
-            if (this._options.cornerRadius > 0) {
-                if (this._options.background.fillStyle) {
-                    rect.fillRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
-                }
-                if (this._options.background.lineStyle) {
-                    rect.strokeRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
-                }
-            } else {
-                if (this._options.background.fillStyle) {
-                    rect.fillRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height);
-                }
-                if (this._options.background.lineStyle) {
-                    rect.strokeRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height);
-                }
+            if (this._options.background.fillStyle) {
+                rect.fillRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
+            }
+            if (this._options.background.lineStyle) {
+                rect.strokeRoundedRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height, this._options.cornerRadius);
             }
             this.add(rect);
             this.sendToBack(rect);

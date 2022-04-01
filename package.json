@@ -1,6 +1,6 @@
 {
   "name": "phaser-ui-components",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "phaser.io UI component library for use in browser games using the Phaser3 game engine",
   "main": "src/index.js",
   "types": "src/index.d.ts",

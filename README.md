@@ -15,7 +15,7 @@ a `Phaser.GameObjects.Container` that can contain a centre-aligned text string a
     text?: string;
     textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
-    cornerRadius?: number;
+    cornerRadius?: number | Phaser.Types.GameObject.Graphics.RoundedRectRadius;
     interactive?: boolean;
     padding?: number;
 }
@@ -27,9 +27,9 @@ a `Phaser.GameObjects.Container` that can contain a centre-aligned text string a
 - **height**: [`number`] the height of the button. if specified and the text string provided is taller than this height, the text will be scaled down to fit _(optional - defaults to the text string height or 0 if no text provided)_
 - **text**: [`string`] the text string to display within the button _(optional - defaults to null)_
 - **textStyle**: [`Phaser.Types.GameObjects.Text.TextStyle`] an object allowing full control over the text styling _(optional - defaults to `20px Courier #000000`)_
-  - **NOTE**: presets are provided in the `TextButton` module and can be used like `TextButton.primary(...)` or `TextButton.Outline.info(...)`
+  - **NOTE**: presets are provided in the `TextButtonOptions` module and can be used like `TextButtonOptions.primary(...)` or `TextButtonOptions.Outline.info(...)`
 - **background**: [`Phaser.Types.GameObjects.Graphics.Styles`] an object allowing full control over the background styling _(optional - defaults to undefined)_
-  - **NOTE**: presets are provided in the `TextButton` module and can be used like `TextButton.primary(...)` or `TextButton.Outline.info(...)`
+  - **NOTE**: presets are provided in the `TextButtonOptions` module and can be used like `TextButtonOptions.primary(...)` or `TextButtonOptions.Outline.info(...)`
 - **cornerRadius**: [`number`] allows specifying a rounded corner radius for the button background _(optional - defaults to 0)_
 - **interactive**: [`boolean`] if _true_ you can set Phaser EventListener functions like `Phaser.Input.Events.POINTER_DOWN` on this button _(optional - defaults to false)_
 - **padding**: [`number`] an amount to pad any text from the edge of the button. this will not increase the width or height if you've specified them in the options, but will ensure the edge of the button will be the number of pixels specified away from the text by scaling the text as needed _(optional - defaults to 0)_
@@ -138,3 +138,6 @@ provides functions to convert between hexidecimal strings and numbers as well as
 - `Colors.toHexString(color: number): string` - converts a number like `0xfc5a6d` to a string like `#fc5a6d`
 - `Colors.toHexNumber(color: string): number` - converts a string like `#fc5a6d` to a number like `0xfc5a6d`
 - `Colors.random(): string` - generates a random colour string like `#fc5a6d`
+
+## Styles module
+provides preset text and graphics styles that can be used with your UI components. for example: `Styles.primary().text` contains preset values for use as a `Phaser.Types.GameObjects.Text.TextStyle` object that will work well with a background of `Styles.primary().graphics` that contains preset values for use as a `Phaser.Types.GameObjects.Graphics.Styles` object
