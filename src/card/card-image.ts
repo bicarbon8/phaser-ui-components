@@ -11,6 +11,7 @@ export class CardImage extends Phaser.GameObjects.Container {
         options = Helpers.merge(CardImageOptions.DEFAULT(scene), options);
         super(scene, options.x, options.y);
         this._options = options;
+        this._options.height = this._options.height || this._options.width;
 
         this._createGameObject();
     }
@@ -24,15 +25,18 @@ export class CardImage extends Phaser.GameObjects.Container {
     }
 
     private _createGameObject(): void {
-        this._createSprite();
-        this._createBackground();
+        this.setSprite(this._options.spriteKey, this._options.spriteIndex);
+        this.setBackground(this._options.background);
     }
 
-    private _createSprite(): void {
-        const key: string = this._options.spriteKey;
+    setSprite(key?: string, spriteIndex: number = 0): void {
+        if (this._sprite) {
+            this.remove(this._sprite, true);
+        }
         if (key) {
-            const index: number = this._options.spriteIndex;
-            const sprite: Phaser.GameObjects.Sprite = this.scene.add.sprite(0, 0, key, index);
+            this._options.spriteKey = key;
+            this._options.spriteIndex = spriteIndex;
+            const sprite: Phaser.GameObjects.Sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, this._options.spriteKey, this._options.spriteIndex);
             this._options.width = this._options.width || sprite.width;
             this._options.height = this._options.height || sprite.height || this._options.width;
             const scaleX: number = this._options.width / sprite.width;
@@ -42,28 +46,26 @@ export class CardImage extends Phaser.GameObjects.Container {
             sprite.setOrigin(0.5);
             this.add(sprite);
             this._sprite = sprite;
-
-            this.setSize(this._options.width, this._options.height);
         }
+        this.setSize(this._options.width, this._options.height);
     }
 
-    private _createBackground(): void {
-        const bg: Phaser.Types.GameObjects.Graphics.Styles = this._options.background;
-        if (bg) {
-            this._options.width = this._options.width || 0;
-            this._options.height = this._options.height || this._options.width;
-            const background: Phaser.GameObjects.Graphics = this.scene.add.graphics(bg);
+    setBackground(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
+        if (this._background) {
+            this.remove(this._background, true);
+        }
+        if (styles) {
+            this._options.background = styles;
+            const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, this._options.background);
             if (this._options.background.fillStyle) {
-                background.fillRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height);
+                background.fillRect(-(this.width / 2), -(this.height / 2), this.width, this.height);
             }
             if (this._options.background.lineStyle) {
-                background.strokeRect(-(this._options.width / 2), -(this._options.height / 2), this._options.width, this._options.height);
+                background.strokeRect(-(this.width / 2), -(this.height / 2), this.width, this.height);
             }
             this.add(background);
             this.sendToBack(background);
             this._background = background;
-
-            this.setSize(this._options.width, this._options.height);
         }
     }
 }

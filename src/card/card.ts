@@ -44,6 +44,10 @@ export class Card extends LinearLayout {
     }
 
     setHeader(options?: CardHeaderOptions): Card {
+        if (this._header) {
+            this.removeContent(this._header, true);
+            this._header = null;
+        }
         if (options) {
             this._options.header = options;
             this._createHeaderObject(this._options.header);
@@ -51,13 +55,11 @@ export class Card extends LinearLayout {
         return this;
     }
 
-    removeHeader(destroy: boolean = true): CardHeader {
-        const header: CardHeader = this.removeContent(this.header, destroy) as CardHeader;
-        this._header = null;
-        return header;
-    }
-
     setImage(options?: CardImageOptions): Card {
+        if (this._image) {
+            this.removeContent(this._image, true);
+            this._image = null;
+        }
         if (options) {
             this._options.image = options;
             this._createImageObject(this._options.image);
@@ -65,24 +67,16 @@ export class Card extends LinearLayout {
         return this;
     }
 
-    removeImage(destroy: boolean = true): CardImage {
-        const image: CardImage = this.removeContent(this.image, destroy) as CardImage;
-        this._image = null;
-        return image;
-    }
-
     setCardBody(options?: CardBodyOptions): Card {
+        if (this._body) {
+            this.removeContent(this._body, true);
+            this._body = null;
+        }
         if (options) {
             this._options.body = options;
             this._createCardBodyObject(this._options.body);
         }
         return this;
-    }
-
-    removeCardBody(destroy: boolean = true): CardBody {
-        const body: CardBody = this.removeContent(this.cardbody, destroy) as CardBody;
-        this._body = null;
-        return body;
     }
 
     private _createGameObject(): void {

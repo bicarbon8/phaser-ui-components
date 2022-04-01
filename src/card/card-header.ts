@@ -32,41 +32,17 @@ export class CardHeader extends Phaser.GameObjects.Container {
 
     private _createGameObject(): void {
         this.setText(this._options.text, this._options.textStyle);
-        this._createBackgroundObject(this._options.background);
+        this.setBackground(this._options.background);
     }
 
-    setText(text?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
+    setText(text?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): CardHeader {
+        if (this._text) {
+            this.remove(this._text, true);
+            this._text = null;
+        }
         if (text) {
             this._options.text = text;
             this._options.textStyle = style || this._options.textStyle;
-            this._createTextObject(text, style);
-        }
-    }
-
-    removeText(destroy: boolean = true): Phaser.GameObjects.Text {
-        const obj: Phaser.GameObjects.Text = this._text;
-        this.remove(this._text, destroy);
-        this._text = null;
-        return obj;
-    }
-
-    updateSize(width: number, height: number): void {
-        this._options.width = width;
-        this._options.height = height;
-        this.setText(this._options.text, this._options.textStyle);
-        this._createBackgroundObject(this._options.background);
-    }
-
-    removeBackground(): void {
-        this._options.background = null;
-        this.remove(this._background, true);
-    }
-
-    private _createTextObject(text?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
-        if (text) {
-            if (this._text) {
-                this.remove(this._text, true);
-            }
             const headerText: Phaser.GameObjects.Text = new Phaser.GameObjects.Text(this.scene, 0, 0, text, style);
             headerText.setOrigin(0.5);
             this._options.width = this._options.width || (headerText.width + (this._options.padding * 2));
@@ -78,12 +54,15 @@ export class CardHeader extends Phaser.GameObjects.Container {
             }
             this._text = headerText;
             this.add(headerText);
-            this.setSize(this._options.width, this._options.height);
         }
+        this.setSize(this._options.width, this._options.height);
+        return this;
     }
 
-    private _createBackgroundObject(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
-        this.remove(this._background, true);
+    setBackground(styles?: Phaser.Types.GameObjects.Graphics.Styles): CardHeader {
+        if (this._background) {
+            this.remove(this._background, true);
+        }
         if (styles) {
             const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, {
                 fillStyle: styles.fillStyle,
@@ -109,6 +88,6 @@ export class CardHeader extends Phaser.GameObjects.Container {
             this.add(background);
             this.sendToBack(background);
         }
-        this.setSize(this._options.width, this._options.height);
+        return this;
     }
 }

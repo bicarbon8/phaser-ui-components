@@ -116,7 +116,7 @@ describe('Card', () => {
         expect(card.header.text).toBeDefined();
         expect(card.image).toBeDefined();
         expect(card.image.sprite).toBeUndefined();
-        expect(card.image.background).toBeDefined();
+        expect(card.image.background).withContext('card image background should default to undefined').toBeUndefined();
         expect(card.image.height).withContext('card image height should be same as card width if not specified').toBe(200);
         expect(card.cardbody).toBeDefined();
         expect(card.cardbody.title).toBeDefined();
@@ -188,7 +188,7 @@ describe('Card', () => {
         expect(card.header).toBeDefined();
 
         spyOn(card, 'refreshLayout').and.callThrough();
-        card.removeHeader();
+        card.setHeader();
 
         expect(card.header).toBeNull();
         expect(card.refreshLayout).toHaveBeenCalledTimes(1);
@@ -216,7 +216,7 @@ describe('Card', () => {
         expect(card.image).toBeDefined();
 
         spyOn(card, 'refreshLayout').and.callThrough();
-        card.removeImage();
+        card.setImage();
 
         expect(card.image).toBeNull();
         expect(card.refreshLayout).toHaveBeenCalledTimes(1);
@@ -244,7 +244,7 @@ describe('Card', () => {
         expect(card.cardbody).toBeDefined();
 
         spyOn(card, 'refreshLayout').and.callThrough();
-        card.removeCardBody();
+        card.setCardBody();
 
         expect(card.cardbody).toBeNull();
         expect(card.refreshLayout).toHaveBeenCalledTimes(1);

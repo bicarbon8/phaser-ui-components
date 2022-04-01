@@ -1,4 +1,3 @@
-import { Colors } from "../color/colors";
 import { Styles } from "../style/styles";
 import { Helpers } from "../utilities/helpers";
 
@@ -10,7 +9,7 @@ export interface TextButtonOptions {
     text?: string;
     textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
-    cornerRadius?: number;
+    cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
     interactive?: boolean;
     padding?: number;
 }
@@ -30,7 +29,7 @@ export module TextButtonOptions {
     export function secondary(options?: TextButtonOptions): TextButtonOptions { return get(Styles.secondary(), options); }
     export function success(options?: TextButtonOptions): TextButtonOptions { return get(Styles.success(), options); }
     export function danger(options?: TextButtonOptions): TextButtonOptions { return get(Styles.danger(), options); }
-    export function warning(options?: TextButtonOptions): TextButtonOptions { return get(Styles.info(), options); }
+    export function warning(options?: TextButtonOptions): TextButtonOptions { return get(Styles.warning(), options); }
     export function info(options?: TextButtonOptions): TextButtonOptions { return get(Styles.info(), options); }
     export function light(options?: TextButtonOptions): TextButtonOptions { return get(Styles.light(), options); }
     export function dark(options?: TextButtonOptions): TextButtonOptions { return get(Styles.dark(), options); }

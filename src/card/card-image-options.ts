@@ -17,7 +17,6 @@ export module CardImageOptions {
             y: 0,
             width: scene.sys.game.scale.gameSize.width,
             spriteIndex: 0,
-            background: {fillStyle: {color: Colors.secondary}}
         };
     }
 }

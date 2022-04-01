@@ -10,6 +10,11 @@ export module TestUtils {
                     init: function() {
                         _scene = this;
                     },
+                    preload: function() {
+                        this.load.spritesheet('sample-spritesheet', 'https://avatars.githubusercontent.com/u/2321610?v=4', {
+                            frameWidth: 460
+                        });
+                    },
                     create: function() {
                         this.cameras.main.centerOn(0, 0);
                     }
