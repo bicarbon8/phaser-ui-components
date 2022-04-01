@@ -64,7 +64,6 @@ describe('CardBody', () => {
         }));
         TestUtils.scene().add.existing(body);
 
-        body.removeTitle();
         body.setTitle('new title text');
 
         expect(body.title.text).withContext('updated text').toEqual('new title text');
@@ -115,7 +114,6 @@ describe('CardBody', () => {
         }));
         TestUtils.scene().add.existing(body);
 
-        body.removeDescription();
         body.setDescription('new description');
 
         expect(body.description.text).withContext('updated text').toEqual('new description');

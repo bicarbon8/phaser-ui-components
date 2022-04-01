@@ -1,5 +1,6 @@
 import { TextButton } from "../button/text-button";
 import { TextButtonOptions } from "../button/text-button-options";
+import { FlexLayout } from "../layout/flex-layout";
 import { LayoutContent } from "../layout/layout-content";
 import { LinearLayout } from "../layout/linear-layout";
 import { LinearLayoutOptions } from "../layout/linear-layout-options";
@@ -10,7 +11,7 @@ export class CardBody extends LinearLayout {
     private _title: Phaser.GameObjects.Text;
     private _description: Phaser.GameObjects.Text;
     private _buttons: TextButton[];
-    private _buttonsLayout: LinearLayout;
+    private _buttonsLayout: FlexLayout;
     private _background: Phaser.GameObjects.Graphics;
 
     private readonly _options: CardBodyOptions;
@@ -57,31 +58,14 @@ export class CardBody extends LinearLayout {
     }
 
     setTitle(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): CardBody {
+        if (this._title) {
+            this.removeContent(this._title, true);
+            this._title = null;
+        }
         if (title) {
             this._options.title = title;
             this._options.titleStyle = style || this._options.titleStyle;
-            this._createTitleObject(this._options.title, this._options.titleStyle);
-            this._createBackgroundObject(this._options.background);
-        }
-        return this;
-    }
-
-    removeTitle(destroy: boolean = true): LayoutContent {
-        if (this._title) {
-            const obj: LayoutContent = this.removeContent(this._title, destroy);
-            this._title = null;
-            return obj;
-        }
-        return null;
-    }
-
-    private _createTitleObject(title?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
-        if (title) {
-            if (this._title) {
-                this.removeContent(this._title, true);
-            }
-            const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).titleStyle, style);
-            const titleText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, title, titleStyle);
+            const titleText: Phaser.GameObjects.Text = new Phaser.GameObjects.Text(this.scene, 0, 0, this._options.title, this._options.titleStyle);
             this._options.width = this._options.width || titleText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
             let scaleX: number = 1;
@@ -92,31 +76,20 @@ export class CardBody extends LinearLayout {
             this._title = titleText;
             const contents: LayoutContent[] = this.removeAllContent(false);
             this.addContents(titleText, ...contents);
+            this._createBackgroundObject(this._options.background);
         }
+        return this;
     }
 
-    setDescription(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
+    setDescription(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): CardBody {
+        if (this._description) {
+            this.removeContent(this._description, true);
+            this._description = null;
+        }
         if (description) {
             this._options.description = description;
             this._options.descriptionStyle = style || this._options.descriptionStyle;
-            this._createDescriptionObject(this._options.description, this._options.descriptionStyle);
-            this._createBackgroundObject(this._options.background);
-        }
-    }
-
-    removeDescription(destroy: boolean = true): LayoutContent {
-        if (this._description) {
-            const obj: LayoutContent = this.removeContent(this._description, destroy);
-            this._description = null;
-            return obj;
-        }
-        return null;
-    }
-
-    private _createDescriptionObject(description?: string, style?: Phaser.Types.GameObjects.Text.TextStyle): void {
-        if (description) {
-            const descStyle: Phaser.Types.GameObjects.Text.TextStyle = Helpers.merge(CardBodyOptions.DEFAULT(this.scene).descriptionStyle, style);
-            const descText: Phaser.GameObjects.Text = this.scene.add.text(0, 0, description, descStyle);
+            const descText: Phaser.GameObjects.Text = new Phaser.GameObjects.Text(this.scene, 0, 0, this._options.description, this._options.descriptionStyle);
             this._options.width = this._options.width || descText.width + (this.padding * 2);
             const availableWidth: number = this._options.width;
             let scaleX: number = 1;
@@ -130,13 +103,15 @@ export class CardBody extends LinearLayout {
             contents.push(this._description);
             if (this._buttonsLayout) { contents.push(this.removeContent(this._buttonsLayout, false)); }
             this.addContents(...contents);
+            this._createBackgroundObject(this._options.background);
         }
+        return this;
     }
 
     addButtons(...buttonOpts: TextButtonOptions[]): void {
         if (!this._buttonsLayout) {
-            this._buttonsLayout = new LinearLayout(this.scene, {
-                orientation: 'horizontal',
+            this._buttonsLayout = new FlexLayout(this.scene, {
+                width: this._options.width,
                 padding: this._options.buttonSpacing
             });
             this.addContents(this._buttonsLayout);
