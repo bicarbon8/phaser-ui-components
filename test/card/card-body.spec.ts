@@ -27,15 +27,17 @@ describe('CardBody', () => {
     it('can be created with only a title', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), {
             width: 300,
-            title: 'sample title text',
-            titleStyle: {color: Colors.toHexString(Colors.warning)}
+            title: {
+                text: 'sample title text',
+                textStyle: {color: Colors.toHexString(Colors.warning)}
+            }
         });
         TestUtils.scene().add.existing(body);
 
         expect(body.title).withContext('title is defined').toBeDefined();
         expect(body.title.y).withContext('title is at y=0').toBe(0);
         expect(body.background).withContext('background should not be defined').not.toBeDefined();
-        expect(body.width).withContext('body should be wider than title text').toBeGreaterThan(body.title.width);
+        expect(body.width).withContext('body should be wider than title text').toBeGreaterThan(body.title.text.width);
         expect(body.height).withContext('body should be height of title text').toBe(body.title.height);
     });
 
@@ -47,16 +49,16 @@ describe('CardBody', () => {
 
         expect(body.title).toBeUndefined();
 
-        body.setTitle('new title text', {stroke: Colors.toHexString(Colors.light)});
+        body.setTitle({text: 'new title text', textStyle: {stroke: Colors.toHexString(Colors.light)}});
 
-        expect(body.title.text).toEqual('new title text');
+        expect(body.title.text.text).toEqual('new title text');
     });
 
     it('removing and re-adding title text maintains correct positioning', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.Outline.success({
             width: 300,
-            title: 'sample title text',
-            description: 'sample description',
+            title: {text:'sample title text'},
+            description: {text:'sample description'},
             buttons: [TextButtonOptions.Outline.danger({
                 text: 'button text',
                 padding: 10
@@ -64,9 +66,9 @@ describe('CardBody', () => {
         }));
         TestUtils.scene().add.existing(body);
 
-        body.setTitle('new title text');
+        body.setTitle({text:'new title text'});
 
-        expect(body.title.text).withContext('updated text').toEqual('new title text');
+        expect(body.title.text.text).withContext('updated text').toEqual('new title text');
         expect(body.contents.length).withContext('should have 3 contents').toBe(3);
         expect(body.contents[0]).withContext('first contents should be title').toBe(body.title);
         expect(body.description).withContext('description should be defined').toBeDefined();
@@ -77,8 +79,10 @@ describe('CardBody', () => {
     it('can be created with only a description', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), {
             width: 300,
-            description: 'sample description',
-            descriptionStyle: {color: Colors.toHexString(Colors.light)}
+            description: {
+                text: 'sample description',
+                textStyle: {color: Colors.toHexString(Colors.light)}
+            }
         });
         TestUtils.scene().add.existing(body);
 
@@ -97,7 +101,7 @@ describe('CardBody', () => {
 
         expect(body.description).toBeUndefined();
 
-        body.setDescription('new description', {color: Colors.toHexString(Colors.light), stroke: Colors.toHexString(Colors.dark)});
+        body.setDescription({text: 'new description', textStyle: {color: Colors.toHexString(Colors.light), stroke: Colors.toHexString(Colors.dark)}});
 
         expect(body.description.text).toEqual('new description');
     });
@@ -105,8 +109,8 @@ describe('CardBody', () => {
     it('removing and re-adding description text maintains correct positioning', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.Outline.success({
             width: 300,
-            title: 'sample title text',
-            description: 'sample description',
+            title: {text: 'sample title text'},
+            description: {text: 'sample description'},
             buttons: [TextButtonOptions.Outline.danger({
                 text: 'button text',
                 padding: 10
@@ -114,7 +118,7 @@ describe('CardBody', () => {
         }));
         TestUtils.scene().add.existing(body);
 
-        body.setDescription('new description');
+        body.setDescription({text: 'new description'});
 
         expect(body.description.text).withContext('updated text').toEqual('new description');
         expect(body.contents.length).withContext('should have 3 contents').toBe(3);
@@ -127,7 +131,7 @@ describe('CardBody', () => {
     it('can be created with a title and a background', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.danger({
             width: 300,
-            title: 'sample title text'
+            title: {text: 'sample title text'}
         }));
         TestUtils.scene().add.existing(body);
 
@@ -186,8 +190,8 @@ describe('CardBody', () => {
     it('removing and re-adding buttons text maintains correct positioning', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.Outline.success({
             width: 300,
-            title: 'sample title text',
-            description: 'sample description',
+            title: {text: 'sample title text'},
+            description: {text: 'sample description'},
             buttons: [TextButtonOptions.Outline.danger({
                 text: 'button text',
                 padding: 10

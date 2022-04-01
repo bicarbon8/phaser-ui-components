@@ -1,3 +1,4 @@
+import { Alignment } from "../layout/alignment";
 import { Styles } from "../style/styles";
 import { Helpers } from "../utilities/helpers";
 
@@ -12,6 +13,7 @@ export interface TextButtonOptions {
     cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
     interactive?: boolean;
     padding?: number;
+    alignment?: Alignment;
 }
 
 export module TextButtonOptions {
@@ -21,7 +23,11 @@ export module TextButtonOptions {
             y: 0,
             textStyle: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'},
             padding: 0,
-            cornerRadius: 0
+            cornerRadius: 0,
+            alignment: {
+                horizontal: 'center',
+                vertical: 'middle'
+            }
         };
     }
 

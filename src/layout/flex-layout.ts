@@ -47,16 +47,15 @@ export class FlexLayout extends Phaser.GameObjects.Container {
         if (contents?.length > 0) {
             for (var i=0; i<contents.length; i++) {
                 let content: LayoutContent = contents[i];
-                content.setScale(1);
                 let row: LinearLayout = this._getLastRow();
-                if (content.width > (this.width + (this.padding * 2))) {
+                if (content.displayWidth > (this.width + (this.padding * 2))) {
                     if (row.contents.length > 0) {
                         row = this._addRow();
                     }
-                    const scale: number = (this.width + (this.padding * 2)) / content.width;
+                    const scale: number = (this.width + (this.padding * 2)) / content.displayWidth;
                     content.setScale(scale);
                 }
-                if (row.width + (content.width * content.scale) + this.padding > this.width) {
+                if (row.width + content.displayWidth + this.padding > this.width) {
                     row = this._addRow();
                 }
                 row.addContents(content);

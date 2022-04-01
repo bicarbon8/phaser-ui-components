@@ -40,10 +40,10 @@ module.exports = function (config) {
         check: {
           emitWarning: false,
           global: {
-            statements: 91,
+            statements: 92,
             branches: 81,
-            functions: 75,
-            lines: 94
+            functions: 78,
+            lines: 95
           }
         }
       },
@@ -64,7 +64,6 @@ module.exports = function (config) {
           flags: [ '--remote-debugging-port=9333' ]
         }
       },
-      browserDisconnectTimeout: 10000,
       browserDisconnectTolerance: 3,
       browserNoActivityTimeout: 100000,
       singleRun: true,

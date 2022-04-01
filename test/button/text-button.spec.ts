@@ -135,4 +135,81 @@ describe('TextButton', () => {
         expect(button.background.defaultFillColor).withContext('new color').toEqual(Colors.warning);
         expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    it('can align the text horizontally left', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.secondary({
+            width: 500,
+            text: 'align left',
+            alignment: {horizontal: 'left'},
+            padding: 5,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.x).toBeLessThan(0);
+        expect(button.text.x - (button.text.width / 2)).toBe(-(button.width / 2) + 5);
+        expect(button.text.y).toBe(0);
+    });
+
+    it('can align the text horizontally right', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.warning({
+            width: 500,
+            text: 'align right',
+            alignment: {horizontal: 'right'},
+            padding: 5,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.x).toBeGreaterThan(0);
+        expect(button.text.x + (button.text.width / 2)).toBe((button.width / 2) - 5);
+        expect(button.text.y).toBe(0);
+    });
+
+    it('can align the text vertically top', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
+            height: 200,
+            text: 'align top',
+            alignment: {vertical: 'top'},
+            padding: 5,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.y).toBeLessThan(0);
+        expect(button.text.y - (button.text.height / 2)).toBe(-(button.height / 2) + 5);
+        expect(button.text.x).toBe(0);
+    });
+
+    it('can align the text vertically bottom', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.dark({
+            height: 200,
+            text: 'align bottom',
+            alignment: {vertical: 'bottom'},
+            padding: 5,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.y).toBeGreaterThan(0);
+        expect(button.text.y + (button.text.height / 2)).toBe((button.height / 2) - 5);
+        expect(button.text.x).toBe(0);
+    });
+
+    it('can align the text to top left', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
+            width: 500,
+            height: 200,
+            text: 'align top left',
+            alignment: {horizontal: 'left', vertical: 'top'},
+            padding: 5,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.x).toBeLessThan(0);
+        expect(button.text.x - (button.text.width / 2)).toBe(-(button.width / 2) + 5);
+        expect(button.text.y).toBeLessThan(0);
+        expect(button.text.y - (button.text.height / 2)).toBe(-(button.height / 2) + 5);
+    });
 });

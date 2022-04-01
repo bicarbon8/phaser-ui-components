@@ -1,20 +1,31 @@
 import { Helpers } from "../utilities/helpers";
+import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
 import { LinearLayoutOptions } from "./linear-layout-options";
 
 export class LinearLayout extends Phaser.GameObjects.Container {
-    public readonly orientation: string;
-    public readonly padding: number;
+    private readonly _options: LinearLayoutOptions;
 
     private _contents: LayoutContent[];
 
     constructor(scene: Phaser.Scene, options?: LinearLayoutOptions) {
-        options = Helpers.merge(LinearLayoutOptions.DEFAULT(), options);
+        options = Helpers.merge(LinearLayoutOptions.DEFAULT(scene), options);
         super(scene, options.x, options.y);
-        this.orientation = options.orientation;
-        this.padding = options.padding;
+        this._options = options;
         this._contents = [];
-        this.addContents(...options.contents);
+        this.addContents(...this._options.contents);
+    }
+
+    get orientation(): 'horizontal' | 'vertical' {
+        return this._options.orientation;
+    }
+
+    get alignment(): Alignment {
+        return this._options.alignment;
+    }
+
+    get padding(): number {
+        return this._options.padding;
     }
 
     get contents(): LayoutContent[] {
@@ -101,10 +112,22 @@ export class LinearLayout extends Phaser.GameObjects.Container {
             contentsWidth += (this.padding * (this.contents.length + 1));
             let contentsHeight: number = Helpers.getHighest(...this.contents.map((c: LayoutContent) => (c.displayHeight) + (this.padding * 2)));
             let xOffset: number = -(contentsWidth / 2) + this.padding;
+            let yOffset: number;
             for (var i=0; i<this.contents.length; i++) {
                 let c: LayoutContent = this.contents[i];
                 let width: number = c.displayWidth;
-                c.setPosition(xOffset + (width / 2), 0);
+                switch (this._options.alignment.vertical) {
+                    case 'top':
+                        yOffset = -(this._options.height / 2) + this.padding + (c.height / 2);
+                        break;
+                    case 'bottom':
+                        yOffset = (this._options.height / 2) - this.padding - (c.height / 2);
+                    case 'middle':
+                    default:
+                        yOffset = 0;
+                        break;
+                }
+                c.setPosition(xOffset + (width / 2), yOffset);
                 xOffset += width + this.padding;
             }
             this.setSize(contentsWidth, contentsHeight);
@@ -119,10 +142,22 @@ export class LinearLayout extends Phaser.GameObjects.Container {
             contentsHeight += (this.padding * (this.contents.length + 1));
             let contentsWidth: number = Helpers.getHighest(...this.contents.map((c: LayoutContent) => (c.displayWidth) + (this.padding * 2)));
             let yOffset: number = -(contentsHeight / 2) + this.padding;
+            let xOffset: number;
             for (var i=0; i<this.contents.length; i++) {
                 let c: LayoutContent = this.contents[i];
                 let height: number = c.displayHeight;
-                c.setPosition(0, yOffset + (height / 2));
+                switch (this._options.alignment.horizontal) {
+                    case 'left':
+                        xOffset = -(this._options.width / 2) + this.padding + (c.width / 2);
+                        break;
+                    case 'right':
+                        xOffset = (this._options.width / 2) - this.padding - (c.width / 2);
+                    case 'center':
+                    default:
+                        xOffset = 0;
+                        break;
+                }
+                c.setPosition(xOffset, yOffset + (height / 2));
                 yOffset += height + this.padding;
             }
             this.setSize(contentsWidth, contentsHeight);

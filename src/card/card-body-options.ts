@@ -2,15 +2,15 @@ import { TextButtonOptions } from "../button/text-button-options";
 import { Colors } from "../color/colors";
 import { Styles } from "../style/styles";
 import { Helpers } from "../utilities/helpers";
+import { CardDescriptionOptions } from "./card-description-options";
+import { CardTitleOptions } from "./card-title-options";
 
 export interface CardBodyOptions {
     x?: number;
     y?: number;
     width?: number;
-    title?: string;
-    titleStyle?: Phaser.Types.GameObjects.Text.TextStyle;
-    description?: string;
-    descriptionStyle?: Phaser.Types.GameObjects.Text.TextStyle;
+    title?: CardTitleOptions;
+    description?: CardDescriptionOptions;
     buttons?: TextButtonOptions[];
     buttonSpacing?: number;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
@@ -24,8 +24,6 @@ export module CardBodyOptions {
             x: 0,
             y: 0,
             width: scene.sys.game.scale.gameSize.width,
-            titleStyle: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'},
-            descriptionStyle: {fontFamily: 'Courier', fontSize: '14px', color: '#000000'},
             buttons: [],
             buttonSpacing: 0,
             cornerRadius: 0,
@@ -59,8 +57,8 @@ export module CardBodyOptions {
         const descriptionStyle: Phaser.Types.GameObjects.Text.TextStyle = {...style.text};
         descriptionStyle.color = (Colors.isDark(titleStyle.color)) ? Colors.lighten(descriptionStyle.color, 2) : Colors.darken(descriptionStyle.color, 2);
         return Helpers.merge({
-            titleStyle: titleStyle,
-            descriptionStyle: descriptionStyle,
+            title: (options.title) ? {textStyle: titleStyle} : undefined,
+            description: (options.description) ? {textStyle: descriptionStyle} : undefined,
             background: backgroundStyle
         }, options);
     }

@@ -114,7 +114,7 @@ export class GridCell extends Phaser.GameObjects.Container {
             this._background = null;
         }
         if (this._backgroundStyle) {
-            this._background = this.scene.add.graphics(this._backgroundStyle);
+            this._background = new Phaser.GameObjects.Graphics(this.scene, this._backgroundStyle);
             this.add(this._background);
             if (this._backgroundStyle?.fillStyle) {this._background.fillRect(this.left, this.top, this.width, this.height);}
             if (this._backgroundStyle?.lineStyle) {this._background.strokeRect(this.left, this.top, this.width, this.height);}

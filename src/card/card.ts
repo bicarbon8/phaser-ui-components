@@ -11,7 +11,7 @@ import { CardImageOptions } from "./card-image-options";
 import { CardOptions } from "./card-options";
 
 export class Card extends LinearLayout {
-    private readonly _options: CardOptions;
+    private readonly _opts: CardOptions;
 
     private _header: CardHeader;
     private _image: CardImage;
@@ -25,8 +25,10 @@ export class Card extends LinearLayout {
             orientation: 'vertical'
         }
         super(scene, opts);
-        this._options = options;
-        this._createGameObject();
+        this._opts = options;
+        this.setHeader(this._opts.header);
+        this.setImage(this._opts.image);
+        this.setCardBody(this._opts.body);
     }
 
     get header(): CardHeader {
@@ -47,8 +49,14 @@ export class Card extends LinearLayout {
             this._header = null;
         }
         if (options) {
-            this._options.header = options;
-            this._createHeaderObject(this._options.header);
+            this._opts.header = options;
+            options.width = options.width || this._opts.width;
+            options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
+            options.padding = options.padding || this._opts.padding;
+            this._header = new CardHeader(this.scene, options);
+            this._opts.width = this._opts.width || this._header.width;
+            const contents: LayoutContent[] = this.removeAllContent(false);
+            this.addContents(this._header, ...contents);
         }
         return this;
     }
@@ -59,8 +67,15 @@ export class Card extends LinearLayout {
             this._image = null;
         }
         if (options) {
-            this._options.image = options;
-            this._createImageObject(this._options.image);
+            this._opts.image = options;
+            options.width = options.width || this._opts.width;
+            this._image = new CardImage(this.scene, options);
+            this._opts.width = this._opts.width || this._image.width;
+            const contents: LayoutContent[] = [];
+            if (this.header) { contents.push(this.removeContent(this._header, false)); }
+            contents.push(this._image);
+            if (this.cardbody) { contents.push(this.removeContent(this._body, false)); }
+            this.addContents(...contents);
         }
         return this;
     }
@@ -71,60 +86,14 @@ export class Card extends LinearLayout {
             this._body = null;
         }
         if (options) {
-            this._options.body = options;
-            this._createCardBodyObject(this._options.body);
-        }
-        return this;
-    }
-
-    private _createGameObject(): void {
-        this.setHeader(this._options.header);
-        this.setImage(this._options.image);
-        this.setCardBody(this._options.body);
-    }
-
-    private _createHeaderObject(options?: CardHeaderOptions): void {
-        if (options) {
-            if (this._header) {
-                this.removeContent(this._header, true);
-            }
-            options.width = options.width || this._options.width;
-            options.cornerRadius = options.cornerRadius || this._options.cornerRadius;
-            options.padding = options.padding || this._options.padding;
-            this._header = new CardHeader(this.scene, options);
-            this._options.width = this._options.width || this._header.width;
-            const contents: LayoutContent[] = this.removeAllContent(false);
-            this.addContents(this._header, ...contents);
-        }
-    }
-
-    private _createImageObject(options?: CardImageOptions): void {
-        if (options) {
-            if (this._image) {
-                this.removeContent(this._image, true);
-            }
-            options.width = options.width || this._options.width;
-            this._image = new CardImage(this.scene, options);
-            this._options.width = this._options.width || this._image.width;
-            const contents: LayoutContent[] = [];
-            if (this.header) { contents.push(this.removeContent(this._header, false)); }
-            contents.push(this._image);
-            if (this.cardbody) { contents.push(this.removeContent(this._body, false)); }
-            this.addContents(...contents);
-        }
-    }
-
-    private _createCardBodyObject(options: CardBodyOptions): void {
-        if (options) {
-            if (this._body) {
-                this.removeContent(this._body, true);
-            }
-            options.width = options.width || this._options.width;
-            options.cornerRadius = options.cornerRadius || this._options.cornerRadius;
-            options.padding = options.padding || this._options.padding;
+            this._opts.body = options;
+            options.width = options.width || this._opts.width;
+            options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
+            options.padding = options.padding || this._opts.padding;
             this._body = new CardBody(this.scene, options);
-            this._options.width = this._options.width || this._body.width;
+            this._opts.width = this._opts.width || this._body.width;
             this.addContents(this._body);
         }
+        return this;
     }
 }

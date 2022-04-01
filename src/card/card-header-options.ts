@@ -1,17 +1,9 @@
-import { Colors } from "../color/colors";
+import { TextButtonOptions } from "../button/text-button-options";
 import { Styles } from "../style/styles";
 import { Helpers } from "../utilities/helpers";
 
-export interface CardHeaderOptions {
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-    text?: string;
-    textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
-    background?: Phaser.Types.GameObjects.Graphics.Styles;
-    cornerRadius?: number;
-    padding?: number;
+export interface CardHeaderOptions extends TextButtonOptions {
+    
 }
 
 export module CardHeaderOptions {
@@ -22,7 +14,7 @@ export module CardHeaderOptions {
             width: scene.sys.game.scale.gameSize.width,
             textStyle: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'},
             cornerRadius: 0,
-            padding: 0
+            padding: 0,
         };
     }
 

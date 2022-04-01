@@ -1,4 +1,4 @@
-import { CardBodyOptions, CardHeaderOptions, CardOptions, Colors, TextButtonOptions } from "../../src";
+import { CardBodyOptions, CardHeaderOptions, CardOptions, Colors, Styles, TextButtonOptions } from "../../src";
 import { Card } from "../../src/card/card";
 import { TestUtils } from "../test-utils";
 
@@ -45,10 +45,14 @@ describe('Card', () => {
 
     it('can be created with only a body', () => {
         const card: Card = new Card(TestUtils.scene(), {body: {
-            title: 'title text',
-            titleStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)},
-            description: 'description text',
-            descriptionStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+            title: {
+                text: 'title text',
+                textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
+            },
+            description: {
+                text: 'description text',
+                textStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+            }
         }});
         TestUtils.scene().add.existing(card);
 
@@ -66,15 +70,20 @@ describe('Card', () => {
 
     it('can be created with a header and a body', () => {
         const card: Card = new Card(TestUtils.scene(), {
+            width: 300,
             header: {
                 text: 'header text',
                 textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.success)}
             },
             body: {
-                title: 'title text',
-                titleStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)},
-                description: 'description text',
-                descriptionStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+                title: {
+                    text: 'title text',
+                    textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
+                },
+                description: {
+                    text: 'description text that is interesting to wrap around for a bit so we can see how it works',
+                    textStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+                }
             }
         });
         TestUtils.scene().add.existing(card);
@@ -103,10 +112,14 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: 'title text',
-                titleStyle: {color: Colors.toHexString(Colors.light)},
-                description: 'description text',
-                descriptionStyle: {color: Colors.toHexString(Colors.warning)}
+                title: {
+                    text: 'title text',
+                    textStyle: {color: Colors.toHexString(Colors.light)}
+                },
+                description: {
+                    text: 'description text',
+                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                }
             }
         });
         TestUtils.scene().add.existing(card);
@@ -128,7 +141,7 @@ describe('Card', () => {
         expect(card.height).withContext('card should be height of all parts combined').toEqual(card.header.height + card.cardbody.height + 200);
     });
 
-    it('can be created with a everything', () => {
+    it('can be created with everything', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 200,
             cornerRadius: 5,
@@ -136,10 +149,14 @@ describe('Card', () => {
             header: CardHeaderOptions.primary({
                 text: 'header text'
             }),
-            image: {height: 100},
+            image: {
+                height: 100,
+                spriteKey: 'sample-spritesheet',
+                background: Styles.secondary().graphics
+            },
             body: CardBodyOptions.light({
-                title: 'title text',
-                description: 'description text',
+                title: { text: 'title text' },
+                description: { text: 'description text' },
                 buttons: [
                     TextButtonOptions.success({
                         text: 'Continue',
@@ -154,7 +171,7 @@ describe('Card', () => {
         expect(card).toBeDefined();
         expect(card.header).toBeDefined();
         expect(card.header.padding).withContext('header padding').toBe(10);
-        expect(card.header.cornerRadius).withContext('header cornerRadius').toBe(5);
+        expect(card.header.cornerRadius).withContext('header cornerRadius').toEqual({tl: 5, tr: 5, bl: 0, br: 0});
         expect(card.image).toBeDefined();
         expect(card.cardbody).toBeDefined();
         expect(card.cardbody.padding).withContext('cardbody padding').toBe(10);
@@ -176,10 +193,14 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: 'title text',
-                titleStyle: {color: Colors.toHexString(Colors.light)},
-                description: 'description text',
-                descriptionStyle: {color: Colors.toHexString(Colors.warning)}
+                title: {
+                    text: 'title text',
+                    textStyle: {color: Colors.toHexString(Colors.light)}
+                },
+                description: {
+                    text: 'description text',
+                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                }
             }
         });
         TestUtils.scene().add.existing(card);
@@ -204,10 +225,14 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: 'title text',
-                titleStyle: {color: Colors.toHexString(Colors.light)},
-                description: 'description text',
-                descriptionStyle: {color: Colors.toHexString(Colors.warning)}
+                title: {
+                    text: 'title text',
+                    textStyle: {color: Colors.toHexString(Colors.light)}
+                },
+                description: {
+                    text: 'description text',
+                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                }
             }
         });
         TestUtils.scene().add.existing(card);
@@ -232,10 +257,14 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: 'title text',
-                titleStyle: {color: Colors.toHexString(Colors.light)},
-                description: 'description text',
-                descriptionStyle: {color: Colors.toHexString(Colors.warning)}
+                title: {
+                    text: 'title text',
+                    textStyle: {color: Colors.toHexString(Colors.light)}
+                },
+                description: {
+                    text: 'description text',
+                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                }
             }
         });
         TestUtils.scene().add.existing(card);
