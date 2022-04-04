@@ -1,4 +1,4 @@
-import { Helpers } from "../utilities/helpers";
+import * as _ from "lodash";
 import { GridCell } from "./grid-cell";
 import { GridLayoutOptions } from "./grid-layout-options";
 import { LayoutContent } from "./layout-content";
@@ -21,7 +21,7 @@ export class GridLayout extends Phaser.GameObjects.Container {
     private _right: number;
 
     constructor(scene: Phaser.Scene, options?: GridLayoutOptions) {
-        options = Helpers.merge(GridLayoutOptions.DEFAULT(scene), options);
+        options = _.merge(GridLayoutOptions.DEFAULT(scene), options);
         super(scene, options.x, options.y);
         
         this.padding = options.padding;

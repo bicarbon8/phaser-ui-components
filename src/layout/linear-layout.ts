@@ -1,6 +1,7 @@
-import { Helpers } from "../utilities/helpers";
+import * as _ from "lodash";
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
+import { LayoutEvents } from "./layout-events";
 import { LinearLayoutOptions } from "./linear-layout-options";
 
 export class LinearLayout extends Phaser.GameObjects.Container {
@@ -9,7 +10,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
     private _contents: LayoutContent[];
 
     constructor(scene: Phaser.Scene, options?: LinearLayoutOptions) {
-        options = Helpers.merge(LinearLayoutOptions.DEFAULT(scene), options);
+        options = _.merge(LinearLayoutOptions.DEFAULT(scene), options);
         super(scene, options.x, options.y);
         this._options = options;
         this._contents = [];
@@ -21,7 +22,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
     }
 
     get alignment(): Alignment {
-        return this._options.alignment;
+        return _.clone(this._options.alignment);
     }
 
     get padding(): number {
@@ -102,6 +103,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
         } else {
             this._layoutVertical();
         }
+        this.emit(LayoutEvents.RESIZE, this.width, this.height);
     }
 
     private _layoutHorizontal(): void {
@@ -110,7 +112,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 .map((c: LayoutContent) => c.displayWidth)
                 .reduce((previous: number, current: number) => previous + current);
             contentsWidth += (this.padding * (this.contents.length + 1));
-            let contentsHeight: number = Helpers.getHighest(...this.contents.map((c: LayoutContent) => (c.displayHeight) + (this.padding * 2)));
+            let contentsHeight: number = _.max(this.contents.map((c: LayoutContent) => (c.displayHeight) + (this.padding * 2)));
             let xOffset: number = -(contentsWidth / 2) + this.padding;
             let yOffset: number;
             for (var i=0; i<this.contents.length; i++) {
@@ -140,7 +142,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 .map((c: LayoutContent) => c.displayHeight)
                 .reduce((previous: number, current: number) => previous + current);
             contentsHeight += (this.padding * (this.contents.length + 1));
-            let contentsWidth: number = Helpers.getHighest(...this.contents.map((c: LayoutContent) => (c.displayWidth) + (this.padding * 2)));
+            let contentsWidth: number = _.max(this.contents.map((c: LayoutContent) => (c.displayWidth) + (this.padding * 2)));
             let yOffset: number = -(contentsHeight / 2) + this.padding;
             let xOffset: number;
             for (var i=0; i<this.contents.length; i++) {

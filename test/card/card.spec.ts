@@ -1,4 +1,4 @@
-import { CardBodyOptions, CardHeaderOptions, CardOptions, Colors, Styles, TextButtonOptions } from "../../src";
+import { CardBodyOptions, Colors, Styles, TextButtonOptions } from "../../src";
 import { Card } from "../../src/card/card";
 import { TestUtils } from "../test-utils";
 
@@ -26,10 +26,14 @@ describe('Card', () => {
     });
 
     it('can be created with only a header', () => {
-        const card: Card = new Card(TestUtils.scene(), {header: {
-            text: 'sample text',
-            textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.dark)}
-        }});
+        const card: Card = new Card(TestUtils.scene(), {
+            header: {
+                text: {
+                    text:'sample text', 
+                    style: {fontSize: '40px', color: Colors.toHexString(Colors.dark)}
+                }
+            }
+        });
         TestUtils.scene().add.existing(card);
 
         expect(card).toBeDefined();
@@ -47,11 +51,11 @@ describe('Card', () => {
         const card: Card = new Card(TestUtils.scene(), {body: {
             title: {
                 text: 'title text',
-                textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
+                style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
             },
             description: {
                 text: 'description text',
-                textStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+                style: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
             }
         }});
         TestUtils.scene().add.existing(card);
@@ -72,17 +76,16 @@ describe('Card', () => {
         const card: Card = new Card(TestUtils.scene(), {
             width: 300,
             header: {
-                text: 'header text',
-                textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.success)}
+                text: {text:'header text', style: {fontSize: '40px', color: Colors.toHexString(Colors.success)}}
             },
             body: {
                 title: {
                     text: 'title text',
-                    textStyle: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
+                    style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
                 },
                 description: {
                     text: 'description text that is interesting to wrap around for a bit so we can see how it works',
-                    textStyle: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
+                    style: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
                 }
             }
         });
@@ -107,18 +110,17 @@ describe('Card', () => {
             width: 200,
             cornerRadius: 5,
             header: {
-                text: 'header text',
-                textStyle: {color: Colors.toHexString(Colors.success)}
+                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 title: {
                     text: 'title text',
-                    textStyle: {color: Colors.toHexString(Colors.light)}
+                    style: {color: Colors.toHexString(Colors.light)}
                 },
                 description: {
                     text: 'description text',
-                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                    style: {color: Colors.toHexString(Colors.warning)}
                 }
             }
         });
@@ -146,8 +148,8 @@ describe('Card', () => {
             width: 200,
             cornerRadius: 5,
             padding: 10,
-            header: CardHeaderOptions.primary({
-                text: 'header text'
+            header: TextButtonOptions.primary({
+                text: {text:'header text'}
             }),
             image: {
                 height: 100,
@@ -159,7 +161,7 @@ describe('Card', () => {
                 description: { text: 'description text' },
                 buttons: [
                     TextButtonOptions.success({
-                        text: 'Continue',
+                        text: {text:'Continue'},
                         padding: 5,
                         cornerRadius: 2
                     })
@@ -188,18 +190,17 @@ describe('Card', () => {
             width: 200,
             cornerRadius: 5,
             header: {
-                text: 'header text',
-                textStyle: {color: Colors.toHexString(Colors.success)}
+                text: {text:'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 title: {
                     text: 'title text',
-                    textStyle: {color: Colors.toHexString(Colors.light)}
+                    style: {color: Colors.toHexString(Colors.light)}
                 },
                 description: {
                     text: 'description text',
-                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                    style: {color: Colors.toHexString(Colors.warning)}
                 }
             }
         });
@@ -220,18 +221,17 @@ describe('Card', () => {
             width: 200,
             cornerRadius: 5,
             header: {
-                text: 'header text',
-                textStyle: {color: Colors.toHexString(Colors.success)}
+                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 title: {
                     text: 'title text',
-                    textStyle: {color: Colors.toHexString(Colors.light)}
+                    style: {color: Colors.toHexString(Colors.light)}
                 },
                 description: {
                     text: 'description text',
-                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                    style: {color: Colors.toHexString(Colors.warning)}
                 }
             }
         });
@@ -252,18 +252,17 @@ describe('Card', () => {
             width: 200,
             cornerRadius: 5,
             header: {
-                text: 'header text',
-                textStyle: {color: Colors.toHexString(Colors.success)}
+                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 title: {
                     text: 'title text',
-                    textStyle: {color: Colors.toHexString(Colors.light)}
+                    style: {color: Colors.toHexString(Colors.light)}
                 },
                 description: {
                     text: 'description text',
-                    textStyle: {color: Colors.toHexString(Colors.warning)}
+                    style: {color: Colors.toHexString(Colors.warning)}
                 }
             }
         });
@@ -277,5 +276,28 @@ describe('Card', () => {
 
         expect(card.cardbody).toBeNull();
         expect(card.refreshLayout).toHaveBeenCalledTimes(1);
+    });
+
+    it('will refreshLayout when contents of CardBody Description is updated', () => {
+        const card: Card = new Card(TestUtils.scene(), {
+            width: 200,
+            padding: 5,
+            cornerRadius: 10,
+            header: TextButtonOptions.primary({text: {text:'sample header'}}),
+            image: {background: {fillStyle: {color: Colors.info}}},
+            body: CardBodyOptions.secondary({
+                title: {text: 'sample body title'},
+                description: {text: '--'}
+            })
+        });
+        TestUtils.scene().add.existing(card);
+
+        const startingHeight: number = card.height;
+
+        expect(startingHeight).withContext('startingHeight').toBeGreaterThan(0);
+
+        card.cardbody.setDescription({text: 'some long text that will wrap around'});
+
+        expect(card.height).withContext('height after update').toBeGreaterThan(startingHeight);
     });
 });

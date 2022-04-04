@@ -1,5 +1,5 @@
+import { TextButtonOptions } from "../button/text-button-options";
 import { CardBodyOptions } from "./card-body-options";
-import { CardHeaderOptions } from "./card-header-options";
 import { CardImageOptions } from "./card-image-options";
 
 export interface CardOptions {
@@ -8,7 +8,7 @@ export interface CardOptions {
     width?: number;
     cornerRadius?: number;
     padding?: number;
-    header?: CardHeaderOptions;
+    header?: TextButtonOptions;
     image?: CardImageOptions;
     body?: CardBodyOptions;
 }

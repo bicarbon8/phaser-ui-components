@@ -1,7 +1,7 @@
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
 import { GridCellOptions } from "./grid-cell-options";
-import { Helpers } from "../utilities/helpers";
+import * as _ from "lodash";
 
 export class GridCell extends Phaser.GameObjects.Container {
     public readonly row: number;
@@ -20,7 +20,7 @@ export class GridCell extends Phaser.GameObjects.Container {
     private _content: LayoutContent;
     
     constructor(scene: Phaser.Scene, options?: GridCellOptions) {
-        options = Helpers.merge(GridCellOptions.DEFAULT(), options);
+        options = _.merge(GridCellOptions.DEFAULT(), options);
         super(scene, options.x, options.y);
         this.row = options.row;
         this.column = options.column;
@@ -60,7 +60,7 @@ export class GridCell extends Phaser.GameObjects.Container {
     }
 
     get background(): Phaser.GameObjects.Graphics {
-        return this._background;
+        return _.clone(this._background);
     }
 
     updateSize(width: number, height: number): GridCell {

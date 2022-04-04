@@ -1,4 +1,4 @@
-import { Helpers } from "../utilities/helpers";
+import * as _ from "lodash";
 
 export module Colors {
     /** Blue */
@@ -88,7 +88,7 @@ export module Colors {
         for (var i=0; i<colorStr.length; i++) {
             let c: string = colorStr[i];
             let index: number = hexValues.indexOf(c);
-            let lighterColorIndex: number = Helpers.getLowest(hexValues.length - 1, index + degrees);
+            let lighterColorIndex: number = _.min([hexValues.length - 1, index + degrees]);
             lighter += hexValues[lighterColorIndex];
         }
         return `#${lighter}`;
@@ -107,7 +107,7 @@ export module Colors {
         for (var i=0; i<colorStr.length; i++) {
             let c: string = colorStr[i];
             let index: number = hexValues.indexOf(c);
-            let darkerColorIndex: number = Helpers.getHighest(0, index - degrees);
+            let darkerColorIndex: number = _.max([0, index - degrees]);
             darker += hexValues[darkerColorIndex];
         }
         return `#${darker}`;

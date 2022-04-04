@@ -1,16 +1,14 @@
+import * as _ from "lodash";
 import { TextButtonOptions } from "../button/text-button-options";
 import { Colors } from "../color/colors";
 import { Styles } from "../style/styles";
-import { Helpers } from "../utilities/helpers";
-import { CardDescriptionOptions } from "./card-description-options";
-import { CardTitleOptions } from "./card-title-options";
 
 export interface CardBodyOptions {
     x?: number;
     y?: number;
     width?: number;
-    title?: CardTitleOptions;
-    description?: CardDescriptionOptions;
+    title?: Phaser.Types.GameObjects.Text.TextConfig;
+    description?: Phaser.Types.GameObjects.Text.TextConfig;
     buttons?: TextButtonOptions[];
     buttonSpacing?: number;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
@@ -19,16 +17,23 @@ export interface CardBodyOptions {
 }
 
 export module CardBodyOptions {
-    export function DEFAULT(scene: Phaser.Scene): CardBodyOptions {
-        return {
+    export function SET_DEFAULTS(scene: Phaser.Scene, options?: CardBodyOptions): CardBodyOptions {
+        const defaults: CardBodyOptions = {
             x: 0,
             y: 0,
             width: scene.sys.game.scale.gameSize.width,
+            title: {style: {wordWrap: {useAdvancedWrap: true}, align: 'left'}, origin: 0.5},
+            description: {style: {wordWrap: {useAdvancedWrap: true}, align: 'left'}, origin: 0.5},
             buttons: [],
             buttonSpacing: 0,
             cornerRadius: 0,
             padding: 0
         };
+        const w: number = options?.width || scene.sys.game.scale.gameSize.width;
+        const p: number = options?.padding || 0;
+        defaults.title.style.wordWrap.width = w - (p * 2);
+        defaults.description.style.wordWrap.width = w - (p * 2);
+        return _.merge(defaults, options);
     }
 
     export function primary(options?: CardBodyOptions): CardBodyOptions { return get(Styles.primary(), options); }
@@ -56,9 +61,9 @@ export module CardBodyOptions {
         const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = {...style.text};
         const descriptionStyle: Phaser.Types.GameObjects.Text.TextStyle = {...style.text};
         descriptionStyle.color = (Colors.isDark(titleStyle.color)) ? Colors.lighten(descriptionStyle.color, 2) : Colors.darken(descriptionStyle.color, 2);
-        return Helpers.merge({
-            title: (options.title) ? {textStyle: titleStyle} : undefined,
-            description: (options.description) ? {textStyle: descriptionStyle} : undefined,
+        return _.merge({
+            title: {style: titleStyle},
+            description: {style: descriptionStyle},
             background: backgroundStyle
         }, options);
     }

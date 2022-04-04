@@ -64,8 +64,6 @@ module.exports = function (config) {
           flags: [ '--remote-debugging-port=9333' ]
         }
       },
-      browserDisconnectTolerance: 3,
-      browserNoActivityTimeout: 100000,
       singleRun: true,
       restartOnFileChange: true,
       concurrency: Infinity

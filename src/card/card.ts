@@ -1,11 +1,12 @@
+import * as _ from "lodash";
+import { TextButtonOptions } from "../button/text-button-options";
 import { LayoutContent } from "../layout/layout-content";
+import { LayoutEvents } from "../layout/layout-events";
 import { LinearLayout } from "../layout/linear-layout";
 import { LinearLayoutOptions } from "../layout/linear-layout-options";
-import { Helpers } from "../utilities/helpers";
 import { CardBody } from "./card-body";
 import { CardBodyOptions } from "./card-body-options";
 import { CardHeader } from "./card-header";
-import { CardHeaderOptions } from "./card-header-options";
 import { CardImage } from "./card-image";
 import { CardImageOptions } from "./card-image-options";
 import { CardOptions } from "./card-options";
@@ -18,12 +19,12 @@ export class Card extends LinearLayout {
     private _body: CardBody;
 
     constructor(scene: Phaser.Scene, options?: CardOptions) {
-        options = Helpers.merge(CardOptions.DEFAULT(scene), options);
+        options = _.merge(CardOptions.DEFAULT(scene), options);
         const opts: LinearLayoutOptions = {
             x: options.x,
             y: options.y,
             orientation: 'vertical'
-        }
+        };
         super(scene, opts);
         this._opts = options;
         this.setHeader(this._opts.header);
@@ -43,7 +44,7 @@ export class Card extends LinearLayout {
         return this._body;
     }
 
-    setHeader(options?: CardHeaderOptions): Card {
+    setHeader(options?: TextButtonOptions): Card {
         if (this._header) {
             this.removeContent(this._header, true);
             this._header = null;
@@ -91,6 +92,9 @@ export class Card extends LinearLayout {
             options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
             options.padding = options.padding || this._opts.padding;
             this._body = new CardBody(this.scene, options);
+            this._body.on(LayoutEvents.RESIZE, (width: number, height: number) => {
+                this.refreshLayout();
+            });
             this._opts.width = this._opts.width || this._body.width;
             this.addContents(this._body);
         }

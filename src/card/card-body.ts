@@ -1,27 +1,23 @@
+import * as _ from "lodash";
 import { TextButton } from "../button/text-button";
 import { TextButtonOptions } from "../button/text-button-options";
 import { FlexLayout } from "../layout/flex-layout";
 import { LayoutContent } from "../layout/layout-content";
+import { LayoutEvents } from "../layout/layout-events";
 import { LinearLayout } from "../layout/linear-layout";
 import { LinearLayoutOptions } from "../layout/linear-layout-options";
-import { Helpers } from "../utilities/helpers";
 import { CardBodyOptions } from "./card-body-options";
-import { CardDescription } from "./card-description";
-import { CardDescriptionOptions } from "./card-description-options";
-import { CardTitle } from "./card-title";
-import { CardTitleOptions } from "./card-title-options";
 
 export class CardBody extends LinearLayout {
-    private _title: CardTitle;
-    private _description: CardDescription;
-    private _buttons: TextButton[];
+    private _title: Phaser.GameObjects.Text;
+    private _description: Phaser.GameObjects.Text;
     private _buttonsLayout: FlexLayout;
     private _background: Phaser.GameObjects.Graphics;
 
     private readonly _opts: CardBodyOptions;
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
-        options = Helpers.merge(CardBodyOptions.DEFAULT(scene), options);
+        options = CardBodyOptions.SET_DEFAULTS(scene, options);
         const opts: LinearLayoutOptions = {
             x: options.x,
             y: options.y,
@@ -31,48 +27,40 @@ export class CardBody extends LinearLayout {
         };
         super(scene, opts);
         this._opts = options;
-        this._buttons = [];
-        this._createGameObject();
+        
+        this.setTitle(this._opts.title)
+            .setDescription(this._opts.description)
+            .addButtons(...this._opts.buttons);
     }
 
     get cornerRadius(): number {
         return this._opts.cornerRadius;
     }
 
-    get title(): CardTitle {
-        return this._title;
+    get title(): Phaser.GameObjects.Text {
+        return _.clone(this._title);
     }
 
-    get description(): CardDescription {
-        return this._description;
+    get description(): Phaser.GameObjects.Text {
+        return _.clone(this._description);
     }
 
     get buttons(): TextButton[] {
-        return this._buttons;
+        return this._buttonsLayout.contents as TextButton[];
     }
 
     get background(): Phaser.GameObjects.Graphics {
-        return this._background;
+        return _.clone(this._background);
     }
 
-    private _createGameObject(): void {
-        this.setTitle(this._opts.title);
-        this.setDescription(this._opts.description);
-        this.addButtons(...this._opts.buttons);
-        this._createBackgroundObject(this._opts.background);
-    }
-
-    setTitle(titleOptions?: CardTitleOptions): CardBody {
+    setTitle(config?: Phaser.Types.GameObjects.Text.TextConfig): CardBody {
         if (this._title) {
             this.removeContent(this._title, true);
             this._title = null;
         }
-        if (titleOptions) {
-            this._opts.title = Helpers.merge({
-                width: this._opts.width,
-                padding: this._opts.padding
-            }, titleOptions);
-            const title: CardTitle = new CardTitle(this.scene, this._opts.title);
+        if (config?.text) {
+            this._opts.title = _.merge(CardBodyOptions.SET_DEFAULTS(this.scene, this._opts).title, config);
+            const title = this.scene.make.text(this._opts.title, false);
             this._opts.width = this._opts.width || title.width + (this.padding * 2);
             const availableWidth: number = this._opts.width;
             let scaleX: number = 1;
@@ -83,41 +71,38 @@ export class CardBody extends LinearLayout {
             this._title = title;
             const contents: LayoutContent[] = this.removeAllContent(false);
             this.addContents(title, ...contents);
-            this._createBackgroundObject(this._opts.background);
         }
+        this._createBackgroundObject(this._opts.background);
         return this;
     }
 
-    setDescription(descriptionOptions?: CardDescriptionOptions): CardBody {
+    setDescription(config?: Phaser.Types.GameObjects.Text.TextConfig): CardBody {
         if (this._description) {
             this.removeContent(this._description, true);
             this._description = null;
         }
-        if (descriptionOptions) {
-            this._opts.description = Helpers.merge({
-                width: this._opts.width,
-                padding: this._opts.padding
-            }, descriptionOptions);
-            const description: CardDescription = new CardDescription(this.scene, this._opts.description);
-            this._opts.width = this._opts.width || description.width + (this.padding * 2);
+        if (config?.text) {
+            this._opts.description = _.merge(CardBodyOptions.SET_DEFAULTS(this.scene, this._opts).description, config);
+            const desc = this.scene.make.text(this._opts.description, false);
+            this._opts.width = this._opts.width || desc.width + (this.padding * 2);
             const availableWidth: number = this._opts.width;
             let scaleX: number = 1;
-            if (availableWidth < (description.width + (this.padding * 2))) {
-                scaleX = availableWidth / (description.width + (this.padding * 2));
-                description.setScale(scaleX);
+            if (availableWidth < (desc.width + (this.padding * 2))) {
+                scaleX = availableWidth / (desc.width + this.padding * 2);
+                desc.setScale(scaleX);
             }
-            this._description = description;
+            this._description = desc;
             const contents: LayoutContent[] = [];
-            if (this.title) { contents.push(this.removeContent(this.title, false)); }
+            if (this.title) { contents.push(this.removeContent(this._title, false)); }
             contents.push(this._description);
             if (this._buttonsLayout) { contents.push(this.removeContent(this._buttonsLayout, false)); }
             this.addContents(...contents);
-            this._createBackgroundObject(this._opts.background);
         }
+        this._createBackgroundObject(this._opts.background);
         return this;
     }
 
-    addButtons(...buttonOpts: TextButtonOptions[]): void {
+    addButtons(...buttonOpts: TextButtonOptions[]): CardBody {
         if (!this._buttonsLayout) {
             this._buttonsLayout = new FlexLayout(this.scene, {
                 width: this._opts.width,
@@ -130,7 +115,6 @@ export class CardBody extends LinearLayout {
                 let opts: TextButtonOptions = buttonOpts[i];
                 let button: TextButton = new TextButton(this.scene, opts);
                 this._buttonsLayout.addContents(button);
-                this._buttons.push(button);
             }
             this._opts.width = this._opts.width || this._buttonsLayout.width + (this.padding * 2);
             const availableWidth: number = this._opts.width;
@@ -142,22 +126,22 @@ export class CardBody extends LinearLayout {
             this.refreshLayout();
             this._createBackgroundObject(this._opts.background);
         }
+        return this;
     }
 
     removeButton(index: number, destroy?: boolean): TextButton {
-        if (index != null && index < this._buttons.length) {
-            let button: TextButton = this._buttons.splice(index, 1)[0];
-            const removed: TextButton = this._buttonsLayout.removeContent(button, destroy) as TextButton;
+        let removed: TextButton;
+        if (index != null && index < this._buttonsLayout.contents.length) {
+            let button: TextButton = this._buttonsLayout.contents[index] as TextButton;
+            removed = this._buttonsLayout.removeContent(button, destroy) as TextButton;
             this.refreshLayout();
             this._createBackgroundObject(this._opts.background);
-            return removed;
         }
-        return null;
+        return removed;
     }
 
     removeAllButtons(destroy: boolean = true): TextButton[] {
         const buttons: TextButton[] = this._buttonsLayout.removeAllContent(destroy) as TextButton[];
-        this._buttons = [];
         this.refreshLayout();
         this._createBackgroundObject(this._opts.background);
         return buttons;
@@ -191,5 +175,6 @@ export class CardBody extends LinearLayout {
             this.sendToBack(background);
         }
         this.setSize(this._opts.width, this.height);
+        this.emit(LayoutEvents.RESIZE, this.width, this.height);
     }
 }

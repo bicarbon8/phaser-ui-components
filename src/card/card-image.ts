@@ -1,5 +1,5 @@
-import { Helpers } from "../utilities/helpers";
 import { CardImageOptions } from "./card-image-options";
+import * as _ from 'lodash';
 
 export class CardImage extends Phaser.GameObjects.Container {
     private readonly _options: CardImageOptions;
@@ -8,7 +8,7 @@ export class CardImage extends Phaser.GameObjects.Container {
     private _background: Phaser.GameObjects.Graphics;
 
     constructor(scene: Phaser.Scene, options?: CardImageOptions) {
-        options = Helpers.merge(CardImageOptions.DEFAULT(scene), options);
+        options = _.merge(CardImageOptions.DEFAULT(scene), options);
         super(scene, options.x, options.y);
         this._options = options;
         this._options.height = this._options.height || this._options.width;
@@ -17,11 +17,11 @@ export class CardImage extends Phaser.GameObjects.Container {
     }
 
     get sprite(): Phaser.GameObjects.Sprite {
-        return this._sprite;
+        return _.clone(this._sprite);
     }
 
     get background(): Phaser.GameObjects.Graphics {
-        return this._background;
+        return _.clone(this._background);
     }
 
     private _createGameObject(): void {

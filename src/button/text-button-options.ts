@@ -1,14 +1,13 @@
+import * as _ from "lodash";
 import { Alignment } from "../layout/alignment";
 import { Styles } from "../style/styles";
-import { Helpers } from "../utilities/helpers";
 
 export interface TextButtonOptions {
     x?: number;
     y?: number;
     width?: number;
     height?: number;
-    text?: string;
-    textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
+    text?: Phaser.Types.GameObjects.Text.TextConfig;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
     interactive?: boolean;
@@ -21,7 +20,7 @@ export module TextButtonOptions {
         return {
             x: 0,
             y: 0,
-            textStyle: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'},
+            text: {style: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'}, origin: 0.5},
             padding: 0,
             cornerRadius: 0,
             alignment: {
@@ -52,8 +51,8 @@ export module TextButtonOptions {
     }
 
     function get(style: Styles, options?: TextButtonOptions): TextButtonOptions {
-        return Helpers.merge({
-            textStyle: style.text,
+        return _.merge({
+            text: {style: style.text},
             background: style.graphics
         }, options);
     }

@@ -9,7 +9,6 @@ export * from "./button/text-button-options";
 export * from "./card/card";
 export * from "./card/card-options";
 export * from "./card/card-header";
-export * from "./card/card-header-options";
 export * from "./card/card-image";
 export * from "./card/card-image-options";
 export * from "./card/card-body";
