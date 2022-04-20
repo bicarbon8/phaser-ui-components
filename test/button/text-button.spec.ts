@@ -156,11 +156,9 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'align left') as Phaser.GameObjects.Text;
-
-        expect(txt.x).toBeLessThan(0);
-        expect(txt.x - (txt.width / 2)).toBe(-(button.width / 2) + 5);
-        expect(txt.y).toBe(0);
+        expect(button.text.x).toBeLessThan(0);
+        expect(button.text.x - (button.text.width / 2)).toBe(-(button.width / 2) + 5);
+        expect(button.text.y).toBe(0);
     });
 
     it('can align the text horizontally right', () => {
@@ -173,11 +171,9 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'align right') as Phaser.GameObjects.Text;
-
-        expect(txt.x).toBeGreaterThan(0);
-        expect(txt.x + (txt.width / 2)).toBe((button.width / 2) - 5);
-        expect(txt.y).toBe(0);
+        expect(button.text.x).toBeGreaterThan(0);
+        expect(button.text.x + (button.text.width / 2)).toBe((button.width / 2) - 5);
+        expect(button.text.y).toBe(0);
     });
 
     it('can align the text vertically top', () => {
@@ -190,11 +186,9 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'align top') as Phaser.GameObjects.Text;
-
-        expect(txt.y).toBeLessThan(0);
-        expect(txt.y - (txt.height / 2)).toBe(-(button.height / 2) + 5);
-        expect(txt.x).toBe(0);
+        expect(button.text.y).toBeLessThan(0);
+        expect(button.text.y - (button.text.height / 2)).toBe(-(button.height / 2) + 5);
+        expect(button.text.x).toBe(0);
     });
 
     it('can align the text vertically bottom', () => {
@@ -207,11 +201,9 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'align bottom') as Phaser.GameObjects.Text;
-
-        expect(txt.y).toBeGreaterThan(0);
-        expect(txt.y + (txt.height / 2)).toBe((button.height / 2) - 5);
-        expect(txt.x).toBe(0);
+        expect(button.text.y).toBeGreaterThan(0);
+        expect(button.text.y + (button.text.height / 2)).toBe((button.height / 2) - 5);
+        expect(button.text.x).toBe(0);
     });
 
     it('can align the text to top left', () => {
@@ -225,12 +217,10 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'align top left') as Phaser.GameObjects.Text;
-
-        expect(txt.x).toBeLessThan(0);
-        expect(txt.x - (txt.width / 2)).toBe(-(button.width / 2) + 5);
-        expect(txt.y).toBeLessThan(0);
-        expect(txt.y - (txt.height / 2)).toBe(-(button.height / 2) + 5);
+        expect(button.text.x).toBeLessThan(0);
+        expect(button.text.x - (button.text.width / 2)).toBe(-(button.width / 2) + 5);
+        expect(button.text.y).toBeLessThan(0);
+        expect(button.text.y - (button.text.height / 2)).toBe(-(button.height / 2) + 5);
     });
 
     it('can set the container to be interactive', () => {
@@ -242,12 +232,39 @@ describe('TextButton', () => {
         }));
         TestUtils.scene().add.existing(button);
         
-        const txt = button.getFirst('text', 'interactive') as Phaser.GameObjects.Text;
-
         expect(() => {
             button.on(Phaser.Input.Keyboard.Events.ANY_KEY_DOWN, () => {
                 const foo = 'bar';
             });
         }).not.toThrow();
+    });
+
+    it('allows the text colour to be updated without resetting the text or other styles', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.danger({
+            text: {text: 'sample text', style: {color: Colors.toHexString(Colors.light)}},
+            padding: 10,
+            cornerRadius: {tl: 5, bl: 5}
+        }));
+        TestUtils.scene().add.existing(button);
+
+        expect(button.text.style.color).withContext('original color is set').toEqual(Colors.toHexString(Colors.light));
+
+        button.setText({style: {color: Colors.toHexString(Colors.warning)}});
+
+        expect(button.text.text).withContext('text is still set').toEqual('sample text');
+        expect(button.text.style.color).withContext('new color is set').toEqual(Colors.toHexString(Colors.warning));
+    });
+
+    it('only allows modification of text through setText function', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.warning({
+            text: {text: 'sample text'},
+            padding: 10
+        }));
+        TestUtils.scene().add.existing(button);
+
+        button.text.setText('foo');
+        button.text.text = 'bar';
+
+        expect(button.text.text).toEqual('sample text');
     });
 });

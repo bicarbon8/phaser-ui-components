@@ -212,4 +212,62 @@ describe('CardBody', () => {
         expect(body.description).withContext('description should be defined').toBeDefined();
         expect(body.contents[1]).withContext('second contents should be description').toBe(body['_description']);
     });
+
+    it('allows the title colour to be updated without resetting the text or other styles', () => {
+        const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.danger({
+            title: {text: 'sample text', style: {color: Colors.toHexString(Colors.light)}},
+            padding: 10,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(body);
+
+        expect(body.title.style.color).withContext('original color is set').toEqual(Colors.toHexString(Colors.light));
+
+        body.setTitle({style: {color: Colors.toHexString(Colors.warning)}});
+
+        expect(body.title.text).withContext('text is still set').toEqual('sample text');
+        expect(body.title.style.color).withContext('new color is set').toEqual(Colors.toHexString(Colors.warning));
+    });
+
+    it('only allows modification of title through setTitle function', () => {
+        const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.warning({
+            title: {text: 'sample text'},
+            padding: 10
+        }));
+        TestUtils.scene().add.existing(body);
+
+        body.title.setText('foo');
+        body.title.text = 'bar';
+
+        expect(body.title.text).toEqual('sample text');
+    });
+
+    it('allows the description colour to be updated without resetting the text or other styles', () => {
+        const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.danger({
+            description: {text: 'sample text', style: {color: Colors.toHexString(Colors.light)}},
+            padding: 10,
+            cornerRadius: 5
+        }));
+        TestUtils.scene().add.existing(body);
+
+        expect(body.description.style.color).withContext('original color is set').toEqual(Colors.toHexString(Colors.light));
+
+        body.setDescription({style: {color: Colors.toHexString(Colors.warning)}});
+
+        expect(body.description.text).withContext('text is still set').toEqual('sample text');
+        expect(body.description.style.color).withContext('new color is set').toEqual(Colors.toHexString(Colors.warning));
+    });
+
+    it('only allows modification of description through setDescription function', () => {
+        const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.warning({
+            description: {text: 'sample text'},
+            padding: 10
+        }));
+        TestUtils.scene().add.existing(body);
+
+        body.description.setText('foo');
+        body.description.text = 'bar';
+
+        expect(body.description.text).toEqual('sample text');
+    });
 });

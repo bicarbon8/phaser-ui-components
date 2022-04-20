@@ -58,8 +58,8 @@ export class TextButton extends Phaser.GameObjects.Container {
             this._text = null;
         }
         
-        if (config?.text) {
-            this._options.text = _.merge(TextButtonOptions.DEFAULT().text, config);
+        if (config?.text || (this._options.text && config?.style)) {
+            this._options.text = _.merge(TextButtonOptions.DEFAULT().text, this._options.text, config);
             const txt = this.scene.make.text(this._options.text);
             this._options.padding = this._options.padding || 0;
             this._options.width = this._options.width || txt.width + (this._options.padding * 2);
@@ -79,7 +79,7 @@ export class TextButton extends Phaser.GameObjects.Container {
 
     setAlignment(alignment?: Alignment): TextButton {
         if (alignment) {
-            this._options.alignment = _.merge(TextButtonOptions.DEFAULT(), {alignment: alignment}).alignment;
+            this._options.alignment = _.merge(TextButtonOptions.DEFAULT().alignment, this._options.alignment, alignment);
             if (this._text) {
                 if (this._text.displayWidth < (this.width - (this._options.padding * 2))) {
                     switch(this._options.alignment.horizontal) {
@@ -122,7 +122,7 @@ export class TextButton extends Phaser.GameObjects.Container {
         }
         
         if (style) {
-            this._options.background = style;
+            this._options.background = _.merge(TextButtonOptions.DEFAULT().background, style);
             this._options.width = this._options.width || 0;
             this._options.height = this._options.height || 0;
             const rect = new Phaser.GameObjects.Graphics(this.scene, this._options.background);

@@ -12,27 +12,25 @@ export interface CardBodyOptions {
     buttons?: TextButtonOptions[];
     buttonSpacing?: number;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
-    cornerRadius?: number;
+    cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
     padding?: number;
 }
 
 export module CardBodyOptions {
     export function SET_DEFAULTS(scene: Phaser.Scene, options?: CardBodyOptions): CardBodyOptions {
+        const w: number = options?.width || scene.sys.game.scale.gameSize.width;
+        const p: number = options?.padding || 0;
         const defaults: CardBodyOptions = {
             x: 0,
             y: 0,
-            width: scene.sys.game.scale.gameSize.width,
-            title: {style: {wordWrap: {useAdvancedWrap: true}, align: 'left'}, origin: 0.5},
-            description: {style: {wordWrap: {useAdvancedWrap: true}, align: 'left'}, origin: 0.5},
+            width: w,
+            title: {style: {wordWrap: {useAdvancedWrap: true, width: w - (p * 2)}, align: 'left'}, origin: 0.5},
+            description: {style: {wordWrap: {useAdvancedWrap: true, width: w - (p * 2)}, align: 'left'}, origin: 0.5},
             buttons: [],
             buttonSpacing: 0,
             cornerRadius: 0,
-            padding: 0
+            padding: p
         };
-        const w: number = options?.width || scene.sys.game.scale.gameSize.width;
-        const p: number = options?.padding || 0;
-        defaults.title.style.wordWrap.width = w - (p * 2);
-        defaults.description.style.wordWrap.width = w - (p * 2);
         return _.merge(defaults, options);
     }
 

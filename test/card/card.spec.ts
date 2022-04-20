@@ -177,7 +177,7 @@ describe('Card', () => {
         expect(card.image).toBeDefined();
         expect(card.cardbody).toBeDefined();
         expect(card.cardbody.padding).withContext('cardbody padding').toBe(10);
-        expect(card.cardbody.cornerRadius).withContext('cardbody cornerRadius').toBe(5);
+        expect(card.cardbody.cornerRadius).withContext('cardbody cornerRadius').toEqual({tl: 0, tr: 0, bl: 5, br: 5});
         expect(card.width).withContext('card width should be as specified').toBe(200);
         expect(card.width).withContext('card header width should be same as card width').toEqual(card.header.width);
         expect(card.width).withContext('card body width should be same as card width').toEqual(card.cardbody.width);

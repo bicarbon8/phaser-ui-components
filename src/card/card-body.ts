@@ -18,6 +18,12 @@ export class CardBody extends LinearLayout {
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
         options = CardBodyOptions.SET_DEFAULTS(scene, options);
+        options.cornerRadius = (typeof options.cornerRadius === 'object') ? options.cornerRadius : {
+            tl: 0,
+            tr: 0,
+            bl: options.cornerRadius,
+            br: options.cornerRadius
+        };
         const opts: LinearLayoutOptions = {
             x: options.x,
             y: options.y,
@@ -33,7 +39,7 @@ export class CardBody extends LinearLayout {
             .addButtons(...this._opts.buttons);
     }
 
-    get cornerRadius(): number {
+    get cornerRadius(): number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius {
         return this._opts.cornerRadius;
     }
 
@@ -58,7 +64,7 @@ export class CardBody extends LinearLayout {
             this.removeContent(this._title, true);
             this._title = null;
         }
-        if (config?.text) {
+        if (config?.text || (this._opts.title?.text && config.style)) {
             this._opts.title = _.merge(CardBodyOptions.SET_DEFAULTS(this.scene, this._opts).title, config);
             const title = this.scene.make.text(this._opts.title, false);
             this._opts.width = this._opts.width || title.width + (this.padding * 2);
@@ -72,7 +78,7 @@ export class CardBody extends LinearLayout {
             const contents: LayoutContent[] = this.removeAllContent(false);
             this.addContents(title, ...contents);
         }
-        this._createBackgroundObject(this._opts.background);
+        this.setBackground(this._opts.background);
         return this;
     }
 
@@ -81,7 +87,7 @@ export class CardBody extends LinearLayout {
             this.removeContent(this._description, true);
             this._description = null;
         }
-        if (config?.text) {
+        if (config?.text || (this._opts.description?.text && config.style)) {
             this._opts.description = _.merge(CardBodyOptions.SET_DEFAULTS(this.scene, this._opts).description, config);
             const desc = this.scene.make.text(this._opts.description, false);
             this._opts.width = this._opts.width || desc.width + (this.padding * 2);
@@ -98,7 +104,7 @@ export class CardBody extends LinearLayout {
             if (this._buttonsLayout) { contents.push(this.removeContent(this._buttonsLayout, false)); }
             this.addContents(...contents);
         }
-        this._createBackgroundObject(this._opts.background);
+        this.setBackground(this._opts.background);
         return this;
     }
 
@@ -124,7 +130,7 @@ export class CardBody extends LinearLayout {
                 this._buttonsLayout.setScale(scaleX);
             }
             this.refreshLayout();
-            this._createBackgroundObject(this._opts.background);
+            this.setBackground(this._opts.background);
         }
         return this;
     }
@@ -135,7 +141,7 @@ export class CardBody extends LinearLayout {
             let button: TextButton = this._buttonsLayout.contents[index] as TextButton;
             removed = this._buttonsLayout.removeContent(button, destroy) as TextButton;
             this.refreshLayout();
-            this._createBackgroundObject(this._opts.background);
+            this.setBackground(this._opts.background);
         }
         return removed;
     }
@@ -143,33 +149,24 @@ export class CardBody extends LinearLayout {
     removeAllButtons(destroy: boolean = true): TextButton[] {
         const buttons: TextButton[] = this._buttonsLayout.removeAllContent(destroy) as TextButton[];
         this.refreshLayout();
-        this._createBackgroundObject(this._opts.background);
+        this.setBackground(this._opts.background);
         return buttons;
     }
 
-    private _createBackgroundObject(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
+    setBackground(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
         this.remove(this._background, true);
         if (styles) {
+            this._opts.background = _.merge(CardBodyOptions.SET_DEFAULTS(this.scene, this._opts).background, styles);
             const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, {
-                fillStyle: styles.fillStyle,
-                lineStyle: styles.lineStyle
+                fillStyle: this._opts.background?.fillStyle,
+                lineStyle: this._opts.background?.lineStyle
             });
             this._background = background;
-            if (styles.fillStyle) {
-                background.fillRoundedRect(-(this._opts.width / 2), -(this.height / 2), this._opts.width, this.height, {
-                    tl: 0,
-                    tr: 0,
-                    bl: this._opts.cornerRadius,
-                    br: this._opts.cornerRadius
-                });
+            if (this._opts.background?.fillStyle) {
+                background.fillRoundedRect(-(this._opts.width / 2), -(this.height / 2), this._opts.width, this.height, this._opts.cornerRadius);
             }
-            if (styles.lineStyle) {
-                background.strokeRoundedRect(-(this._opts.width / 2), -(this.height / 2), this._opts.width, this.height, {
-                    tl: 0,
-                    tr: 0,
-                    bl: this._opts.cornerRadius,
-                    br: this._opts.cornerRadius
-                });
+            if (this._opts.background?.lineStyle) {
+                background.strokeRoundedRect(-(this._opts.width / 2), -(this.height / 2), this._opts.width, this.height, this._opts.cornerRadius);
             }
             this.add(background);
             this.sendToBack(background);

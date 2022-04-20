@@ -10,7 +10,7 @@ export class CardHeader extends TextButton {
             tr: options.cornerRadius,
             bl: 0,
             br: 0
-        }
+        };
         super(scene, options);
     }
 }
