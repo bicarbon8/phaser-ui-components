@@ -28,7 +28,7 @@ describe('LinearLayout', () => {
 
         let previousX: number = -Infinity;
         for (var i=0; i<ll.contents.length; i++) {
-            let content: Phaser.GameObjects.Text = ll.contents[i] as Phaser.GameObjects.Text;
+            let content = ll.getContentAt<Phaser.GameObjects.Text>(i);
             expect(previousX).toBeLessThan(content.x);
             previousX = content.x;
             expect(content.y).toBe(0);
@@ -48,7 +48,7 @@ describe('LinearLayout', () => {
 
         let previousY: number = -Infinity;
         for (var i=0; i<ll.contents.length; i++) {
-            let content: Phaser.GameObjects.Text = ll.contents[i] as Phaser.GameObjects.Text;
+            let content = ll.getContentAt<Phaser.GameObjects.Text>(i);
             expect(previousY).toBeLessThan(content.y);
             previousY = content.y;
             expect(content.x).toBe(0);

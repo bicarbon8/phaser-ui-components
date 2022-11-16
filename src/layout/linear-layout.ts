@@ -128,7 +128,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 .map((c: LayoutContent) => c.displayWidth ?? 0)
                 .reduce((previous: number, current: number) => previous + current);
             contentsWidth += (this.padding * (this.contents.length + 1));
-            let contentsHeight: number = _.max(this.contents.map((c: LayoutContent) => (c.displayHeight) + (this.padding * 2)).concat(this.desiredHeight ?? 0));
+            let contentsHeight: number = _.max(this.contents.map((c: LayoutContent) => (c.displayHeight ?? 0) + (this.padding * 2)).concat(this.desiredHeight ?? 0));
             let xOffset: number = -(contentsWidth / 2) + this.padding;
             let yOffset: number;
             for (var i=0; i<this.contents.length; i++) {
