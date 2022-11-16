@@ -6,6 +6,7 @@ import { TextButtonOptions } from "./text-button-options";
 
 export class TextButton extends Phaser.GameObjects.Container {
     private _text: Phaser.GameObjects.Text;
+    private _textConfig: Phaser.Types.GameObjects.Text.TextConfig;
     private _background: Phaser.GameObjects.Graphics;
 
     public desiredWidth: number;
@@ -25,6 +26,8 @@ export class TextButton extends Phaser.GameObjects.Container {
         this.alignment = options.alignment;
         this.cornerRadius = options.cornerRadius;
         this.interactive = options.interactive;
+        
+        this._textConfig = options.text;
         
         this.setText(options.text)
             .setBackground(options.background);
@@ -57,16 +60,15 @@ export class TextButton extends Phaser.GameObjects.Container {
     }
 
     setText(config?: Phaser.Types.GameObjects.Text.TextConfig): TextButton {
-        let previousConfig: Phaser.Types.GameObjects.Text.TextConfig = {};
         if (this._text) {
-            previousConfig = {text: this._text.text, style: this._text.style, padding: this._text.padding};
             this._text.destroy();
             this._text = null;
         }
         
         if (config) {
-            config = _.merge(previousConfig, config);
-            const txt = this.scene.make.text(config);
+            config = _.merge(this._textConfig, config);
+            const txt = this.scene.make.text(config, false);
+            txt.setOrigin(0.5);
             let availableWidth: number = this.scene.sys.game.scale.gameSize.width - (this.padding * 2);
             let availableHeight: number = this.scene.sys.game.scale.gameSize.height - (this.padding * 2);
             if (this.desiredWidth != null) {
@@ -85,6 +87,7 @@ export class TextButton extends Phaser.GameObjects.Container {
             }
             this.add(txt);
             this._text = txt;
+            this._textConfig = config;
         }
         const txtDisplayWidth = this._text?.displayWidth ?? 0;
         const txtDisplayHeight = this._text?.displayHeight ?? 0;

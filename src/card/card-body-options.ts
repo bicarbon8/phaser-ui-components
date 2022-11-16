@@ -13,6 +13,7 @@ export module CardBodyOptions {
         return {
             x: 0,
             y: 0,
+            orientation: 'vertical',
             contents: new Array<LayoutContent>(),
             cornerRadius: {tl: 0, tr: 0, bl: 0, br: 0},
             padding: 0

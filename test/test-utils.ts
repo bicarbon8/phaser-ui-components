@@ -11,6 +11,7 @@ export module TestUtils {
                         _scene = this;
                     },
                     preload: function() {
+                        this.load.image('sample-image', 'https://avatars.githubusercontent.com/u/2321610?v=4');
                         this.load.spritesheet('sample-spritesheet', 'https://avatars.githubusercontent.com/u/2321610?v=4', {
                             frameWidth: 460
                         });

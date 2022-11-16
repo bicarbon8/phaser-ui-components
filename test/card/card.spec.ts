@@ -12,7 +12,7 @@ describe('Card', () => {
     });
 
     it('can be created empty', () => {
-        const card: Card = new Card(TestUtils.scene());
+        const card: Card = new Card(TestUtils.scene(), {});
         TestUtils.scene().add.existing(card);
 
         expect(card).toBeDefined();
@@ -73,14 +73,14 @@ describe('Card', () => {
 
     it('can be created with a header and a body', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 300,
+            desiredWidth: 300,
             header: {
                 text: {text:'header text', style: {fontSize: '40px', color: Colors.toHexString(Colors.success)}}
             },
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        text: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
                     })
                 ]
             }
@@ -94,24 +94,27 @@ describe('Card', () => {
         expect(card.cardbody).toBeDefined();
         expect(card.cardbody.contents[0]).toBeDefined();
         expect(card.width).toBeGreaterThan(0);
-        expect(card.width).toEqual(card.header.width);
-        expect(card.width).toEqual(card.cardbody.width);
+        expect(card.width).withContext('card width should be equal to header width').toEqual(card.header.width);
+        expect(card.width).withContext('card width should be equal to body width').toEqual(card.cardbody.width);
         expect(card.height).toBeGreaterThan(0);
-        expect(card.height).toEqual(card.header.height + card.cardbody.height);
+        expect(card.height).withContext('card height should be header plus body height').toEqual(card.header.height + card.cardbody.height);
     });
 
     it('can be created with a header image and a body', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             cornerRadius: 5,
             header: {
                 text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
-            image: {},
+            image: {
+                image: {key: 'sample-spritesheet', index: 0},
+                background: Styles.secondary().graphics
+            },
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        text: {text: 'body contents', style: Styles.primary().text}
                     })
                 ]
             }
@@ -122,8 +125,8 @@ describe('Card', () => {
         expect(card.header).toBeDefined();        
         expect(card.header.text).toBeDefined();
         expect(card.image).toBeDefined();
-        expect(card.image.sprite).toBeUndefined();
-        expect(card.image.background).withContext('card image background should default to undefined').toBeUndefined();
+        expect(card.image.sprite).toBeDefined();
+        expect(card.image.background).withContext('card image background should default to undefined').toBeDefined();
         expect(card.image.height).withContext('card image height should be same as card width if not specified').toBe(200);
         expect(card.cardbody).toBeDefined();
         expect(card.cardbody.contents[0]).toBeDefined();
@@ -136,21 +139,20 @@ describe('Card', () => {
 
     it('can be created with everything', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             cornerRadius: 5,
             padding: 10,
             header: TextButtonOptions.primary({
                 text: {text:'header text'}
             }),
             image: {
-                height: 100,
-                spriteKey: 'sample-spritesheet',
+                image: {key: 'sample-image'},
                 background: Styles.secondary().graphics
             },
             body: CardBodyOptions.light({
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        text: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
                     })
                 ]
             })
@@ -169,12 +171,12 @@ describe('Card', () => {
         expect(card.width).withContext('card header width should be same as card width').toEqual(card.header.width);
         expect(card.width).withContext('card body width should be same as card width').toEqual(card.cardbody.width);
         expect(card.height).withContext('card height should be over 200').toBeGreaterThan(200);
-        expect(card.height).withContext('card should be height of all parts combined').toEqual(card.header.height + card.cardbody.height + 100);
+        expect(card.height).withContext('card should be height of all parts combined').toEqual(card.header.height + card.image.height + card.cardbody.height);
     });
 
     it('can remove header', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             cornerRadius: 5,
             header: {
                 text: {text:'header text', style: {color: Colors.toHexString(Colors.success)}}
@@ -202,7 +204,7 @@ describe('Card', () => {
 
     it('can remove image', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             cornerRadius: 5,
             header: {
                 text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
@@ -230,7 +232,7 @@ describe('Card', () => {
 
     it('can remove cardbody', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             cornerRadius: 5,
             header: {
                 text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
@@ -256,9 +258,9 @@ describe('Card', () => {
         expect(card.refreshLayout).toHaveBeenCalledTimes(1);
     });
 
-    it('will refreshLayout when contents of CardBody Description is updated', () => {
+    it('will call refreshLayout when contents of CardBody is updated', () => {
         const card: Card = new Card(TestUtils.scene(), {
-            width: 200,
+            desiredWidth: 200,
             padding: 5,
             cornerRadius: 10,
             header: TextButtonOptions.primary({text: {text:'sample header'}}),
@@ -266,7 +268,17 @@ describe('Card', () => {
             body: CardBodyOptions.secondary({
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        text: {
+                            text: 'body contents',
+                            style: {
+                                wordWrap: {
+                                    useAdvancedWrap: true, 
+                                    width: 180
+                                }, 
+                                align: 'left'
+                            }, 
+                            origin: 0.5
+                        }
                     })
                 ]
             })
@@ -277,7 +289,7 @@ describe('Card', () => {
 
         expect(startingHeight).withContext('startingHeight').toBeGreaterThan(0);
 
-        card.cardbody.getContentAt<TextButton>(0).setText({text: 'some long text that will wrap around'});
+        card.cardbody.getContentAt<TextButton>(0).setText({text: 'some long text that will wrap around... some long text that will wrap around... some long text that will wrap around...'});
 
         expect(card.height).withContext('height after update').toBeGreaterThan(startingHeight);
     });

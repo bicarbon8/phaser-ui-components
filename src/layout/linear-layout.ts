@@ -19,8 +19,10 @@ export class LinearLayout extends Phaser.GameObjects.Container {
         this.orientation = options.orientation;
         this.alignment = options.alignment;
         this.padding = options.padding;
-        this.contents = options.contents ?? new Array<LayoutContent>();
-        this.addContents(...this.contents);
+        this.desiredWidth = options.desiredWidth;
+        this.desiredHeight = options.desiredHeight;
+        this.contents = new Array<LayoutContent>();
+        this.addContents(...options.contents);
     }
 
     getContentAt<T extends LayoutContent>(index: number): T {
@@ -65,8 +67,8 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 this.add(c);
             }
             this.contents = this.contents.concat(contents);
-            this.refreshLayout();
         }
+        this.refreshLayout();
     }
 
     /**
@@ -149,7 +151,10 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 c.setPosition(xOffset + (width / 2), yOffset);
                 xOffset += width + this.padding;
             }
-            this.setSize(contentsWidth, contentsHeight);
+            const height = this.desiredHeight ?? contentsHeight;
+            this.setSize(contentsWidth, height);
+        } else {
+            this.setSize(0, 0);
         }
     }
 
@@ -180,7 +185,10 @@ export class LinearLayout extends Phaser.GameObjects.Container {
                 c.setPosition(xOffset, yOffset + (height / 2));
                 yOffset += height + this.padding;
             }
-            this.setSize(contentsWidth, contentsHeight);
+            const width = this.desiredWidth ?? contentsWidth;
+            this.setSize(width, contentsHeight);
+        } else {
+            this.setSize(0, 0);
         }
     }
 }

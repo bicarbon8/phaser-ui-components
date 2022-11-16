@@ -12,12 +12,16 @@ export class CardBody extends LinearLayout {
 
     constructor(scene: Phaser.Scene, options?: CardBodyOptions) {
         options = CardBodyOptions.setDefaultOptions(options);
+        const contents = options.contents ?? new Array<LayoutContent>();
+        options.contents = new Array<LayoutContent>();
         super(scene, options);
 
-        this.cornerRadius = options.cornerRadius;
+        this.cornerRadius = (typeof options.cornerRadius === 'number') ? 
+            {tr: 0, tl: 0, br: options.cornerRadius, bl: options.cornerRadius} : 
+            {tr: 0, tl: 0, br: options.cornerRadius.br, bl: options.cornerRadius.bl};
         this.backgroundStyle = options.background;
         
-        this.addContents(...options.contents);
+        this.addContents(...contents);
     }
 
     get background(): Phaser.GameObjects.Graphics {
@@ -25,9 +29,7 @@ export class CardBody extends LinearLayout {
     }
 
     override addContents(...contents: LayoutContent[]): void {
-        if (contents?.length) {
-            super.addContents(...contents);
-        }
+        super.addContents(...contents);
         this.setBackground(this.backgroundStyle);
     }
 
@@ -49,14 +51,14 @@ export class CardBody extends LinearLayout {
 
     setBackground(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
         this.remove(this._background, true);
+        const width = this.desiredWidth ?? this.width;
+        const height = this.desiredHeight ?? this.height;
         if (styles) {
             const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, {
                 fillStyle: this.backgroundStyle?.fillStyle,
                 lineStyle: this.backgroundStyle?.lineStyle
             });
             this._background = background;
-            const width = (this.desiredWidth) ? this.desiredWidth : this.width;
-            const height = (this.desiredHeight) ? this.desiredHeight : this.height;
             if (this.backgroundStyle?.fillStyle) {
                 background.fillRoundedRect(-(width / 2), -(height / 2), width, height, this.cornerRadius);
             }
@@ -65,8 +67,8 @@ export class CardBody extends LinearLayout {
             }
             this.add(background);
             this.sendToBack(background);
-            this.setSize(width, height);
         }
+        this.setSize(width, height);
         this.emit(LayoutEvents.RESIZE, {width: this.width, height: this.height});
     }
 }

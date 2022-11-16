@@ -84,7 +84,7 @@ describe('LinearLayout', () => {
         });
         TestUtils.scene().add.existing(ll);
 
-        expect(ll.contents.length).toBe(3);
+        expect(ll.contents.length).withContext('only 3 contents added in constructor options').toBe(3);
 
         spyOn(ll, 'refreshLayout');
         ll.removeContent(ll.contents[1]);
