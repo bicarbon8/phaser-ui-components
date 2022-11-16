@@ -12,7 +12,7 @@ describe('LinearLayout', () => {
     });
     
     it('can be created with no options', () => {
-        const ll: LinearLayout = new LinearLayout(TestUtils.scene());
+        const ll: LinearLayout = new LinearLayout(TestUtils.scene(), {});
         TestUtils.scene().add.existing(ll);
 
         expect(ll).toBeDefined();

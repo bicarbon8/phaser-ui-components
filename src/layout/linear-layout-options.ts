@@ -1,11 +1,11 @@
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
 
-export interface LinearLayoutOptions {
+export type LinearLayoutOptions = {
     x?: number;
     y?: number;
-    width?: number;
-    height?: number;
+    desiredWidth?: number;
+    desiredHeight?: number;
     orientation?: 'vertical' | 'horizontal';
     padding?: number;
     alignment?: Alignment;
@@ -13,16 +13,14 @@ export interface LinearLayoutOptions {
 }
 
 export module LinearLayoutOptions {
-    export function DEFAULT(scene: Phaser.Scene): LinearLayoutOptions {
+    export function getDefaultOptions(): LinearLayoutOptions {
         return {
             x: 0,
             y: 0,
-            width: scene.sys.game.scale.gameSize.width,
-            height: scene.sys.game.scale.gameSize.height,
             orientation: 'horizontal',
             padding: 0,
             alignment: {horizontal: 'center', vertical: 'middle'},
-            contents: []
+            contents: new Array<LayoutContent>()
         };
     }
 }

@@ -27,22 +27,22 @@ describe('TextButton', () => {
     it('scales the text if text is wider than specified width', () => {
         const opts: TextButtonOptions = {};
         opts.text = {text: 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll'};
-        opts.width = 100;
+        opts.desiredWidth = 100;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.primary(opts));
         TestUtils.scene().add.existing(button);
 
         const txt = button.getFirst('text', 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll') as Phaser.GameObjects.Text;
 
-        expect(button.width).toBe(opts.width);
-        expect(txt.displayWidth).toBe(opts.width);
-        expect(txt.width).toBeGreaterThan(opts.width);
+        expect(button.width).toBe(opts.desiredWidth);
+        expect(txt.displayWidth).toBe(opts.desiredWidth);
+        expect(txt.width).toBeGreaterThan(opts.desiredWidth);
     });
 
     it('centers the text within the button', () => {
         const opts: TextButtonOptions = {};
         opts.text = {text: '-'};
-        opts.width = 200;
-        opts.height = 200;
+        opts.desiredWidth = 200;
+        opts.desiredHeight = 200;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.warning(opts));
         TestUtils.scene().add.existing(button);
 
@@ -148,7 +148,7 @@ describe('TextButton', () => {
 
     it('can align the text horizontally left', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.secondary({
-            width: 500,
+            desiredWidth: 500,
             text: {text: 'align left'},
             alignment: {horizontal: 'left'},
             padding: 5,
@@ -163,7 +163,7 @@ describe('TextButton', () => {
 
     it('can align the text horizontally right', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.warning({
-            width: 500,
+            desiredWidth: 500,
             text: {text: 'align right'},
             alignment: {horizontal: 'right'},
             padding: 5,
@@ -178,7 +178,7 @@ describe('TextButton', () => {
 
     it('can align the text vertically top', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
-            height: 200,
+            desiredHeight: 200,
             text: {text: 'align top'},
             alignment: {vertical: 'top'},
             padding: 5,
@@ -193,7 +193,7 @@ describe('TextButton', () => {
 
     it('can align the text vertically bottom', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.dark({
-            height: 200,
+            desiredHeight: 200,
             text: {text: 'align bottom'},
             alignment: {vertical: 'bottom'},
             padding: 5,
@@ -208,8 +208,8 @@ describe('TextButton', () => {
 
     it('can align the text to top left', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
-            width: 500,
-            height: 200,
+            desiredWidth: 500,
+            desiredHeight: 200,
             text: {text: 'align top left'},
             alignment: {horizontal: 'left', vertical: 'top'},
             padding: 5,

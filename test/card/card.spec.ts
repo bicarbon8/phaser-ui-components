@@ -1,4 +1,4 @@
-import { CardBodyOptions, Colors, Styles, TextButtonOptions } from "../../src";
+import { CardBodyOptions, Colors, Styles, TextButton, TextButtonOptions } from "../../src";
 import { Card } from "../../src/card/card";
 import { TestUtils } from "../test-utils";
 
@@ -49,14 +49,14 @@ describe('Card', () => {
 
     it('can be created with only a body', () => {
         const card: Card = new Card(TestUtils.scene(), {body: {
-            title: {
-                text: 'title text',
-                style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
-            },
-            description: {
-                text: 'description text',
-                style: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
-            }
+            contents: [
+                new TextButton(TestUtils.scene(), {
+                    text: {
+                        text: 'title text',
+                        style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
+                    }}
+                )
+            ]
         }});
         TestUtils.scene().add.existing(card);
 
@@ -64,8 +64,7 @@ describe('Card', () => {
         expect(card.image).toBeUndefined();
         expect(card.header).toBeUndefined();
         expect(card.cardbody).toBeDefined();
-        expect(card.cardbody.title).toBeDefined();
-        expect(card.cardbody.description).toBeDefined();
+        expect(card.cardbody.contents[0]).toBeDefined();
         expect(card.width).toBeGreaterThan(0);
         expect(card.width).toEqual(card.cardbody.width);
         expect(card.height).toBeGreaterThan(0);
@@ -79,14 +78,11 @@ describe('Card', () => {
                 text: {text:'header text', style: {fontSize: '40px', color: Colors.toHexString(Colors.success)}}
             },
             body: {
-                title: {
-                    text: 'title text',
-                    style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
-                },
-                description: {
-                    text: 'description text that is interesting to wrap around for a bit so we can see how it works',
-                    style: {fontSize: '20px', color: Colors.toHexString(Colors.warning)}
-                }
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             }
         });
         TestUtils.scene().add.existing(card);
@@ -96,8 +92,7 @@ describe('Card', () => {
         expect(card.header).toBeDefined();
         expect(card.header.text).toBeDefined();
         expect(card.cardbody).toBeDefined();
-        expect(card.cardbody.title).toBeDefined();
-        expect(card.cardbody.description).toBeDefined();
+        expect(card.cardbody.contents[0]).toBeDefined();
         expect(card.width).toBeGreaterThan(0);
         expect(card.width).toEqual(card.header.width);
         expect(card.width).toEqual(card.cardbody.width);
@@ -114,14 +109,11 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: {
-                    text: 'title text',
-                    style: {color: Colors.toHexString(Colors.light)}
-                },
-                description: {
-                    text: 'description text',
-                    style: {color: Colors.toHexString(Colors.warning)}
-                }
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             }
         });
         TestUtils.scene().add.existing(card);
@@ -134,8 +126,7 @@ describe('Card', () => {
         expect(card.image.background).withContext('card image background should default to undefined').toBeUndefined();
         expect(card.image.height).withContext('card image height should be same as card width if not specified').toBe(200);
         expect(card.cardbody).toBeDefined();
-        expect(card.cardbody.title).toBeDefined();
-        expect(card.cardbody.description).toBeDefined();
+        expect(card.cardbody.contents[0]).toBeDefined();
         expect(card.width).withContext('card width should be as specified').toBe(200);
         expect(card.width).withContext('card header width should be same as card width').toEqual(card.header.width);
         expect(card.width).withContext('card body width should be same as card width').toEqual(card.cardbody.width);
@@ -157,13 +148,9 @@ describe('Card', () => {
                 background: Styles.secondary().graphics
             },
             body: CardBodyOptions.light({
-                title: { text: 'title text' },
-                description: { text: 'description text' },
-                buttons: [
-                    TextButtonOptions.success({
-                        text: {text:'Continue'},
-                        padding: 5,
-                        cornerRadius: 2
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
                     })
                 ]
             })
@@ -194,14 +181,11 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: {
-                    text: 'title text',
-                    style: {color: Colors.toHexString(Colors.light)}
-                },
-                description: {
-                    text: 'description text',
-                    style: {color: Colors.toHexString(Colors.warning)}
-                }
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             }
         });
         TestUtils.scene().add.existing(card);
@@ -225,14 +209,11 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: {
-                    text: 'title text',
-                    style: {color: Colors.toHexString(Colors.light)}
-                },
-                description: {
-                    text: 'description text',
-                    style: {color: Colors.toHexString(Colors.warning)}
-                }
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             }
         });
         TestUtils.scene().add.existing(card);
@@ -256,14 +237,11 @@ describe('Card', () => {
             },
             image: {},
             body: {
-                title: {
-                    text: 'title text',
-                    style: {color: Colors.toHexString(Colors.light)}
-                },
-                description: {
-                    text: 'description text',
-                    style: {color: Colors.toHexString(Colors.warning)}
-                }
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             }
         });
         TestUtils.scene().add.existing(card);
@@ -286,8 +264,11 @@ describe('Card', () => {
             header: TextButtonOptions.primary({text: {text:'sample header'}}),
             image: {background: {fillStyle: {color: Colors.info}}},
             body: CardBodyOptions.secondary({
-                title: {text: 'sample body title'},
-                description: {text: '--'}
+                contents: [
+                    new TextButton(TestUtils.scene(), {
+                        text: {text: 'body contents'}
+                    })
+                ]
             })
         });
         TestUtils.scene().add.existing(card);
@@ -296,7 +277,7 @@ describe('Card', () => {
 
         expect(startingHeight).withContext('startingHeight').toBeGreaterThan(0);
 
-        card.cardbody.setDescription({text: 'some long text that will wrap around'});
+        card.cardbody.getContentAt<TextButton>(0).setText({text: 'some long text that will wrap around'});
 
         expect(card.height).withContext('height after update').toBeGreaterThan(startingHeight);
     });

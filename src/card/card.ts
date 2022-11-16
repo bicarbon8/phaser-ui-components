@@ -51,7 +51,7 @@ export class Card extends LinearLayout {
         }
         if (options) {
             this._opts.header = options;
-            options.width = options.width || this._opts.width;
+            options.desiredWidth = options.desiredWidth || this._opts.width;
             options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
             options.padding = options.padding || this._opts.padding;
             this._header = new CardHeader(this.scene, options);
@@ -88,7 +88,7 @@ export class Card extends LinearLayout {
         }
         if (options) {
             this._opts.body = options;
-            options.width = options.width || this._opts.width;
+            options.desiredWidth = options.desiredWidth || this._opts.width;
             options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
             options.padding = options.padding || this._opts.padding;
             this._body = new CardBody(this.scene, options);

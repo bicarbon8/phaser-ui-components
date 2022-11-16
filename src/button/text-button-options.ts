@@ -2,11 +2,11 @@ import * as _ from "lodash";
 import { Alignment } from "../layout/alignment";
 import { Styles } from "../style/styles";
 
-export interface TextButtonOptions {
+export type TextButtonOptions = {
     x?: number;
     y?: number;
-    width?: number;
-    height?: number;
+    desiredWidth?: number;
+    desiredHeight?: number;
     text?: Phaser.Types.GameObjects.Text.TextConfig;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
@@ -16,7 +16,7 @@ export interface TextButtonOptions {
 }
 
 export module TextButtonOptions {
-    export function DEFAULT(): TextButtonOptions {
+    export function getDefaultOptions(): TextButtonOptions {
         return {
             x: 0,
             y: 0,
@@ -28,6 +28,9 @@ export module TextButtonOptions {
                 vertical: 'middle'
             }
         };
+    }
+    export function setDefaultOptions(options: TextButtonOptions): TextButtonOptions {
+        return _.merge(TextButtonOptions.getDefaultOptions(), options);
     }
 
     export function primary(options?: TextButtonOptions): TextButtonOptions { return get(Styles.primary(), options); }
