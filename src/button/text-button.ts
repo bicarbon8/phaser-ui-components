@@ -8,12 +8,12 @@ export class TextButton extends Phaser.GameObjects.Container {
     private _text: Phaser.GameObjects.Text;
     private _background: Phaser.GameObjects.Graphics;
 
-    desiredWidth: number;
-    desiredHeight: number;
-    padding: number;
-    alignment: Alignment;
-    cornerRadius: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
-    interactive: boolean;
+    public desiredWidth: number;
+    public desiredHeight: number;
+    public padding: number;
+    public alignment: Alignment;
+    public cornerRadius: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
+    public interactive: boolean;
 
     constructor(scene: Phaser.Scene, options: TextButtonOptions) {
         options = TextButtonOptions.setDefaultOptions(options);
@@ -57,12 +57,15 @@ export class TextButton extends Phaser.GameObjects.Container {
     }
 
     setText(config?: Phaser.Types.GameObjects.Text.TextConfig): TextButton {
+        let previousConfig: Phaser.Types.GameObjects.Text.TextConfig = {};
         if (this._text) {
+            previousConfig = {text: this._text.text, style: this._text.style, padding: this._text.padding};
             this._text.destroy();
             this._text = null;
         }
         
-        if (config?.text) {
+        if (config) {
+            config = _.merge(previousConfig, config);
             const txt = this.scene.make.text(config);
             let availableWidth: number = this.scene.sys.game.scale.gameSize.width - (this.padding * 2);
             let availableHeight: number = this.scene.sys.game.scale.gameSize.height - (this.padding * 2);
@@ -83,8 +86,10 @@ export class TextButton extends Phaser.GameObjects.Container {
             this.add(txt);
             this._text = txt;
         }
-        const width = (this.desiredWidth != null) ? this.desiredWidth : this._text.displayWidth + (this.padding * 2);
-        const height = (this.desiredHeight != null) ? this.desiredHeight : this._text.displayHeight + (this.padding * 2);
+        const txtDisplayWidth = this._text?.displayWidth ?? 0;
+        const txtDisplayHeight = this._text?.displayHeight ?? 0;
+        const width = (this.desiredWidth != null) ? this.desiredWidth : txtDisplayWidth + (this.padding * 2);
+        const height = (this.desiredHeight != null) ? this.desiredHeight : txtDisplayHeight + (this.padding * 2);
         this.setSize(width, height);
         
         this.setAlignment(this.alignment);

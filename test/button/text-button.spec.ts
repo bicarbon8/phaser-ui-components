@@ -110,7 +110,7 @@ describe('TextButton', () => {
         expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    it('will does not modify size when text changes', () => {
+    it('updates size when text changes if desiredWidth not set', () => {
         const opts: TextButtonOptions = {};
         opts.text = {text: 'Sample Long Text'};
         opts.padding = 10;
@@ -119,6 +119,28 @@ describe('TextButton', () => {
         TestUtils.scene().add.existing(button);
 
         const originalWidth: number = button.width;
+
+        button.setText({text: 'Short Text'});
+
+        expect(button.width).withContext('shorter text').not.toBe(originalWidth);
+
+        button.setText({text: 'Some Even Longer Long Text'});
+
+        expect(button.width).withContext('longer text').not.toBe(originalWidth);
+    });
+
+    it('does not update size when text changes if desiredWidth set', () => {
+        const opts: TextButtonOptions = {
+            desiredWidth: 300
+        };
+        opts.text = {text: 'Sample Long Text'};
+        opts.padding = 10;
+        opts.cornerRadius = 5;
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.info(opts));
+        TestUtils.scene().add.existing(button);
+
+        const originalWidth: number = button.width;
+        expect(originalWidth).withContext('original width should be desiredWidth').toBe(300);
 
         button.setText({text: 'Short Text'});
 
