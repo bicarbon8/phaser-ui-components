@@ -119,7 +119,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
         } else {
             this._layoutVertical();
         }
-        this.emit(LayoutEvents.RESIZE, this.width, this.height);
+        this.emit(LayoutEvents.RESIZE, {width: this.width, height: this.height});
     }
 
     private _layoutHorizontal(): void {

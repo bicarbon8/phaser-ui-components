@@ -92,7 +92,7 @@ export class Card extends LinearLayout {
             options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
             options.padding = options.padding || this._opts.padding;
             this._body = new CardBody(this.scene, options);
-            this._body.on(LayoutEvents.RESIZE, (width: number, height: number) => {
+            this._body.on(LayoutEvents.RESIZE, (evt: LayoutEvents.RESIZE_ARGS) => {
                 this.refreshLayout();
             });
             this._opts.width = this._opts.width || this._body.width;
