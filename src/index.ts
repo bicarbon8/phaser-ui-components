@@ -21,7 +21,6 @@ export * from "./layout/linear-layout-options";
 export * from "./layout/layout-content";
 export * from "./layout/grid-layout";
 export * from "./layout/grid-layout-options";
-export * from "./layout/grid-cell";
-export * from "./layout/grid-cell-options";
+export * from "./layout/layout-container";
 export * from "./layout/flex-layout";
 export * from "./layout/flex-layout-options";

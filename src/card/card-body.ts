@@ -50,10 +50,14 @@ export class CardBody extends LinearLayout {
     }
 
     setBackground(styles?: Phaser.Types.GameObjects.Graphics.Styles): void {
-        this.remove(this._background, true);
+        if (this._background) {
+            this.backgroundStyle = null;
+            this.remove(this._background, true);
+        }
         const width = this.desiredWidth ?? this.width;
         const height = this.desiredHeight ?? this.height;
         if (styles) {
+            this.backgroundStyle = styles;
             const background: Phaser.GameObjects.Graphics = new Phaser.GameObjects.Graphics(this.scene, {
                 fillStyle: this.backgroundStyle?.fillStyle,
                 lineStyle: this.backgroundStyle?.lineStyle

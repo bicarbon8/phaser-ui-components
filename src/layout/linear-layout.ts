@@ -46,7 +46,7 @@ export class LinearLayout extends Phaser.GameObjects.Container {
         if (contents?.length) {
             for (var i=0; i<contents.length; i++) {
                 let c: LayoutContent = contents[i];
-                if (c['setOrigin']) { c.setOrigin(0.5); }
+                c.setOrigin?.(0.5);
                 switch (this.orientation) {
                     case 'horizontal': 
                         if (this.desiredHeight != null) {

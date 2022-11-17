@@ -61,7 +61,7 @@ module.exports = function (config) {
         },
         ChromeDebugging: {
           base: 'Chrome',
-          flags: [ '--remote-debugging-port=9333' ]
+          flags: [ '--remote-debugging-port=9333', '--no-sandbox' ]
         }
       },
       singleRun: true,
