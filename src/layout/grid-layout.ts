@@ -31,6 +31,7 @@ export class GridLayout extends Phaser.GameObjects.Container {
         this.padding = options.padding;
         this.rows = options.rows;
         this.columns = options.columns;
+        this.cornerRadius = options.cornerRadius;
 
         const width: number = options.width ?? this.scene.sys.game.scale.gameSize.width;
         const height: number = options.height ?? this.scene.sys.game.scale.gameSize.height;
