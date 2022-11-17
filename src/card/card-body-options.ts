@@ -1,37 +1,26 @@
 import * as _ from "lodash";
-import { TextButtonOptions } from "../button/text-button-options";
-import { Colors } from "../color/colors";
+import { LayoutContent } from "../layout/layout-content";
+import { LinearLayoutOptions } from "../layout/linear-layout-options";
 import { Styles } from "../style/styles";
 
-export interface CardBodyOptions {
-    x?: number;
-    y?: number;
-    width?: number;
-    title?: Phaser.Types.GameObjects.Text.TextConfig;
-    description?: Phaser.Types.GameObjects.Text.TextConfig;
-    buttons?: TextButtonOptions[];
-    buttonSpacing?: number;
+export type CardBodyOptions = LinearLayoutOptions & {
     background?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
-    padding?: number;
 }
 
 export module CardBodyOptions {
-    export function SET_DEFAULTS(scene: Phaser.Scene, options?: CardBodyOptions): CardBodyOptions {
-        const w: number = options?.width || scene.sys.game.scale.gameSize.width;
-        const p: number = options?.padding || 0;
-        const defaults: CardBodyOptions = {
+    export function getDefaultOptions(): CardBodyOptions {
+        return {
             x: 0,
             y: 0,
-            width: w,
-            title: {style: {wordWrap: {useAdvancedWrap: true, width: w - (p * 2)}, align: 'left'}, origin: 0.5},
-            description: {style: {wordWrap: {useAdvancedWrap: true, width: w - (p * 2)}, align: 'left'}, origin: 0.5},
-            buttons: [],
-            buttonSpacing: 0,
-            cornerRadius: 0,
-            padding: p
+            orientation: 'vertical',
+            contents: new Array<LayoutContent>(),
+            cornerRadius: {tl: 0, tr: 0, bl: 0, br: 0},
+            padding: 0
         };
-        return _.merge(defaults, options);
+    }
+    export function setDefaultOptions(options?: CardBodyOptions): CardBodyOptions {
+        return _.merge(CardBodyOptions.getDefaultOptions(), options);
     }
 
     export function primary(options?: CardBodyOptions): CardBodyOptions { return get(Styles.primary(), options); }
@@ -56,12 +45,7 @@ export module CardBodyOptions {
 
     function get(style: Styles, options?: CardBodyOptions): CardBodyOptions {
         const backgroundStyle: Phaser.Types.GameObjects.Graphics.Styles = {...style.graphics};
-        const titleStyle: Phaser.Types.GameObjects.Text.TextStyle = {...style.text};
-        const descriptionStyle: Phaser.Types.GameObjects.Text.TextStyle = {...style.text};
-        descriptionStyle.color = (Colors.isDark(titleStyle.color)) ? Colors.lighten(descriptionStyle.color, 2) : Colors.darken(descriptionStyle.color, 2);
         return _.merge({
-            title: {style: titleStyle},
-            description: {style: descriptionStyle},
             background: backgroundStyle
         }, options);
     }

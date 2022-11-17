@@ -1,22 +1,22 @@
-import { Colors } from "../color/colors";
+export type ImageOptions = {
+    key: string;
+    index?: number;
+};
 
-export interface CardImageOptions {
+export type CardImageOptions = {
     x?: number;
     y?: number;
-    width?: number;
-    height?: number;
-    spriteKey?: string;
-    spriteIndex?: number;
+    desiredWidth?: number;
+    desiredHeight?: number;
+    image?: ImageOptions;
     background?: Phaser.Types.GameObjects.Graphics.Styles;
-}
+};
 
 export module CardImageOptions {
-    export function DEFAULT(scene: Phaser.Scene): CardImageOptions {
+    export function getDefaultOptions(): CardImageOptions {
         return {
             x: 0,
-            y: 0,
-            width: scene.sys.game.scale.gameSize.width,
-            spriteIndex: 0,
+            y: 0
         };
     }
 }

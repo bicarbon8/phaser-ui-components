@@ -14,6 +14,8 @@ export * from "./card/card-image-options";
 export * from "./card/card-body";
 export * from "./card/card-body-options";
 /** Layout */
+export * from "./layout/alignment";
+export * from "./layout/layout-events";
 export * from "./layout/linear-layout";
 export * from "./layout/linear-layout-options";
 export * from "./layout/layout-content";

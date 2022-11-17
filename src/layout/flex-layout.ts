@@ -80,7 +80,7 @@ export class FlexLayout extends Phaser.GameObjects.Container {
     refreshLayout(): FlexLayout {
         const contents: LayoutContent[] = this.removeAllContent(false);
         this.addContents(...contents);
-        this.emit(LayoutEvents.RESIZE, this.width, this.height);
+        this.emit(LayoutEvents.RESIZE, {width: this.width, height: this.height});
         return this;
     }
 

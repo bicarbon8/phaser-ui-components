@@ -12,24 +12,28 @@ import { CardImageOptions } from "./card-image-options";
 import { CardOptions } from "./card-options";
 
 export class Card extends LinearLayout {
-    private readonly _opts: CardOptions;
-
     private _header: CardHeader;
     private _image: CardImage;
     private _body: CardBody;
 
-    constructor(scene: Phaser.Scene, options?: CardOptions) {
+    cornerRadius: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
+    cardPadding: number;
+    
+    constructor(scene: Phaser.Scene, options: CardOptions) {
         options = _.merge(CardOptions.DEFAULT(scene), options);
         const opts: LinearLayoutOptions = {
             x: options.x,
             y: options.y,
-            orientation: 'vertical'
+            orientation: 'vertical',
+            desiredWidth: options.desiredWidth,
+            desiredHeight: options.desiredHeight
         };
         super(scene, opts);
-        this._opts = options;
-        this.setHeader(this._opts.header);
-        this.setImage(this._opts.image);
-        this.setCardBody(this._opts.body);
+        this.cornerRadius = options.cornerRadius;
+        this.cardPadding = options.padding;
+        this.setHeader(options.header);
+        this.setImage(options.image);
+        this.setCardBody(options.body);
     }
 
     get header(): CardHeader {
@@ -50,12 +54,10 @@ export class Card extends LinearLayout {
             this._header = null;
         }
         if (options) {
-            this._opts.header = options;
-            options.width = options.width || this._opts.width;
-            options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
-            options.padding = options.padding || this._opts.padding;
+            options.desiredWidth ??= this.desiredWidth;
+            options.cornerRadius ??= this.cornerRadius;
+            options.padding ??= this.cardPadding;
             this._header = new CardHeader(this.scene, options);
-            this._opts.width = this._opts.width || this._header.width;
             const contents: LayoutContent[] = this.removeAllContent(false);
             this.addContents(this._header, ...contents);
         }
@@ -68,10 +70,8 @@ export class Card extends LinearLayout {
             this._image = null;
         }
         if (options) {
-            this._opts.image = options;
-            options.width = options.width || this._opts.width;
+            options.desiredWidth ??= this.desiredWidth;
             this._image = new CardImage(this.scene, options);
-            this._opts.width = this._opts.width || this._image.width;
             const contents: LayoutContent[] = [];
             if (this.header) { contents.push(this.removeContent(this._header, false)); }
             contents.push(this._image);
@@ -87,15 +87,13 @@ export class Card extends LinearLayout {
             this._body = null;
         }
         if (options) {
-            this._opts.body = options;
-            options.width = options.width || this._opts.width;
-            options.cornerRadius = options.cornerRadius || this._opts.cornerRadius;
-            options.padding = options.padding || this._opts.padding;
+            options.desiredWidth ??= this.desiredWidth;
+            options.cornerRadius ??= this.cornerRadius;
+            options.padding ??= this.cardPadding;
             this._body = new CardBody(this.scene, options);
-            this._body.on(LayoutEvents.RESIZE, (width: number, height: number) => {
+            this._body.on(LayoutEvents.RESIZE, () => {
                 this.refreshLayout();
             });
-            this._opts.width = this._opts.width || this._body.width;
             this.addContents(this._body);
         }
         return this;

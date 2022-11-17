@@ -88,6 +88,6 @@ describe('FlexLayout', () => {
         TestUtils.scene().add.existing(flex);
 
         expect(flex.rows).withContext('expect 2 rows').toBe(2);
-        expect(flex.contents[1].scaleX).toBeLessThan(1);
+        expect((flex.contents[1] as Phaser.GameObjects.Rectangle).scaleX).toBeLessThan(1);
     });
 });
