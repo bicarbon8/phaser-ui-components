@@ -91,6 +91,15 @@ export class GridLayout extends Phaser.GameObjects.Container {
         return this._getLayoutContainerAt(row, col)?.contentAs<T>();
     }
 
+    removeContentAt<T extends LayoutContent>(row: number, col: number, destroy: boolean = true): T {
+        const cell = this._getLayoutContainerAt(row, col);
+        if (cell) {
+            const content = cell.removeContent(destroy);
+            return content as T;
+        }
+        return null;
+    }
+
     getRow(row: number): Array<LayoutContent> {
         if (row >= 0 && row < this.rows) {
             return this._grid[row].map(c => c.content);
@@ -174,8 +183,8 @@ export class GridLayout extends Phaser.GameObjects.Container {
                 let cell: LayoutContainer = new LayoutContainer(this.scene, {
                     x: xOffset + (cellWidth / 2), 
                     y: yOffset + (cellHeight / 2),
-                    width: cellWidth,
-                    height: cellHeight,
+                    desiredWidth: cellWidth,
+                    desiredHeight: cellHeight,
                     padding: this.padding,
                     alignment: this.alignment
                 });

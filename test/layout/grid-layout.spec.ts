@@ -93,7 +93,7 @@ describe('GridLayout', () => {
         expect(grid.columns).toBe(1);
     });
 
-    it('can set contents of GridCells', () => {
+    it('can set contents of cell', () => {
         const scene = TestUtils.scene();
         const grid: GridLayout = new GridLayout(TestUtils.scene(), {
             width: scene.sys.game.scale.gameSize.width,
@@ -119,7 +119,44 @@ describe('GridLayout', () => {
         }
     });
 
-    it('can return a row of GridCells', () => {
+    it('can remove content in a specific cell', () => {
+        const scene = TestUtils.scene();
+        const grid: GridLayout = new GridLayout(TestUtils.scene(), {});
+        TestUtils.scene().add.existing(grid);
+        for (var row=0; row<grid.rows; row++) {
+            for (var col=0; col<grid.columns; col++) {
+                let txt: string = `text at ${row}x${col}`;
+                grid.addContentAt(row, col, new Phaser.GameObjects.Text(TestUtils.scene(), 0, 0, txt, {
+                    fontSize: '20px',
+                    color: Colors.random()
+                }));
+            }
+        }
+
+        for (var row=0; row<grid.rows; row++) {
+            for (var col=0; col<grid.columns; col++) {
+                // remove even row, col content
+                if (row%2 === 0 && col%2 === 0) {
+                    grid.removeContentAt<Phaser.GameObjects.Text>(row, col);
+                }
+            }
+        }
+
+        for (var row=0; row<grid.rows; row++) {
+            for (var col=0; col<grid.columns; col++) {
+                if (row%2 === 0 && col%2 === 0) {
+                    let none = grid.getContentAt(row, col);
+                    expect(none).withContext('content should be null').toBeNull();
+                } else {
+                    let text = grid.getContentAt<Phaser.GameObjects.Text>(row, col);
+                    let expected: string = `text at ${row}x${col}`;
+                    expect(text.text).toEqual(expected);
+                }
+            }
+        }
+    });
+
+    it('can return a row of cell', () => {
         const grid: GridLayout = new GridLayout(TestUtils.scene(), {});
         for (var row=0; row<grid.rows; row++) {
             for (var col=0; col<grid.columns; col++) {
@@ -181,7 +218,7 @@ describe('GridLayout', () => {
         expect(grid.getColumn(12)).withContext('greater than length').toHaveSize(0);
     });
 
-    it('can return an array of all the GridCells', () => {
+    it('can return an array of all the cell', () => {
         const grid: GridLayout = new GridLayout(TestUtils.scene(), {});
         TestUtils.scene().add.existing(grid);
 
