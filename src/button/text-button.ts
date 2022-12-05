@@ -75,7 +75,7 @@ export class TextButton extends LayoutContainer {
         if (func) {
             this.setInteractive();
             const origTxtCfg = this._textConfig;
-            const origBkgCfg = this.backgroundConfig;
+            const origBkgCfg = this.backgroundStyles;
             this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => func());
             this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setText(origTxtCfg);
@@ -103,7 +103,7 @@ export class TextButton extends LayoutContainer {
         if (func) {
             this.setInteractive();
             const origTxtCfg = this._textConfig;
-            const origBkgCfg = this.backgroundConfig;
+            const origBkgCfg = this.backgroundStyles;
             this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => func());
             this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setText(origTxtCfg);

@@ -76,15 +76,27 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         return this._right;
     }
 
+    /**
+     * the `LayoutContent` object contained in this container
+     */
     get content(): LayoutContent {
         return this._content;
     }
 
+    /**
+     * attempts to cast the `content` to the specified type
+     * @returns the `LayoutContent` object contained in this container
+     * cast to the specified type
+     */
     contentAs<T extends LayoutContent>(): T {
         return this.content as T;
     }
 
-    get backgroundConfig(): Phaser.Types.GameObjects.Graphics.Styles {
+    /**
+     * the `Phaser.Types.GameObjects.Graphics.Styles` object used to create
+     * the `background` or `undefined` if none specified
+     */
+    get backgroundStyles(): Phaser.Types.GameObjects.Graphics.Styles {
         return this._backgroundStyle;
     }
 
@@ -93,7 +105,7 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
      * background for this `LayoutContainer`
      * 
      * **WARNING!** this SHOULD NOT be modified directly. use the 
-     * `LayoutContainer.setBackground(config)` function instead
+     * `LayoutContainer.setBackground(styles)` function instead
      */
     get background(): Phaser.GameObjects.Graphics {
         return this._background;
@@ -158,6 +170,13 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         return null;
     }
 
+    /**
+     * removes any existing background and sets a new background using the passed in
+     * style object and the size of this `LayoutContainer` or its contents
+     * @param style the `Phaser.Types.GameObjects.Graphics.Styles` object used to create a
+     * a background from or `undefined` to create none
+     * @returns this instance
+     */
     setBackground(style?: Phaser.Types.GameObjects.Graphics.Styles): this {
         if (this._background) {
             this.remove(this._background, true);
