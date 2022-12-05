@@ -12,9 +12,67 @@ describe('demo', () => {
 
     it('all features', () => {
         const scene = TestUtils.scene();
+        const clickable = new TextButton(scene, {
+            padding: 10,
+            cornerRadius: 10, 
+            textConfig: {
+                text: 'Click Me',
+                style: Styles.Outline.success().text
+            },
+            backgroundStyles: Styles.Outline.success().graphics,
+            onClick: () => {
+                clickable.setText({
+                    text: 'CLICKED!',
+                    style: Styles.success().text
+                });
+                clickable.setBackground(Styles.success().graphics);
+            }
+        });
+        const hoverable = new TextButton(scene, {
+            padding: 10,
+            cornerRadius: 10, 
+            textConfig: {
+                text: 'Mouseover Me',
+                style: Styles.Outline.danger().text
+            },
+            backgroundStyles: Styles.Outline.danger().graphics,
+            onHover: () => {
+                hoverable.setText({
+                    text: 'Success!',
+                    style: Styles.danger().text
+                });
+                hoverable.setBackground(Styles.danger().graphics);
+            }
+        });
+        const clickhover = new TextButton(scene, {
+            padding: 10,
+            cornerRadius: 10, 
+            textConfig: {
+                text: 'Click or Mouseover Me',
+                style: Styles.Outline.info().text
+            },
+            backgroundStyles: Styles.Outline.info().graphics,
+            onHover: () => {
+                clickhover.setText({
+                    text: 'mouseover!',
+                    style: Styles.warning().text
+                });
+                clickhover.setBackground(Styles.warning().graphics);
+            },
+            onClick: () => {
+                clickhover.setText({
+                    text: 'clicked!',
+                    style: Styles.success().text
+                });
+                clickhover.setBackground(Styles.success().graphics);
+            }
+        });
         const flex = new FlexLayout(scene, {
             padding: 5,
             contents: [
+                clickable,
+                hoverable,
+                clickhover,
                 new Card(scene, {
                     desiredWidth: 500,
                     padding: 10,
