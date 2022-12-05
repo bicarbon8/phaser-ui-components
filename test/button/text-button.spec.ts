@@ -255,7 +255,56 @@ describe('TextButton', () => {
             textConfig: {text: 'interactive'},
             padding: 10,
             cornerRadius: 10,
-            onClick: () => button.setText({text: 'clicked'})
+            onClick: () => {
+                button.setText({
+                    text: 'clicked',
+                    style: Styles.warning().text
+                });
+                button.setBackground(Styles.warning().graphics);
+            }
+        }));
+        TestUtils.scene().add.existing(button);
+        
+        expect(button).toBeDefined();
+    });
+
+    it('can set the onHover behaviour via ctor options', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
+            textConfig: {text: 'interactive'},
+            padding: 10,
+            cornerRadius: 10,
+            onHover: () => {
+                button.setText({
+                    text: 'hovering',
+                    style: Styles.success().text
+                });
+                button.setBackground(Styles.success().graphics);
+            }
+        }));
+        TestUtils.scene().add.existing(button);
+        
+        expect(button).toBeDefined();
+    });
+
+    it('can set the onClick and onHover behaviour via ctor options', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
+            textConfig: {text: 'interactive'},
+            padding: 10,
+            cornerRadius: 10,
+            onClick: () => {
+                button.setText({
+                    text: 'clicked',
+                    style: Styles.warning().text
+                });
+                button.setBackground(Styles.warning().graphics);
+            },
+            onHover: () => {
+                button.setText({
+                    text: 'hovering',
+                    style: Styles.success().text
+                });
+                button.setBackground(Styles.success().graphics);
+            }
         }));
         TestUtils.scene().add.existing(button);
         
