@@ -27,7 +27,7 @@ describe('CardBody', () => {
             desiredWidth: 300,
             contents: [
                 new TextButton(TestUtils.scene(), {
-                    text: { 
+                    textConfig: { 
                         text:'sample title text', 
                         style: {color: Colors.toHexString(Colors.warning)}
                     }
@@ -51,7 +51,7 @@ describe('CardBody', () => {
 
         expect(body.contents?.length).toEqual(0);
 
-        body.addContents(new TextButton(TestUtils.scene(), {text: {text: 'new title text', style: {stroke: Colors.toHexString(Colors.light)}}}));
+        body.addContents(new TextButton(TestUtils.scene(), {textConfig: {text: 'new title text', style: {stroke: Colors.toHexString(Colors.light)}}}));
 
         expect((body.getContentAt<TextButton>(0)).text.text).toEqual('new title text');
     });
@@ -60,10 +60,10 @@ describe('CardBody', () => {
         const body: CardBody = new CardBody(TestUtils.scene(), CardBodyOptions.Outline.success({
             desiredWidth: 300,
             contents: [
-                new TextButton(TestUtils.scene(), {text: {text:'sample title text'}}),
-                new TextButton(TestUtils.scene(), {text: {text:'sample description'}}),
+                new TextButton(TestUtils.scene(), {textConfig: {text:'sample title text'}}),
+                new TextButton(TestUtils.scene(), {textConfig: {text:'sample description'}}),
                 new TextButton(TestUtils.scene(), {
-                    text: {
+                    textConfig: {
                         text:'button text', 
                         style: Styles.Outline.danger().text
                     },

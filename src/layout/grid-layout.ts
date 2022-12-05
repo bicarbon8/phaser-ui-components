@@ -183,8 +183,8 @@ export class GridLayout extends Phaser.GameObjects.Container {
                 let cell: LayoutContainer = new LayoutContainer(this.scene, {
                     x: xOffset + (cellWidth / 2), 
                     y: yOffset + (cellHeight / 2),
-                    desiredWidth: cellWidth,
-                    desiredHeight: cellHeight,
+                    width: cellWidth,
+                    height: cellHeight,
                     padding: this.padding,
                     alignment: this.alignment
                 });

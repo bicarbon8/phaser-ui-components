@@ -1,12 +1,13 @@
 import * as _ from "lodash";
 import { Alignment } from "./alignment";
 import { LayoutContent } from "./layout-content";
+import { LayoutEvents } from "./layout-events";
 
 export type LayoutContainerOptions = {
     x?: number;
     y?: number;
-    desiredWidth?: number;
-    desiredHeight?: number;
+    width?: number;
+    height?: number;
     padding?: number;
     alignment?: Alignment;
     content?: LayoutContent;
@@ -54,10 +55,9 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         this.alignment = options.alignment;
         this.cornerRadius = options.cornerRadius;
         this._backgroundStyle = options.background;
-        this._desiredWidth = options.desiredWidth;
-        this._desiredHeight = options.desiredHeight ?? options.desiredWidth;
-        this.updateSize(this._desiredWidth, this._desiredHeight);
-        this.setContent(options.content);
+
+        this.updateSize(options.width, options.height)
+            .setContent(options.content);
     }
 
     get top(): number {
@@ -84,27 +84,43 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         return this.content as T;
     }
 
+    get backgroundConfig(): Phaser.Types.GameObjects.Graphics.Styles {
+        return this._backgroundStyle;
+    }
+
+    /**
+     * returns the `Phaser.GameObjects.Graphics` object used to create a 
+     * background for this `LayoutContainer`
+     * 
+     * **WARNING!** this SHOULD NOT be modified directly. use the 
+     * `LayoutContainer.setBackground(config)` function instead
+     */
+    get background(): Phaser.GameObjects.Graphics {
+        return this._background;
+    }
+
     /**
      * modifies the size of this `LayoutContainer` and its contents. if no values
      * specified then the content dimensions will determine the size.
-     * @param width the new width or null to size based on content
+     * @param width the new width or undefined to size based on content
      * @param height the new height or undefined / null to use same value as `width`
      * @returns `this`
      */
-    updateSize(width: number, height?: number): this {
-        height ??= width;
-        if (width != null && height != null) {
-            this._desiredWidth = width;
-            this._desiredHeight = height;
-            this._top = -(height / 2);
-            this._bottom = (height / 2);
-            this._left = -(width / 2);
-            this._right = (width / 2);
-            if (this.content) {
-                const content = this.removeContent(false);
-                this.setContent(content);
+    updateSize(width?: number, height?: number): this {
+        this._desiredWidth = width;
+        this._desiredHeight = height;
+        if (this._desiredWidth != null && this._desiredHeight != null) {
+            if (this._desiredWidth !== this.width || this._desiredHeight !== this.height) {
+                this.setSize(width, height);
+                this.emit(LayoutEvents.RESIZE, {width: this.width, height: this.height});
             }
         }
+
+        this._setContentScale();
+        this._updateBounds();
+        this._setContentPosition();
+        this.setBackground(this._backgroundStyle);
+
         return this;
     }
 
@@ -114,18 +130,24 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
      * if you wish to retain the object
      * @param content the content to be added to this `LayoutContainer`
      */
-    setContent(content: LayoutContent): LayoutContainer {
+    setContent(content: LayoutContent): this {
         if (content) {
             if (this._content) { this.removeContent(true); } // remove previous contents and destroy
             this._content = content;
-            this._setContentScale(this._content);
-            this._setContentPosition(this._content);
             this.add(this._content);
+            this._setContentScale();
+            this._updateBounds();
+            this._setContentPosition();
             this.setBackground(this._backgroundStyle);
         }
         return this;
     }
 
+    /**
+     * will remove the `LayoutContent` contained in this `LayoutContainer`
+     * @param destroy if `true` the removed contents will be destroyed
+     * @returns the `LayoutContent` contained in this `LayoutContainer`
+     */
     removeContent<T extends LayoutContent>(destroy: boolean = true): T {
         if (this._content) {
             const content: T = this.contentAs<T>();
@@ -158,34 +180,35 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         return this;
     }
 
-    private _setContentScale(content: LayoutContent): LayoutContainer {
+    private _setContentScale(): this {
+        const content = this._content;
         if (content) {
             const cWidth: number = content.displayWidth;
             const cHeight: number = content.displayHeight;
-            let scaleX: number = 1;
-            let scaleY: number = 1;
-            if (this._desiredWidth) {
-                const availableWidth = this._desiredWidth - (this.padding * 2);
-                scaleX = availableWidth / cWidth;
+            // if we don't already specify a width & height then set them based on content size
+            const width = this._desiredWidth ?? cWidth + (this.padding * 2);
+            const height = this._desiredHeight ?? cHeight + (this.padding * 2);
+            if (width !== this.width || height !== this.height) {
+                this.setSize(width, height);
+                this.emit(LayoutEvents.RESIZE, {width: this.width, height: this.height});
             }
-            if (this._desiredHeight) {
-                const availableHeight = this._desiredHeight - (this.padding * 2);
-                scaleY = availableHeight / cHeight;
-            }
+            const availableWidth = width - (this.padding * 2);
+            const scaleX = availableWidth / cWidth;
+            const availableHeight = height - (this.padding * 2);
+            const scaleY = availableHeight / cHeight;
 
+            // only scale down, not up
             if (scaleX < 1 || scaleY < 1) {
                 const scale: number = (scaleX < scaleY) ? scaleX : scaleY;
                 content.setScale(scale);
             }
-
-            const width = this._desiredWidth ?? cWidth;
-            const height = this._desiredHeight ?? cHeight;
-            this.setSize(width, height);
         }
+
         return this;
     }
 
-    private _setContentPosition(content: LayoutContent): LayoutContainer {
+    private _setContentPosition(): LayoutContainer {
+        const content = this._content;
         if (content) {
             content.setOrigin?.(0.5);
             const cWidth = content.displayWidth;
@@ -216,5 +239,12 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
             }
         }
         return this;
+    }
+
+    private _updateBounds(): void {
+        this._top = -(this.height / 2);
+        this._bottom = (this.height / 2);
+        this._left = -(this.width / 2);
+        this._right = (this.width / 2);
     }
 }

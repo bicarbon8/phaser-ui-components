@@ -20,7 +20,7 @@ describe('demo', () => {
                     padding: 10,
                     cornerRadius: 5,
                     header: TextButtonOptions.info({
-                        text: { text: "Demonstration of GridLayout (6x6)" },
+                        textConfig: { text: "Demonstration of GridLayout (6x6)" },
                         alignment: { horizontal: "left" }
                     }),
                     body: CardBodyOptions.light({
@@ -37,20 +37,20 @@ describe('demo', () => {
                                 padding: 10,
                                 contents: [
                                     [new TextButton(scene, {
-                                        text: {text: '0x0', style: Styles.success().text},
+                                        textConfig: {text: '0x0', style: Styles.success().text},
                                         background: Styles.success().graphics,
                                         cornerRadius: 5
                                     }),,,,,new TextButton(scene, {
-                                        text: {text: '0x5', style: Styles.warning().text},
+                                        textConfig: {text: '0x5', style: Styles.warning().text},
                                         background: Styles.warning().graphics,
                                         cornerRadius: 5
                                     })],,,,,[
                                         new TextButton(scene, {
-                                            text: {text: '5x0', style: Styles.warning().text},
+                                            textConfig: {text: '5x0', style: Styles.warning().text},
                                             background: Styles.warning().graphics,
                                             cornerRadius: 5
                                         }),,,,,new TextButton(scene, {
-                                            text: {text: '5x5', style: Styles.danger().text},
+                                            textConfig: {text: '5x5', style: Styles.danger().text},
                                             background: Styles.danger().graphics,
                                             cornerRadius: 5
                                         })
@@ -65,7 +65,7 @@ describe('demo', () => {
                     padding: 10,
                     cornerRadius: 5,
                     header: TextButtonOptions.primary({
-                        text: { text: "Left Aligned Card Header" },
+                        textConfig: { text: "Left Aligned Card Header" },
                         alignment: { horizontal: "left" }
                     }),
                     body: CardBodyOptions.light({
@@ -87,42 +87,42 @@ describe('demo', () => {
                                 width: 480,
                                 contents: [
                                     new TextButton(scene, TextButtonOptions.primary({
-                                        text: { text: "Primary" },
+                                        textConfig: { text: "Primary" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.secondary({
-                                        text: { text: "Secondary" },
+                                        textConfig: { text: "Secondary" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.success({
-                                        text: { text: "Success" },
+                                        textConfig: { text: "Success" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.danger({
-                                        text: { text: "Danger" },
+                                        textConfig: { text: "Danger" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.dark({
-                                        text: { text: "Dark" },
+                                        textConfig: { text: "Dark" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.info({
-                                        text: { text: "Info" },
+                                        textConfig: { text: "Info" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.light({
-                                        text: { text: "Light" },
+                                        textConfig: { text: "Light" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.warning({
-                                        text: { text: "Warning" },
+                                        textConfig: { text: "Warning" },
                                         cornerRadius: 5,
                                         padding: 10
                                     }))
@@ -136,7 +136,7 @@ describe('demo', () => {
                     padding: 10,
                     cornerRadius: 5,
                     header: TextButtonOptions.Outline.primary({
-                        text: {
+                        textConfig: {
                             text: "Default Alignment Card Header with background lineStyle width 2",
                             style: {
                                 align: 'center',
@@ -168,42 +168,42 @@ describe('demo', () => {
                                 width: 480,
                                 contents: [
                                     new TextButton(scene, TextButtonOptions.Outline.primary({
-                                        text: { text: "Primary" },
+                                        textConfig: { text: "Primary" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.secondary({
-                                        text: { text: "Secondary" },
+                                        textConfig: { text: "Secondary" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.success({
-                                        text: { text: "Success" },
+                                        textConfig: { text: "Success" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.danger({
-                                        text: { text: "Danger" },
+                                        textConfig: { text: "Danger" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.dark({
-                                        text: { text: "Dark" },
+                                        textConfig: { text: "Dark" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.info({
-                                        text: { text: "Info" },
+                                        textConfig: { text: "Info" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.light({
-                                        text: { text: "Light" },
+                                        textConfig: { text: "Light" },
                                         cornerRadius: 5,
                                         padding: 10
                                     })),
                                     new TextButton(scene, TextButtonOptions.Outline.warning({
-                                        text: { text: "Warning" },
+                                        textConfig: { text: "Warning" },
                                         cornerRadius: 5,
                                         padding: 10
                                     }))

@@ -1,65 +1,49 @@
 import * as _ from 'lodash';
 import * as Phaser from 'phaser';
-import { Alignment } from '../layout/alignment';
-import { LayoutEvents } from '../layout/layout-events';
+import { LayoutContainer } from '../layout/layout-container';
 import { TextButtonOptions } from "./text-button-options";
 
-export class TextButton extends Phaser.GameObjects.Container {
+export class TextButton extends LayoutContainer {
     private _text: Phaser.GameObjects.Text;
     private _textConfig: Phaser.Types.GameObjects.Text.TextConfig;
-    private _background: Phaser.GameObjects.Graphics;
-
-    public desiredWidth: number;
-    public desiredHeight: number;
-    public padding: number;
-    public alignment: Alignment;
-    public cornerRadius: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
-    public interactive: boolean;
 
     constructor(scene: Phaser.Scene, options: TextButtonOptions) {
         options = TextButtonOptions.setDefaultOptions(options);
-        super(scene, options.x, options.y);
-
-        this.desiredWidth = options.desiredWidth;
-        this.desiredHeight = options.desiredHeight;
-        this.padding = options.padding;
-        this.alignment = options.alignment;
-        this.cornerRadius = options.cornerRadius;
-        this.interactive = options.interactive;
+        super(scene, options);
         
-        this._textConfig = options.text;
+        this._textConfig = options.textConfig;
         
-        this.setText(options.text)
-            .setBackground(options.background);
-        
-        if (this.interactive) { this.setInteractive(); }
+        this.setText(options.textConfig)
+            .setOnClick(options.onClick)
+            .setOnHover(options.onHover);
     }
 
-    get left(): number {
-        return this.x - (this.width / 2);
-    }
-
-    get right(): number {
-        return this.x + (this.width / 2);
-    }
-
-    get top(): number {
-        return this.y - (this.height / 2);
-    }
-
-    get bottom(): number {
-        return this.y + (this.height / 2);
-    }
-
+    /**
+     * returns the `Phaser.GameObjects.Text` used to display text in this button.
+     * 
+     * **WARNING!** this SHOULD NOT be modified directly. use the `TextButton.setText(config)`
+     * function instead
+     */
     get text(): Phaser.GameObjects.Text {
-        return _.clone(this._text);
+        return this._text;
     }
 
-    get background(): Phaser.GameObjects.Graphics {
-        return _.clone(this._background);
+    /**
+     * returns the current `Phaser.Types.GameObjects.Text.TextConfig` used
+     * for the text in this `TextButton`
+     */
+    get textConfig(): Phaser.Types.GameObjects.Text.TextConfig {
+        return this._textConfig;
     }
 
-    setText(config?: Phaser.Types.GameObjects.Text.TextConfig): TextButton {
+    /**
+     * sets the `text` and `style` to be added
+     * @param config a `Phaser.Types.GameObjects.Text.TextConfig` object
+     * containing the `text` and `style` to be applied to a `Phaser.GameObjects.Text`
+     * object
+     * @returns the current instance of this `TextButton`
+     */
+    setText(config?: Phaser.Types.GameObjects.Text.TextConfig): this {
         if (this._text) {
             this._text.destroy();
             this._text = null;
@@ -68,94 +52,63 @@ export class TextButton extends Phaser.GameObjects.Container {
         if (config) {
             config = _.merge(this._textConfig, config);
             const txt = this.scene.make.text(config, false);
-            txt.setOrigin(0.5);
-            let availableWidth: number = this.scene.sys.game.scale.gameSize.width - (this.padding * 2);
-            let availableHeight: number = this.scene.sys.game.scale.gameSize.height - (this.padding * 2);
-            if (this.desiredWidth != null) {
-                availableWidth = this.desiredWidth - (this.padding * 2);
-            }
-            if (this.desiredHeight != null) {
-                availableHeight = this.desiredHeight - (this.padding * 2);
-            }
-            if (availableWidth < txt.displayWidth) {
-                const scaleX: number = availableWidth / txt.width; // must use actual width for proper scaling of displayWidth
-                txt.setScale(scaleX);
-            }
-            if (availableHeight < txt.displayHeight) {
-                const scaleY: number = availableHeight / txt.height; // must use actual height for proper scaling of displayHeight
-                txt.setScale(scaleY);
-            }
-            this.add(txt);
+            this.setContent(txt);
             this._text = txt;
             this._textConfig = config;
         }
-        const txtDisplayWidth = this._text?.displayWidth ?? 0;
-        const txtDisplayHeight = this._text?.displayHeight ?? 0;
-        const width = (this.desiredWidth != null) ? this.desiredWidth : txtDisplayWidth + (this.padding * 2);
-        const height = (this.desiredHeight != null) ? this.desiredHeight : txtDisplayHeight + (this.padding * 2);
-        this.setSize(width, height);
-        
-        this.setAlignment(this.alignment);
-
-        this.emit(LayoutEvents.RESIZE, {width: width, height: height});
 
         return this;
     }
 
-    setAlignment(alignment?: Alignment): TextButton {
-        if (alignment) {
-            if (this._text) {
-                if (this._text.displayWidth < (this.width - (this.padding * 2))) {
-                    switch(this.alignment.horizontal) {
-                        case 'left':
-                            this._text.setX(-(this.width / 2) + this.padding + (this._text.displayWidth / 2));
-                            break;
-                        case 'right':
-                            this._text.setX((this.width / 2) - this.padding - (this._text.displayWidth / 2));
-                            break;
-                        case 'center':
-                        default:
-                            this._text.setX(0);
-                            break;
-                    }
-                }
-                if (this._text.displayHeight < (this.height - (this.padding * 2))) {
-                    switch(this.alignment.vertical) {
-                        case 'top':
-                            this._text.setY(-(this.height / 2) + this.padding + (this._text.displayHeight / 2));
-                            break;
-                        case 'bottom':
-                            this._text.setY((this.height / 2) - this.padding - (this._text.displayHeight / 2));
-                            break;
-                        case 'middle':
-                        default:
-                            this._text.setY(0);
-                            break;
-                    }
-                }
-            }
+    /**
+     * sets the function to be run when a pointer down event is fired on this `TextButton`
+     * and also sets the behaviour when pointer up and pointer out events occur to reset the 
+     * `TextButton` back to its previous state
+     * @param func a function to be run when the `Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN`
+     * event is fired on this object
+     * @returns the current instance of this `TextButton`
+     */
+    setOnClick(func: () => void): this {
+        this.off(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN)
+            .off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
+
+        if (func) {
+            this.setInteractive();
+            const origTxtCfg = this._textConfig;
+            const origBkgCfg = this.backgroundConfig;
+            this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => func());
+            this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setText(origTxtCfg);
+                this.setBackground(origBkgCfg);
+            }).on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setText(origTxtCfg);
+                this.setBackground(origBkgCfg);
+            });
         }
 
         return this;
     }
 
-    setBackground(style?: Phaser.Types.GameObjects.Graphics.Styles): TextButton {
-        if (this._background) {
-            this._background.destroy();
-            this._background = null;
-        }
-        
-        if (style) {
-            const rect = new Phaser.GameObjects.Graphics(this.scene, style);
-            if (style.fillStyle) {
-                rect.fillRoundedRect(-(this.width / 2), -(this.height / 2), this.width, this.height, this.cornerRadius);
-            }
-            if (style.lineStyle) {
-                rect.strokeRoundedRect(-(this.width / 2), -(this.height / 2), this.width, this.height, this.cornerRadius);
-            }
-            this.add(rect);
-            this.sendToBack(rect);
-            this._background = rect;
+    /**
+     * sets the function to be run when a pointer over event is fired on this `TextButton`
+     * and also sets the behaviour when a pointer out event occurs to reset the `TextButton`
+     * back to its previous state
+     * @param func a function to be run when the `Phaser.Input.Events.GAMEOBJECT_POINTER_OVER`
+     * event is fired on this object
+     * @returns the current instance of this `TextButton`
+     */
+    setOnHover(func: () => void): this {
+        this.off(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER);
+
+        if (func) {
+            this.setInteractive();
+            const origTxtCfg = this._textConfig;
+            const origBkgCfg = this.backgroundConfig;
+            this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => func());
+            this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setText(origTxtCfg);
+                this.setBackground(origBkgCfg);
+            });
         }
 
         return this;

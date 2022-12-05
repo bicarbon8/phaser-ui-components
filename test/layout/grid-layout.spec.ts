@@ -30,14 +30,14 @@ describe('GridLayout', () => {
 
     it('can be resized', () => {
         const monitoredA = new TextButton(TestUtils.scene(), {
-            desiredWidth: Math.floor(500 / 12), 
-            text: {text: 'a'},
+            width: Math.floor(500 / 12), 
+            textConfig: {text: 'a'},
             background: Styles.success().graphics
         });
         const monitoredASpy = spyOn(monitoredA, 'setScale').and.callThrough();
         const monitoredZ = new TextButton(TestUtils.scene(), {
-            desiredWidth: Math.floor(500 / 12), 
-            text: {text: 'z'},
+            width: Math.floor(500 / 12), 
+            textConfig: {text: 'z'},
             background: Styles.danger().graphics
         });
         const monitoredZSpy = spyOn(monitoredZ, 'setScale').and.callThrough();

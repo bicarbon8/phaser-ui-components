@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { Colors } from '../../src';
+import { Colors, Styles } from '../../src';
 import { TextButton } from "../../src/button/text-button";
 import { TextButtonOptions } from '../../src/button/text-button-options';
 import { TestUtils } from '../test-utils';
@@ -15,34 +15,35 @@ describe('TextButton', () => {
 
     it('sets its width based on text if not specified', () => {
         const opts: TextButtonOptions = {}; 
-        opts.text = {text: 'sample text'};
+        opts.textConfig = {text: 'sample text'};
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.info(opts));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'sample text') as Phaser.GameObjects.Text;
+        const txt = button.text;
         
         expect(txt.width).toBe(button.width);
     });
 
     it('scales the text if text is wider than specified width', () => {
-        const opts: TextButtonOptions = {};
-        opts.text = {text: 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll'};
-        opts.desiredWidth = 100;
+        const opts: TextButtonOptions = {
+            textConfig: {text: 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll'},
+            width: 100
+        };
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.primary(opts));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllll') as Phaser.GameObjects.Text;
+        const txt = button.text;
 
-        expect(button.width).toBe(opts.desiredWidth);
-        expect(txt.displayWidth).toBe(opts.desiredWidth);
-        expect(txt.width).toBeGreaterThan(opts.desiredWidth);
+        expect(button.width).withContext('button.width').toBe(opts.width);
+        expect(txt.displayWidth).withContext('txt.displayWidth').toBe(opts.width);
+        expect(txt.width).withContext('text width expected to be greater than container').toBeGreaterThan(opts.width);
     });
 
     it('centers the text within the button', () => {
         const opts: TextButtonOptions = {};
-        opts.text = {text: '-'};
-        opts.desiredWidth = 200;
-        opts.desiredHeight = 200;
+        opts.textConfig = {text: '-'};
+        opts.width = 200;
+        opts.height = 200;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.warning(opts));
         TestUtils.scene().add.existing(button);
 
@@ -63,16 +64,17 @@ describe('TextButton', () => {
     });
 
     it('can add padding around the text', () => {
-        const opts: TextButtonOptions = {};
-        opts.text = {text: 'Sample Text'};
-        opts.padding = 10;
+        const opts: TextButtonOptions = {
+            textConfig: {text: 'Sample Text'},
+            padding: 10
+        };
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.info(opts));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'Sample Text') as Phaser.GameObjects.Text;
+        const txt = button.text;
 
-        expect(button.width).toBe(txt.width + (opts.padding * 2));
-        expect(button.height).toBe(txt.height + (opts.padding * 2));
+        expect(button.width).withContext('expect button to be width of text plus padding').toBe(txt.width + (opts.padding * 2));
+        expect(button.height).withContext('expect button to be height of text plus padding').toBe(txt.height + (opts.padding * 2));
         const textBounds: Phaser.Geom.Rectangle = txt.getBounds();
         expect(button.top).toBe(textBounds.top - opts.padding);
         expect(button.bottom).toBe(textBounds.bottom + opts.padding);
@@ -82,12 +84,12 @@ describe('TextButton', () => {
 
     it('can add rounded corners', () => {
         const opts: TextButtonOptions = {};
-        opts.text = {text: 'Sample Text'};
+        opts.textConfig = {text: 'Sample Text'};
         opts.cornerRadius = 5;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.info(opts));
         TestUtils.scene().add.existing(button);
 
-        const txt = button.getFirst('text', 'Sample Text') as Phaser.GameObjects.Text;
+        const txt = button.text;
 
         expect(button.width).toBe(txt.width);
         expect(button.height).toBe(txt.height);
@@ -95,13 +97,13 @@ describe('TextButton', () => {
 
     it('will destroy existing text when new text is set', () => {
         const opts: TextButtonOptions = {};
-        opts.text = {text: 'Sample Text'};
+        opts.textConfig = {text: 'Sample Text'};
         opts.padding = 10;
         opts.cornerRadius = 5;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.info(opts));
         TestUtils.scene().add.existing(button);
 
-        expect(button.text.text).withContext('original text').toEqual(opts.text.text);
+        expect(button.text.text).withContext('original text').toEqual(opts.textConfig.text);
 
         const spy = spyOn<any>(button['_text'], 'destroy').and.callThrough();
         button.setText({text: 'New Text'});
@@ -112,7 +114,7 @@ describe('TextButton', () => {
 
     it('updates size when text changes if desiredWidth not set', () => {
         const opts: TextButtonOptions = {};
-        opts.text = {text: 'Sample Long Text'};
+        opts.textConfig = {text: 'Sample Long Text'};
         opts.padding = 10;
         opts.cornerRadius = 5;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.info(opts));
@@ -131,9 +133,9 @@ describe('TextButton', () => {
 
     it('does not update size when text changes if desiredWidth set', () => {
         const opts: TextButtonOptions = {
-            desiredWidth: 300
+            width: 300
         };
-        opts.text = {text: 'Sample Long Text'};
+        opts.textConfig = {text: 'Sample Long Text'};
         opts.padding = 10;
         opts.cornerRadius = 5;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.info(opts));
@@ -153,7 +155,7 @@ describe('TextButton', () => {
 
     it('allows background style to be udpated', () => {
         const opts: TextButtonOptions = {};
-        opts.text = {text: 'Sample Text'};
+        opts.textConfig = {text: 'Sample Text'};
         opts.padding = 10;
         opts.cornerRadius = 5;
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.success(opts));
@@ -170,23 +172,26 @@ describe('TextButton', () => {
 
     it('can align the text horizontally left', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.secondary({
-            desiredWidth: 500,
-            text: {text: 'align left'},
+            width: 500,
+            textConfig: {
+                text: 'align left', 
+                style: Styles.Outline.secondary().text
+            },
             alignment: {horizontal: 'left'},
             padding: 5,
             cornerRadius: 5
         }));
         TestUtils.scene().add.existing(button);
 
-        expect(button.text.x).toBeLessThan(0);
-        expect(button.text.x - (button.text.width / 2)).toBe(-(button.width / 2) + 5);
-        expect(button.text.y).toBe(0);
+        expect(button.text.x).withContext('x should be less than 0').toBeLessThan(0);
+        expect(button.text.x - (button.text.displayWidth / 2)).withContext('text should be offset by padding').toBe(-(button.width / 2) + 5);
+        expect(button.text.y).withContext('text should be vertically centered').toBe(0);
     });
 
     it('can align the text horizontally right', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.warning({
-            desiredWidth: 500,
-            text: {text: 'align right'},
+            width: 500,
+            textConfig: {text: 'align right'},
             alignment: {horizontal: 'right'},
             padding: 5,
             cornerRadius: 5
@@ -194,14 +199,14 @@ describe('TextButton', () => {
         TestUtils.scene().add.existing(button);
 
         expect(button.text.x).toBeGreaterThan(0);
-        expect(button.text.x + (button.text.width / 2)).toBe((button.width / 2) - 5);
+        expect(button.text.x + (button.text.displayWidth / 2)).toBe((button.width / 2) - 5);
         expect(button.text.y).toBe(0);
     });
 
     it('can align the text vertically top', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
-            desiredHeight: 200,
-            text: {text: 'align top'},
+            height: 200,
+            textConfig: {text: 'align top'},
             alignment: {vertical: 'top'},
             padding: 5,
             cornerRadius: 5
@@ -215,8 +220,8 @@ describe('TextButton', () => {
 
     it('can align the text vertically bottom', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.Outline.dark({
-            desiredHeight: 200,
-            text: {text: 'align bottom'},
+            height: 200,
+            textConfig: {text: 'align bottom'},
             alignment: {vertical: 'bottom'},
             padding: 5,
             cornerRadius: 5
@@ -230,9 +235,9 @@ describe('TextButton', () => {
 
     it('can align the text to top left', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.light({
-            desiredWidth: 500,
-            desiredHeight: 200,
-            text: {text: 'align top left'},
+            width: 500,
+            height: 200,
+            textConfig: {text: 'align top left'},
             alignment: {horizontal: 'left', vertical: 'top'},
             padding: 5,
             cornerRadius: 5
@@ -245,25 +250,21 @@ describe('TextButton', () => {
         expect(button.text.y - (button.text.height / 2)).toBe(-(button.height / 2) + 5);
     });
 
-    it('can set the container to be interactive', () => {
+    it('can set the onClick behaviour via ctor options', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
-            text: {text: 'interactive'},
+            textConfig: {text: 'interactive'},
             padding: 10,
             cornerRadius: 10,
-            interactive: true
+            onClick: () => button.setText({text: 'clicked'})
         }));
         TestUtils.scene().add.existing(button);
         
-        expect(() => {
-            button.on(Phaser.Input.Keyboard.Events.ANY_KEY_DOWN, () => {
-                const foo = 'bar';
-            });
-        }).not.toThrow();
+        expect(button).toBeDefined();
     });
 
     it('allows the text colour to be updated without resetting the text or other styles', () => {
         const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.danger({
-            text: {text: 'sample text', style: {color: Colors.toHexString(Colors.light)}},
+            textConfig: {text: 'sample text', style: {color: Colors.toHexString(Colors.light)}},
             padding: 10,
             cornerRadius: {tl: 5, bl: 5}
         }));
@@ -275,18 +276,5 @@ describe('TextButton', () => {
 
         expect(button.text.text).withContext('text is still set').toEqual('sample text');
         expect(button.text.style.color).withContext('new color is set').toEqual(Colors.toHexString(Colors.warning));
-    });
-
-    it('only allows modification of text through setText function', () => {
-        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.warning({
-            text: {text: 'sample text'},
-            padding: 10
-        }));
-        TestUtils.scene().add.existing(button);
-
-        button.text.setText('foo');
-        button.text.text = 'bar';
-
-        expect(button.text.text).toEqual('sample text');
     });
 });

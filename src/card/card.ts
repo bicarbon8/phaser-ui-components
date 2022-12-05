@@ -54,7 +54,7 @@ export class Card extends LinearLayout {
             this._header = null;
         }
         if (options) {
-            options.desiredWidth ??= this.desiredWidth;
+            options.width ??= this.desiredWidth;
             options.cornerRadius ??= this.cornerRadius;
             options.padding ??= this.cardPadding;
             this._header = new CardHeader(this.scene, options);

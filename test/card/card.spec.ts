@@ -28,7 +28,7 @@ describe('Card', () => {
     it('can be created with only a header', () => {
         const card: Card = new Card(TestUtils.scene(), {
             header: {
-                text: {
+                textConfig: {
                     text:'sample text', 
                     style: {fontSize: '40px', color: Colors.toHexString(Colors.dark)}
                 }
@@ -51,7 +51,7 @@ describe('Card', () => {
         const card: Card = new Card(TestUtils.scene(), {body: {
             contents: [
                 new TextButton(TestUtils.scene(), {
-                    text: {
+                    textConfig: {
                         text: 'title text',
                         style: {fontSize: '40px', color: Colors.toHexString(Colors.light)}
                     }}
@@ -75,12 +75,12 @@ describe('Card', () => {
         const card: Card = new Card(TestUtils.scene(), {
             desiredWidth: 300,
             header: {
-                text: {text:'header text', style: {fontSize: '40px', color: Colors.toHexString(Colors.success)}}
+                textConfig: {text:'header text', style: {fontSize: '40px', color: Colors.toHexString(Colors.success)}}
             },
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
+                        textConfig: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
                     })
                 ]
             }
@@ -105,7 +105,7 @@ describe('Card', () => {
             desiredWidth: 200,
             cornerRadius: 5,
             header: {
-                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
+                textConfig: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {
                 image: {key: 'sample-spritesheet', index: 0},
@@ -114,7 +114,7 @@ describe('Card', () => {
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents', style: Styles.primary().text}
+                        textConfig: {text: 'body contents', style: Styles.primary().text}
                     })
                 ]
             }
@@ -143,7 +143,7 @@ describe('Card', () => {
             cornerRadius: 5,
             padding: 10,
             header: TextButtonOptions.primary({
-                text: {text:'header text'}
+                textConfig: {text:'header text'}
             }),
             image: {
                 image: {key: 'sample-image'},
@@ -152,7 +152,7 @@ describe('Card', () => {
             body: CardBodyOptions.light({
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
+                        textConfig: {text: 'body contents', style: {fontSize: '20px', color: Colors.toHexString(Colors.primary)}}
                     })
                 ]
             })
@@ -179,13 +179,13 @@ describe('Card', () => {
             desiredWidth: 200,
             cornerRadius: 5,
             header: {
-                text: {text:'header text', style: {color: Colors.toHexString(Colors.success)}}
+                textConfig: {text:'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        textConfig: {text: 'body contents'}
                     })
                 ]
             }
@@ -207,13 +207,13 @@ describe('Card', () => {
             desiredWidth: 200,
             cornerRadius: 5,
             header: {
-                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
+                textConfig: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        textConfig: {text: 'body contents'}
                     })
                 ]
             }
@@ -235,13 +235,13 @@ describe('Card', () => {
             desiredWidth: 200,
             cornerRadius: 5,
             header: {
-                text: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
+                textConfig: {text: 'header text', style: {color: Colors.toHexString(Colors.success)}}
             },
             image: {},
             body: {
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {text: 'body contents'}
+                        textConfig: {text: 'body contents'}
                     })
                 ]
             }
@@ -263,12 +263,12 @@ describe('Card', () => {
             desiredWidth: 200,
             padding: 5,
             cornerRadius: 10,
-            header: TextButtonOptions.primary({text: {text:'sample header'}}),
+            header: TextButtonOptions.primary({textConfig: {text:'sample header'}}),
             image: {background: {fillStyle: {color: Colors.info}}},
             body: CardBodyOptions.secondary({
                 contents: [
                     new TextButton(TestUtils.scene(), {
-                        text: {
+                        textConfig: {
                             text: 'body contents',
                             style: {
                                 wordWrap: {
@@ -289,7 +289,10 @@ describe('Card', () => {
 
         expect(startingHeight).withContext('startingHeight').toBeGreaterThan(0);
 
-        card.cardbody.getContentAt<TextButton>(0).setText({text: 'some long text that will wrap around... some long text that will wrap around... some long text that will wrap around...'});
+        card.cardbody
+            .getContentAt<TextButton>(0)
+            .updateSize()
+            .setText({text: 'some long text that will wrap around... some long text that will wrap around... some long text that will wrap around...'});
 
         expect(card.height).withContext('height after update').toBeGreaterThan(startingHeight);
     });

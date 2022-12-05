@@ -26,8 +26,8 @@ describe('LayoutContainer', () => {
         const scene = TestUtils.scene();
         const text = scene.make.text({text: 'sample text to verify dimensions'}, false);
         const container = new LayoutContainer(scene, {
-            desiredWidth: 500,
-            desiredHeight: 200,
+            width: 500,
+            height: 200,
             content: text
         });
         scene.add.existing(container);
@@ -43,8 +43,8 @@ describe('LayoutContainer', () => {
         const gContainer = scene.add.container(0, 0, [graphics]);
         gContainer.setSize(50, 4);
         const container = new LayoutContainer(scene, {
-            desiredWidth: 102,
-            desiredHeight: 6,
+            width: 102,
+            height: 6,
             padding: 1,
             content: gContainer,
             alignment: {horizontal: 'left'},
@@ -63,8 +63,8 @@ describe('LayoutContainer', () => {
         const gContainer = scene.add.container(0, 0, [graphics]);
         gContainer.setSize(50, 4);
         const container = new LayoutContainer(scene, {
-            desiredWidth: 102,
-            desiredHeight: 6,
+            width: 102,
+            height: 6,
             padding: 1,
             content: gContainer,
             alignment: {horizontal: 'right'},

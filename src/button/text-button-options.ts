@@ -1,18 +1,11 @@
 import * as _ from "lodash";
-import { Alignment } from "../layout/alignment";
+import { LayoutContainerOptions } from "../layout/layout-container";
 import { Styles } from "../style/styles";
 
-export type TextButtonOptions = {
-    x?: number;
-    y?: number;
-    desiredWidth?: number;
-    desiredHeight?: number;
-    text?: Phaser.Types.GameObjects.Text.TextConfig;
-    background?: Phaser.Types.GameObjects.Graphics.Styles;
-    cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
-    interactive?: boolean;
-    padding?: number;
-    alignment?: Alignment;
+export type TextButtonOptions = Omit<LayoutContainerOptions, 'content'> & {
+    textConfig?: Phaser.Types.GameObjects.Text.TextConfig;
+    onClick?: () => void;
+    onHover?: () => void;
 }
 
 export module TextButtonOptions {
@@ -20,7 +13,7 @@ export module TextButtonOptions {
         return {
             x: 0,
             y: 0,
-            text: {style: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'}, origin: 0.5},
+            textConfig: {style: {fontFamily: 'Courier', fontSize: '20px', color: '#000000'}, origin: 0.5},
             padding: 0,
             cornerRadius: 0,
             alignment: {
