@@ -67,7 +67,7 @@ describe('CardBody', () => {
                         text:'button text', 
                         style: Styles.Outline.danger().text
                     },
-                    background: Styles.Outline.danger().graphics, 
+                    backgroundStyles: Styles.Outline.danger().graphics, 
                     padding: 10})
             ]
         }));

@@ -11,7 +11,7 @@ export type LayoutContainerOptions = {
     padding?: number;
     alignment?: Alignment;
     content?: LayoutContent;
-    background?: Phaser.Types.GameObjects.Graphics.Styles;
+    backgroundStyles?: Phaser.Types.GameObjects.Graphics.Styles;
     cornerRadius?: number | Phaser.Types.GameObjects.Graphics.RoundedRectRadius;
 };
 
@@ -54,7 +54,7 @@ export class LayoutContainer extends Phaser.GameObjects.Container {
         this.padding = options.padding;
         this.alignment = options.alignment;
         this.cornerRadius = options.cornerRadius;
-        this._backgroundStyle = options.background;
+        this._backgroundStyle = options.backgroundStyles;
 
         this.updateSize(options.width, options.height)
             .setContent(options.content);

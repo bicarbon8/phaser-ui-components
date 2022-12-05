@@ -48,7 +48,7 @@ describe('LayoutContainer', () => {
             padding: 1,
             content: gContainer,
             alignment: {horizontal: 'left'},
-            background: {fillStyle: {color: 0xffffff}}
+            backgroundStyles: {fillStyle: {color: 0xffffff}}
         });
         scene.add.existing(container);
 
@@ -68,7 +68,7 @@ describe('LayoutContainer', () => {
             padding: 1,
             content: gContainer,
             alignment: {horizontal: 'right'},
-            background: {fillStyle: {color: 0xffffff}}
+            backgroundStyles: {fillStyle: {color: 0xffffff}}
         });
         scene.add.existing(container);
 

@@ -48,8 +48,8 @@ export module TextButtonOptions {
 
     function get(style: Styles, options?: TextButtonOptions): TextButtonOptions {
         return _.merge({
-            text: {style: style.text},
-            background: style.graphics
+            textConfig: {style: style.text},
+            backgroundStyles: style.graphics
         }, options);
     }
 }

@@ -38,20 +38,20 @@ describe('demo', () => {
                                 contents: [
                                     [new TextButton(scene, {
                                         textConfig: {text: '0x0', style: Styles.success().text},
-                                        background: Styles.success().graphics,
+                                        backgroundStyles: Styles.success().graphics,
                                         cornerRadius: 5
                                     }),,,,,new TextButton(scene, {
                                         textConfig: {text: '0x5', style: Styles.warning().text},
-                                        background: Styles.warning().graphics,
+                                        backgroundStyles: Styles.warning().graphics,
                                         cornerRadius: 5
                                     })],,,,,[
                                         new TextButton(scene, {
                                             textConfig: {text: '5x0', style: Styles.warning().text},
-                                            background: Styles.warning().graphics,
+                                            backgroundStyles: Styles.warning().graphics,
                                             cornerRadius: 5
                                         }),,,,,new TextButton(scene, {
                                             textConfig: {text: '5x5', style: Styles.danger().text},
-                                            background: Styles.danger().graphics,
+                                            backgroundStyles: Styles.danger().graphics,
                                             cornerRadius: 5
                                         })
                                     ]
@@ -146,7 +146,7 @@ describe('demo', () => {
                                 }
                             }
                         },
-                        background: { lineStyle: { width: 2 } }
+                        backgroundStyles: { lineStyle: { width: 2 } }
                     }),
                     body: CardBodyOptions.Outline.secondary({
                         cornerRadius: 5,
