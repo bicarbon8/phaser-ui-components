@@ -326,14 +326,24 @@ describe('TextButton', () => {
         expect(button.text.text).withContext('expect original text').toEqual('interactive');
 
         button.setHovering(true);
+        expect(button.hovering).withContext('expect hovering state to be true').toBeTrue();
         expect(button.text.text).withContext('expect text change on click').toEqual('hovering');
         button.setClicking(true);
+        expect(button.clicking).withContext('expect clicking state to be true').toBeTrue();
         expect(button.text.text).withContext('expect text change on click').toEqual('clicked');
 
         button.setClicking(false);
+        expect(button.clicking).withContext('expect clicking state to be false').toBeFalse();
         expect(button.text.text).withContext('expect original text').toEqual('hovering');
         button.setHovering(false);
+        expect(button.hovering).withContext('expect hovering state to be false').toBeFalse();
         expect(button.text.text).withContext('expect original text').toEqual('interactive');
+
+        button.setClicking(true); 
+        expect(button.hovering).withContext('expect hovering state to be true when clicking').toBeTrue();
+
+        button.setHovering(false);
+        expect(button.clicking).withContext('expect clicking state to be false when hovering stops').toBeFalse();
     });
 
     it('allows the text colour to be updated without resetting the text or other styles', () => {

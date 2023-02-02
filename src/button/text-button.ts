@@ -106,7 +106,7 @@ export class TextButton extends LayoutContainer {
      * event is fired on this object
      * @returns the current instance of this `TextButton`
      */
-    setOnClick(func: () => void): this {
+    setOnClick(func?: () => void): this {
         this._onClickAction = func;
         return this;
     }
@@ -119,7 +119,7 @@ export class TextButton extends LayoutContainer {
      * event is fired on this object
      * @returns the current instance of this `TextButton`
      */
-    setOnHover(func: () => void): this {
+    setOnHover(func?: () => void): this {
         this._onHoverAction = func;
         return this;
     }
@@ -143,9 +143,13 @@ export class TextButton extends LayoutContainer {
      */
     setHovering(hovering: boolean): this {
         if (hovering) {
-            this._onHoverHandler();
+            if (!this._hovering) {
+                this._onHoverHandler();
+            }
         } else {
-            this._offHoverHandler();
+            if (this._hovering) {
+                this._offHoverHandler();
+            }
         }
         return this;
     }
@@ -157,9 +161,13 @@ export class TextButton extends LayoutContainer {
      */
     setClicking(clicking: boolean): this {
         if (clicking) {
-            this._onClickHandler();
+            if (!this._clicking) {
+                this._onClickHandler();
+            }
         } else {
-            this._offClickHandler();
+            if (this._clicking) {
+                this._offClickHandler();
+            }
         }
         return this;
     }
@@ -171,16 +179,17 @@ export class TextButton extends LayoutContainer {
         this.removeAllListeners(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
 
         this.setInteractive();
-        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => this._onHoverHandler());
-        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => this._onClickHandler());
-        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => this._offHoverHandler());
-        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => this._offClickHandler());
+        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => this.setHovering(true));
+        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => this.setClicking(true));
+        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => this.setHovering(false));
+        this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => this.setClicking(false));
     }
 
     private _onClickHandler(): void {
         this._clicking = true;
         if (this.enabled && this._onClickAction) {
             this._saveState();
+            this.setHovering(true); // always enable hover when clicking
             this._onClickAction();
         }
     }
@@ -204,14 +213,14 @@ export class TextButton extends LayoutContainer {
     private _offHoverHandler(): void {
         this._hovering = false;
         this._restoreState();
-        if (this._clicking) {
-            this._onClickHandler();
-        }
+        this.setClicking(false); // always disable click when disable hover
     }
 
+    /**
+     * only save state if not already saved to avoid overwriting between
+     * hover and click
+     */
     private _saveState(): void {
-        // only save state if not already saved to avoid overwriting between
-        // hover and click
         if (!this._textConfigState) {
             this._textConfigState = _.cloneDeep(this._textConfig);
         }
