@@ -266,6 +266,13 @@ describe('TextButton', () => {
         TestUtils.scene().add.existing(button);
         
         expect(button).toBeDefined();
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
+
+        button.setClicking(true);
+        expect(button.text.text).withContext('expect text change on click').toEqual('clicked');
+
+        button.setClicking(false);
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
     });
 
     it('can set the onHover behaviour via ctor options', () => {
@@ -284,6 +291,13 @@ describe('TextButton', () => {
         TestUtils.scene().add.existing(button);
         
         expect(button).toBeDefined();
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
+
+        button.setHovering(true);
+        expect(button.text.text).withContext('expect text change on click').toEqual('hovering');
+
+        button.setHovering(false);
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
     });
 
     it('can set the onClick and onHover behaviour via ctor options', () => {
@@ -309,6 +323,17 @@ describe('TextButton', () => {
         TestUtils.scene().add.existing(button);
         
         expect(button).toBeDefined();
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
+
+        button.setHovering(true);
+        expect(button.text.text).withContext('expect text change on click').toEqual('hovering');
+        button.setClicking(true);
+        expect(button.text.text).withContext('expect text change on click').toEqual('clicked');
+
+        button.setClicking(false);
+        expect(button.text.text).withContext('expect original text').toEqual('hovering');
+        button.setHovering(false);
+        expect(button.text.text).withContext('expect original text').toEqual('interactive');
     });
 
     it('allows the text colour to be updated without resetting the text or other styles', () => {
