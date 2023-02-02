@@ -326,4 +326,30 @@ describe('TextButton', () => {
         expect(button.text.text).withContext('text is still set').toEqual('sample text');
         expect(button.text.style.color).withContext('new color is set').toEqual(Colors.toHexString(Colors.warning));
     });
+
+    it('can be disabled via contructor options', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
+            textConfig: {text: 'disabled'},
+            disabled: true
+        }));
+
+        expect(button.enabled).withContext('expect button.enabled is false').toBeFalse();
+    });
+
+    it('defaults to enabled if not set in contructor options', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
+            textConfig: {text: 'enabled'}
+        }));
+
+        expect(button.enabled).withContext('expect button.enabled is true').toBeTrue();
+    });
+
+    it('allows modification of the enabled state after creation', () => {
+        const button: TextButton = new TextButton(TestUtils.scene(), TextButtonOptions.secondary({
+            textConfig: {text: 'enabled'}
+        }));
+        button.setEnabled(false);
+
+        expect(button.enabled).withContext('expect button.enabled is false').toBeFalse();
+    });
 });

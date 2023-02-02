@@ -6,6 +6,7 @@ export type TextButtonOptions = Omit<LayoutContainerOptions, 'content'> & {
     textConfig?: Phaser.Types.GameObjects.Text.TextConfig;
     onClick?: () => void;
     onHover?: () => void;
+    disabled?: boolean;
 }
 
 export module TextButtonOptions {
@@ -19,7 +20,8 @@ export module TextButtonOptions {
             alignment: {
                 horizontal: 'center',
                 vertical: 'middle'
-            }
+            },
+            disabled: false
         };
     }
     export function setDefaultOptions(options: TextButtonOptions): TextButtonOptions {
