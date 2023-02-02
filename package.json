@@ -1,11 +1,11 @@
 {
   "name": "phaser-ui-components",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "phaser.io UI component library for use in browser games using the Phaser3 game engine",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
-    "src/**/*"
+    "./src/**/*"
   ],
   "scripts": {
     "clean": "npx rimraf ./dist && npx rimraf ./coverage",
